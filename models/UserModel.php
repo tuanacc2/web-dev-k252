@@ -7,7 +7,7 @@ class UserModel {
     }
 
     public function getAllUsers() {
-        $stmt = $this->db->prepare("SELECT * FROM user");
+        $stmt = $this->db->prepare("SELECT * FROM users");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

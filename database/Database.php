@@ -14,7 +14,7 @@ class Database {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // Kết nối chính thức vào Database vừa tạo
-            $this->conn->exec("USE `$this->db` text");
+            $this->conn->exec("USE `$this->db`");
 
         } catch (PDOException $e) {
             die("Lỗi Database: " . $e->getMessage());

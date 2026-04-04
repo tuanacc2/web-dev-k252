@@ -2,7 +2,7 @@
 require_once 'models/PostModel.php';
 
 class PostController {
-    public function index() {
+    public function product() {
         $model = new UserModel();
         $users = $model->getAllUsers();
 

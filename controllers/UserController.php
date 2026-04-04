@@ -10,16 +10,10 @@ class UserController {
     }
 
     public function history() {
-        $model = new UserModel();
-        $users = $model->getAllUsers();
-
         require_once 'views/history.php';
     }
 
     public function cart() {
-        $model = new UserModel();
-        $users = $model->getAllUsers();
-
         require_once 'views/cart.php';
     }
 }

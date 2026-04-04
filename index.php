@@ -1,28 +1,25 @@
 <?php
 session_start();
-require_once 'core/Database.php';
-require_once 'controllers/UserController.php';
-require_once 'controllers/AuthController.php';
-require_once 'controllers/HomeController.php';
-require_once 'controllers/ProductController.php';
-require_once 'controllers/PostController.php';
+require_once __DIR__ . '/database/Database.php';
+require_once __DIR__ . '/controllers/UserController.php';
+require_once __DIR__ . '/controllers/AuthController.php';
+require_once __DIR__ . '/controllers/HomeController.php';
+require_once __DIR__ . '/controllers/ProductController.php';
+require_once __DIR__ . '/controllers/PostController.php';
 
-$action = $_GET['action'] ?? 'home';
+$action = $_GET['action'] ?? 'homepage';
 
 switch ($action) {
-    case 'login':
-        (new AuthController())->login();
+    case 'user':
+        (new UserController())->info();
         break;
     case 'product':
-        (new ProductController())->listOfProduct();
-        break;
-    case 'help':
-        (new HomeController())->help();
+        (new ProductController())->product();
         break;
     case 'logout':
         session_destroy();
         header("Location: index.php");
-        break;
+        exit();
     default:
         (new HomeController())->home();
         break;

@@ -2,7 +2,7 @@
 
 class HomeController {
     public function home() {
-        require_once 'views/home.php';
+        require_once 'views/homepage.php';
     }
 
     public function about() {

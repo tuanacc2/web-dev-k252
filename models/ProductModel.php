@@ -6,9 +6,14 @@ class ProductModel {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function getProductList() {
-        $stmt = $this->db->prepare("SELECT * FROM user");
+    public function getProductList(string $value = "") {
+        if ($value != "") {
+            $stmt = $this->db->prepare("SELECT * FROM products WHERE name LIKE '%".$value."%'");
+        } else {
+            $stmt = $this->db->prepare("SELECT * FROM products");
+        }
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }

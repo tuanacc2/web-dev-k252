@@ -2,9 +2,9 @@
 require_once 'models/ProductModel.php';
 
 class ProductController {
-    public function productList() {
+    public function product() {
         $model = new ProductModel();
-        $users = $model->getProductList();
+        $products = $model->getProductList();
 
         require_once 'views/product_list.php';
     }
