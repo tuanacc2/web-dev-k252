@@ -1,7 +1,12 @@
+<?php
+include("./controllers/PostController.php");
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Homepage</title>
+        <title>Post List</title>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <style type="text/tailwindcss">

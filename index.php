@@ -16,7 +16,13 @@ switch ($action) {
     case 'product':
         (new ProductController())->product();
         break;
-    case 'logout':
+    case 'posts':
+        (new PostController())->listPosts();
+        break;
+    case '/auth/login':
+        (new AuthController())->login();
+        break;
+    case '/auth/logout':
         session_destroy();
         header("Location: index.php");
         exit();

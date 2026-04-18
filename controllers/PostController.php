@@ -2,10 +2,10 @@
 require_once 'models/PostModel.php';
 
 class PostController {
-    public function product() {
-        $model = new UserModel();
-        $users = $model->getAllUsers();
+    public function listPosts() {
+        $model = new PostModel();
+        $posts = $model->getPost();
 
-        require_once 'views/user_list.php';
+        require_once 'views/listPosts.php';
     }
 }
