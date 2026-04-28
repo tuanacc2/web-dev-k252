@@ -2,11 +2,11 @@
 require_once 'models/UserModel.php';
 
 class UserController {
-    public function info() {
-        $model = new UserModel();
-        $users = $model->getAllUsers();
 
-        require_once 'views/user_list.php';
+    public function profile() {
+        $users = (new UserModel())->getUserInfoById($_SESSION['user_id']);
+
+        require_once 'views/profile.php';
     }
 
     public function history() {

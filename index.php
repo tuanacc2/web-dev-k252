@@ -1,32 +1,51 @@
 <?php
-session_start();
+require_once __DIR__ . '/config/session_init.php';
 require_once __DIR__ . '/database/Database.php';
 require_once __DIR__ . '/controllers/UserController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/HomeController.php';
 require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/PostController.php';
+enum Page: string {
+    case Home = 'homepage';
+    case Login = 'auth/login';
+    case Logout = 'auth/logout';
+    case Register = 'auth/register';
+    case Dashboard = 'dashboard';
+    case Profile = 'profile';
+    case Setting = 'setting';
+    case Posts = 'posts';
+    case Products = 'products';
 
-$action = $_GET['action'] ?? 'homepage';
-
-switch ($action) {
-    case 'user':
-        (new UserController())->info();
-        break;
-    case 'product':
-        (new ProductController())->product();
-        break;
-    case 'posts':
-        (new PostController())->listPosts();
-        break;
-    case '/auth/login':
-        (new AuthController())->login();
-        break;
-    case '/auth/logout':
-        session_destroy();
-        header("Location: index.php");
-        exit();
-    default:
-        (new HomeController())->home();
-        break;
+    public static function isValid(string $name): bool {
+        foreach (self::cases() as $case) {
+            if ($case->value === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+
+$action = $_GET['action'] ?? Page::Home->value;
+
+$page = Page::tryFrom($action);
+
+if (!$page || !Page::isValid($action)) {
+    $base = dirname($_SERVER['REQUEST_URI']);
+    if ($base === '/') $base = '';
+    header("Location: $base/");
+    exit();
+}
+
+match($page) {
+    Page::Home      => (new HomeController())->home(),
+    Page::Login     => (new AuthController())->login(),
+    Page::Logout    => (new AuthController())->logout(),
+    Page::Register  => (new AuthController())->register(),
+    Page::Dashboard => (new HomeController())->home(),
+    Page::Profile   => (new UserController())->profile(),
+    Page::Posts     => (new PostController())->listPosts(),
+    Page::Products  => (new ProductController())->product(),
+    default         => (new HomeController())->home(),
+};
