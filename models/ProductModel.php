@@ -6,7 +6,7 @@ class ProductModel {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function getProduct(string $value = "") {
+    public function getProducts(string $value = "") {
         if ($value != "") {
             $stmt = $this->db->prepare("SELECT * FROM products WHERE name LIKE '%".$value."%'");
         } else {

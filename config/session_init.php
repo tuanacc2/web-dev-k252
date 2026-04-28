@@ -1,4 +1,7 @@
 <?php
+
+$base = dirname($_SERVER['website_root'] ?? $_SERVER['SCRIPT_NAME'], 1);
+
 // 1. Set the session cookie lifetime (in seconds)
 $lifetime = 1800;
 

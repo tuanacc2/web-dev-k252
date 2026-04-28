@@ -36,24 +36,35 @@ class AuthController {
     }
 
     public function register() {
-        $input_username = $_POST["username"];
-        $input_password = $_POST["password"];
-        $input_email = $_POST["email"];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $input_username = $_POST["username"];
+                $input_password = $_POST["password"];
+                $input_email = $_POST["email"];
 
-        $model = new UserModel();
+                $model = new UserModel();
 
-        if ($model->isUsernameTaken($input_username)) {
-            $error_message = "Username already taken.";
+                if ($model->isUsernameTaken($input_username)) {
+                    $error_message = "Username already taken.";
+                    require_once 'views/auth/register.php';
+                    return;
+                }
+
+                // Proceed with user registration
+                $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
+                $model->addNewUser($input_username, $input_email, $hashed_password);
+                $_SESSION['user'] = $model;
+            } catch (Exception $e) {
+                $error_message = "An error occurred during registration. Please try again.";
+                require_once 'views/auth/register.php';
+            }              
+        } else {
             require_once 'views/auth/register.php';
-            return;
         }
 
-        // Proceed with user registration
-        $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
-        $model->addNewUser($input_username, $input_email, $hashed_password);
-        $_SESSION['user'] = $model;
+        global $base;
 
-        header("Location: /homepage");
+        header("Location: $base/auth/login");
         exit();
     }
 

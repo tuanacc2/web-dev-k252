@@ -32,8 +32,7 @@ $action = $_GET['action'] ?? Page::Home->value;
 $page = Page::tryFrom($action);
 
 if (!$page || !Page::isValid($action)) {
-    $base = dirname($_SERVER['REQUEST_URI']);
-    if ($base === '/') $base = '';
+    global $base;
     header("Location: $base/");
     exit();
 }
