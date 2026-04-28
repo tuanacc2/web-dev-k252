@@ -1,3 +1,11 @@
+-- Lưu dữ liệu ảnh trong server
+CREATE TABLE images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file_name VARCHAR(255) NOT NULL,
+    target_id INT NOT NULL,
+    target_type ENUM('avatar', 'product', 'post') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 -- Danh sách người dùng và admin
 CREATE TABLE users ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -105,14 +113,6 @@ CREATE TABLE order_details (
 ALTER TABLE comments ADD COLUMN rating TINYINT NULL;
 
 
--- Lưu dữ liệu ảnh trong server
-CREATE TABLE images (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    file_name VARCHAR(255) NOT NULL,
-    target_id INT NOT NULL,
-    target_type ENUM('avatar', 'product', 'post') NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 -- Lưu các thay đổi của database
 CREATE TABLE logs (
