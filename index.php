@@ -32,8 +32,8 @@ $action = $_GET['action'] ?? Page::Home->value;
 $page = Page::tryFrom($action);
 
 if (!$page || !Page::isValid($action)) {
-    global $base;
-    header("Location: $base/");
+    global $base_url;
+    header("Location: $base_url/");
     exit();
 }
 

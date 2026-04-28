@@ -12,7 +12,7 @@ CREATE TABLE users (
 	username VARCHAR(50) UNIQUE NOT NULL, 
 	password VARCHAR(255) NOT NULL, 
 	email VARCHAR(100),
-    avatar_id INT NULL,
+    avatar_id INT NULL DEFAULT NULL,
     phoneNumber VARCHAR(20),
     address VARCHAR(100), 
 	role ENUM('admin', 'user') DEFAULT 'user', 
@@ -33,7 +33,7 @@ CREATE TABLE products (
     name VARCHAR(255) NOT NULL, 
     category_id INT NOT NULL,
     description TEXT, 
-    image_id INT NULL,
+    image_id INT NULL DEFAULT NULL,
     price DECIMAL(10,2) NOT NULL, 
     stock_quantity INT DEFAULT 0,
     is_active TINYINT(1) DEFAULT 1,
@@ -115,16 +115,21 @@ ALTER TABLE comments ADD COLUMN rating TINYINT NULL;
 
 
 -- Lưu các thay đổi của database
+DROP TABLE IF EXISTS logs;
+
 CREATE TABLE logs (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	user_id INT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
     action VARCHAR(255) NOT NULL,
     target_id INT NULL,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    CONSTRAINT fk_logs_user 
+        FOREIGN KEY (user_id) 
+        REFERENCES users(id) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
 );
-
 
 
 

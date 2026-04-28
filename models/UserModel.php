@@ -36,9 +36,9 @@ class UserModel {
         return $stmt->fetchColumn() > 0;
     }
 
-    public function addNewUser($username, $email, $password) {
-        $stmt = $this->db->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-        $stmt->execute([$username, $email, $password]);
+    public function addNewUser($username, $email, $password, $phone, $address) {
+        $stmt = $this->db->prepare("INSERT INTO users (username, email, password, phoneNumber, address) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$username, $email, $password, $phone, $address]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
