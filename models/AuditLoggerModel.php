@@ -18,13 +18,13 @@ enum Action: string {
 }
 
 class AuditLoggerModel {
-    private $db;
+    private \PDO $db;
 
     public function __construct() {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function log($action, $user_id = null, $description = "", $target_id = null) {
+    public function log(String $action, ?int $user_id = null, string $description = "", ?int $target_id = null) {
         $timestamp = date("Y-m-d H:i:s");
         $stmt = $this->db->prepare("INSERT INTO logs (user_id, action, target_id, description, created_at) VALUES (:user_id, :action, :target_id, :description, :created_at)");
         $stmt->execute([
@@ -36,7 +36,7 @@ class AuditLoggerModel {
         ]);
     }
 
-    public function getLogs($keyword = "") {
+    public function getLogs(string $keyword = "") {
         $sql = "SELECT * FROM logs";
         if (!empty($keyword)) {
             $sql .= " WHERE * LIKE ?";
@@ -50,7 +50,7 @@ class AuditLoggerModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getLogById($log_id) {
+    public function getLogById(int $log_id) {
         $stmt = $this->db->prepare("SELECT * FROM logs WHERE id = ?");
         $stmt->bindParam("i", $log_id);
         $stmt->execute();

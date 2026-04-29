@@ -20,6 +20,18 @@ CREATE TABLE users (
 	FOREIGN KEY (avatar_id) REFERENCES images(id) ON DELETE SET NULL
 ); 
 
+-- Thông tin liên hệ
+CREATE TABLE contacts ( 
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phoneNumber VARCHAR(20),
+    question TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    hasSeen TINYINT(1) DEFAULT 0,
+    hasReplied TINYINT(1) DEFAULT 0
+);
+
 -- Các category của sản phẩm / dịch vụ và bài đăng
 CREATE TABLE categories ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -131,7 +143,29 @@ CREATE TABLE logs (
         ON UPDATE CASCADE
 );
 
-
+-- Chèn admin vào với tài khoản admin / 0
+INSERT INTO `users` (
+        `id`, 
+        `username`, 
+        `password`, 
+        `email`, 
+        `avatar_id`, 
+        `phoneNumber`, 
+        `address`, 
+        `role`, 
+        `created_at`
+    ) 
+VALUES (
+    NULL, 
+    'admin', 
+    '0', 
+    'admin123@gmail.com', 
+    NULL, 
+    '0123456789', 
+    'lmao', 
+    'admin', 
+    current_timestamp()
+);
 
 
 

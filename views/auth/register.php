@@ -1,5 +1,5 @@
 <?php
-
+$base_url = $base_url ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">

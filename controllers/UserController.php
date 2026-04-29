@@ -1,10 +1,10 @@
 <?php
-require_once 'models/UserModel.php';
+require_once BASE_DIR .'/models/UserModel.php';
 
 class UserController {
 
     public function profile() {
-        $users = (new UserModel())->getUserInfoById($_SESSION['user_id']);
+        $users = (new UserModel())->getUserById($_SESSION['user_id']);
 
         require_once 'views/profile.php';
     }

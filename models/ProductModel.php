@@ -1,12 +1,12 @@
 <?php
 class ProductModel {
-    private $db;
+    private \PDO $db;
 
     public function __construct() {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function getProducts(string $value = "") {
+    public function getProduct(string $value = "") {
         if ($value != "") {
             $stmt = $this->db->prepare("SELECT * FROM products WHERE name LIKE '%".$value."%'");
         } else {
@@ -18,8 +18,8 @@ class ProductModel {
 
     public function getProductById(int $id) {   
         $stmt = $this->db->prepare("SELECT * FROM products WHERE id = ?");
-        $stmt->bind_param("i", $id);
+        $stmt->bindParam("i", $id);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

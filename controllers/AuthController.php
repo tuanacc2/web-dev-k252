@@ -1,14 +1,14 @@
 <?php
-require_once 'models/UserModel.php';
-require_once 'models/AuditLoggerModel.php';
+require_once BASE_DIR .'/models/AuthModel.php';
+require_once BASE_DIR .'/models/AuditLoggerModel.php';
 
 class AuthController {
-    private $logModel;
-    private $userModel;
+    private AuditLoggerModel $logModel;
+    private AuthModel $authModel;
 
     public function __construct() { 
         $this->logModel = new AuditLoggerModel();
-        $this->userModel = new UserModel();
+        $this->authModel = new AuthModel();
     }
 
     public function login() {
@@ -18,9 +18,17 @@ class AuthController {
                 $input_username = $_POST['username'];
                 $input_password = $_POST['password'];
 
-                $user = $this->userModel->getUserByUsername($input_username);
+                $user = $this->authModel->getUserByUsername($input_username);
 
-                if ($user && password_verify($input_password, $user['password'])) {
+                if ($user && $input_password === $user['password'] && $user['role'] === 'admin') {
+                    $_SESSION['admin_user'] = $user['username'];
+                    $_SESSION['admin_user_id'] = $user['id'];
+                    $_SESSION['admin_auth'] = true;
+                    $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
+                    
+                    header("Location: $base_url/admin/dashboard");
+                    exit();
+                } elseif ($user && password_verify($input_password, $user['password'])) {
                     $_SESSION['user'] = $user['username'];
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['login_status'] = true;
@@ -58,7 +66,7 @@ class AuthController {
                 $input_phone = $_POST["phone"];
                 $input_address = $_POST["address"];
 
-                if ($this->userModel->isUsernameTaken($input_username)) {
+                if ($this->authModel->isUsernameTaken($input_username)) {
                     $error_message = "Username already taken.";
                     require_once 'views/auth/register.php';
                     return;
@@ -66,10 +74,10 @@ class AuthController {
 
                 // Proceed with user registration
                 $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
-                $this->userModel->addNewUser($input_username, $input_email, $hashed_password, $input_phone, $input_address);
+                $this->authModel->addNewUser($input_username, $input_email, $hashed_password, $input_phone, $input_address);
                 $_SESSION['user'] = $input_username;
 
-                $user = $this->userModel->getUserByUsername($input_username);
+                $user = $this->authModel->getUserByUsername($input_username);
 
                 $this->logModel->log(Action::Register->value, $user['id'], $input_username . " registered an account");
 

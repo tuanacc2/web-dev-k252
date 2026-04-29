@@ -1,24 +1,25 @@
+<?php $title = "Homepage"; ?>
 <!DOCTYPE html>
 <html lang="en">
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Homepage</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
-        </style>
-    <body>
-        <header>
-            <h1>Page Title</h1>
-            <nav>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/help">Help</a>
-                <a href="/auth/login">Login</a>
-            </nav>
-        </header>
-        <div>
-            <img src="" alt="homepage">
-        </div>
-        <p>Whatever it is, this still is the homepage.</p>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/public/css/header.css">
+
+</head>
+<body>
+<div class="w-full min-h-[10000px] bg-[#fefbf4]">
+<!-- Header section -->
+<?php include __DIR__ . '/layout/header.php'; ?>
+<!-- Main content -->
+
+<!--  Footer section -->
+<?php include __DIR__ . '/layout/footer.php'; ?>
+</div>
+</body>
 </html>

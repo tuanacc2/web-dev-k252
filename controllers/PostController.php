@@ -1,11 +1,25 @@
 <?php
-require_once 'models/PostModel.php';
+require_once BASE_DIR .'/models/PostModel.php';
 
 class PostController {
-    public function listPosts() {
-        $model = new PostModel();
-        $posts = $model->getPost();
 
-        require_once 'views/listPosts.php';
+    private AuditLoggerModel $logModel;
+    private PostModel $postModel;
+
+    public function __construct() {
+        $this->logModel = new AuditLoggerModel();
+        $this->postModel = new PostModel();
+    }
+
+    public function posts() {
+        $posts = $this->postModel->getPost();
+
+        require_once 'views/posts.php';
+    }
+
+    public function postDetail(int $post_id) {
+        $post = $this->postModel->getPostById($post_id);
+
+        require_once 'views/postDetail.php';
     }
 }

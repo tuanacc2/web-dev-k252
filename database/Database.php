@@ -1,22 +1,25 @@
 <?php
 class Database {
-    private static $instance = null;
-    private $host = "localhost";
-    private $user = "root";
-    private $pass = "";
-    private $db   = "mydbass";
-    public $conn;
+    private static ?Database $instance = null;
+    private string $host = "localhost";
+    private string $port = "";
+    private string $user = "root";
+    private string $pass = "";
+    private string $db   = "mydbass";
+    public PDO|null $conn;
 
     private function __construct() {
         try {
             // Kết nối đến MySQL (không chọn database trước)
-            $this->conn = new PDO("mysql:host=$this->host", $this->user, $this->pass);
+            $port_dsn = $this->port ? ";port={$this->port}" : "";
+            $this->conn = new PDO("mysql:host=$this->host" . $port_dsn, $this->user, $this->pass);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // Kết nối chính thức vào Database vừa tạo
             $this->conn->exec("USE `$this->db`");
 
         } catch (PDOException $e) {
+            error_log("[DB ERROR] " . $e->getMessage());
             die("Lỗi Database: " . $e->getMessage());
         }
     }
