@@ -1,5 +1,4 @@
 <?php $title = "Homepage"; ?>
-<?php $title = "Homepage"; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
