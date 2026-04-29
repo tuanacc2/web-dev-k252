@@ -40,11 +40,35 @@ enum Page: string {
     }
 }
 
-enum SubPage: string {
+enum UserPage: string {
+    case Profile = 'profile';
+
+    public static function isValid(string $name): bool {
+        foreach (self::cases() as $case) {
+            if ($case->value === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+enum AuthPage: string {
     case Login = 'login';
     case Logout = 'logout';
     case Register = 'register';
-    case Profile = 'profile';
+    
+    public static function isValid(string $name): bool {
+        foreach (self::cases() as $case) {
+            if ($case->value === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+enum AdminPage: string {
     case Dashboard = 'dashboard';
     case Homepage = 'homepage';
     case Contact = 'contact';
@@ -55,7 +79,6 @@ enum SubPage: string {
     case Cart = 'cart';
     case Post = 'post';
     case AuditLog = 'log';
-    case Detail = 'detail';
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -79,36 +102,12 @@ $controller = Page::tryFrom($controller)->value;
 
 $base_url = $base_url ?? "";
 
-if (!$controller || !Page::isValid($controller)) {
+if (!$controller || !Page::isValid($controller) ||
+    ($controller == Page::Auth && !AuthPage::isValid($action)) ||
+    ($controller == Page::User && !UserPage::isValid($action)) ||
+    ($controller == Page::Admin && !AdminPage::isValid($action))) {
     header("Location: $base_url/");
     exit();
-} else if ($controller == Page::Auth) {
-    switch ($action) {
-        case SubPage::Login->value:
-        case SubPage::Logout->value:
-        case SubPage::Register->value:
-            break;
-        default:
-            header("Location: $base_url/");
-            exit();
-    }
-} else if ($controller == Page::User) {
-    switch ($action) {
-        case SubPage::Profile:
-            break;
-        default:
-            header("Location: $base_url/");
-            exit();
-    }
-} else if ($controller === Page::Admin) {
-    switch ($action) {
-        case SubPage::Dashboard || SubPage::User || SubPage::Post || 
-            SubPage::Product || SubPage::AuditLog:
-            break;
-        default:
-            header("Location: $base_url/");
-            exit();
-    }
 }
 
 switch ($controller) {
@@ -133,19 +132,18 @@ switch ($controller) {
         break;
     case Page::Auth->value:
         match($action) {
-            SubPage::Login->value       => (new AuthController())->login(),
-            SubPage::Logout->value      => (new AuthController())->logout(),
-            SubPage::Register->value    => (new AuthController())->register(),
+            AuthPage::Login->value      => (new AuthController())->login(),
+            AuthPage::Logout->value     => (new AuthController())->logout(),
+            AuthPage::Register->value   => (new AuthController())->register(),
             default                     => require_once "views/error404.php"
         };
         break;
     case Page::User->value:
         match($action) {
-            SubPage::Profile->value     => (new UserController())->profile(),          
+            UserPage::Profile->value    => (new UserController())->profile(),          
             default                     => require_once "views/error404.php"
         };
-        break;
-        
+        break;        
     case Page::Admin->value:
         // Check if there's admin access
         if (!isset($_SESSION['admin_auth']) || $_SESSION['admin_auth'] !== true) {
@@ -153,11 +151,11 @@ switch ($controller) {
             break; 
         }
         match($action) {
-            SubPage::Dashboard->value   => (new AdminDashboardController())->dashboard(),
-            SubPage::User->value        => (new AdminUserController())->users(),
-            SubPage::Post->value        => require_once "views/error404.php",
-            SubPage::Product->value     => require_once "views/error404.php",
-            SubPage::AuditLog->value    => (new AuditLoggerController())->logs(),
+            AdminPage::Dashboard->value => (new AdminDashboardController())->dashboard(),
+            AdminPage::User->value      => (new AdminUserController())->users(),
+            AdminPage::Post->value      => require_once "views/error404.php",
+            AdminPage::Product->value   => require_once "views/error404.php",
+            AdminPage::AuditLog->value  => (new AuditLoggerController())->logs(),
             default                     => require_once "views/error404.php"
         };
         break;
