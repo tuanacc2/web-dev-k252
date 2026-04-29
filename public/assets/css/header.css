@@ -1,0 +1,18 @@
+        .nav-hover {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-hover::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            height: 1px;
+            width: 0;
+            background: #1f1c17;
+            transform: translateX(-50%);
+            transition: all 0.3s ease;
+        }
+        .nav-hover:hover::after {
+            width: 100%;
+        }

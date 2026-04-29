@@ -21,7 +21,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
     // Session expired: Clear and destroy
     session_unset();
     session_destroy();
-    header("Location: login.php?message=expired");
+    // Redirect to the app's login route (root-relative) so routing works under built-in server
+    header("Location: /auth/login?message=expired");
     exit();
 }
 

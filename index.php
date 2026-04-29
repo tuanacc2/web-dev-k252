@@ -6,6 +6,7 @@ require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/HomeController.php';
 require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/PostController.php';
+require_once __DIR__ . '/controllers/ContactController.php';
 enum Page: string {
     case Home = 'homepage';
     case Login = 'auth/login';
@@ -16,6 +17,9 @@ enum Page: string {
     case Setting = 'setting';
     case Posts = 'posts';
     case Products = 'products';
+    case ContactStore  = 'contact_store';
+    case ContactCreate = 'contact_create';
+
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -46,5 +50,7 @@ match($page) {
     Page::Profile   => (new UserController())->profile(),
     Page::Posts     => (new PostController())->listPosts(),
     Page::Products  => (new ProductController())->product(),
+    // CONTACT
+    Page::ContactStore  => (new ContactController())->store(),
     default         => (new HomeController())->home(),
 };

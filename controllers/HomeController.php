@@ -1,18 +1,15 @@
 <?php
 class HomeController {
+
     public function home() {
-        require_once 'views/homepage.php';
+        require_once __DIR__ . '/../views/homepage.php';
     }
 
     public function about() {
-        require_once 'views/about.php';
-    }
-
-    public function contact() {
-        require_once 'views/contact.php';
+        require_once __DIR__ . '/../views/about.php';
     }
 
     public function help() {
-        require_once 'views/help.php';
+        require_once __DIR__ . '/../views/help.php';
     }
 }
