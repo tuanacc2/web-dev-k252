@@ -1,8 +1,17 @@
 <?php
 define('BASE_DIR', __DIR__);
+
 $scriptPath = $_SERVER['SCRIPT_NAME'];
-$webRoot = explode('/', $scriptPath)[1];
-define('SITE_URL', '/' . $webRoot);
+$pathArray = explode('/', $scriptPath);
+$webRoot = '';
+if (count($pathArray) > 1) {
+    array_pop($pathArray);
+    $webRoot = implode('/', $pathArray);
+} else {
+    $webRoot = '/';
+}
+
+define('SITE_URL', $webRoot ?? '/');
 
 require_once __DIR__ . '/config/session_init.php';
 require_once __DIR__ . '/database/Database.php';
@@ -100,13 +109,12 @@ $id = $parts[2] ?? null;
 
 $controller = Page::tryFrom($controller)->value;
 
-$base_url = $base_url ?? "";
 
 if (!$controller || !Page::isValid($controller) ||
     ($controller == Page::Auth && !AuthPage::isValid($action)) ||
     ($controller == Page::User && !UserPage::isValid($action)) ||
     ($controller == Page::Admin && !AdminPage::isValid($action))) {
-    header("Location: $base_url/");
+    header("Location: ".SITE_URL."/");
     exit();
 }
 

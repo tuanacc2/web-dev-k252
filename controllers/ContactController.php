@@ -9,7 +9,6 @@ class ContactController {
     // 📌 4. Xử lý submit contact (user gửi)
     // =========================
     public function store() {
-        global $base_url;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Content-Type: application/json; charset=utf-8');
         $name = trim($_POST['name'] ?? '');

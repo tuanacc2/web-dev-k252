@@ -1,6 +1,3 @@
-<?php
-$base_url = $base_url ?? '';
-?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -56,42 +53,42 @@ $base_url = $base_url ?? '';
                                     <span>Edit page</span>
                                 </a>
                                 <ul class="collapse">
-                                    <li><a href="<?= $base_url ?>/admin/homepage">Homepage</a></li>
-                                    <li><a href="<?= $base_url ?>/admin/about">About us</a></li>
+                                    <li><a href="<?= SITE_URL ?>/admin/homepage">Homepage</a></li>
+                                    <li><a href="<?= SITE_URL ?>/admin/about">About us</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a href="<?= $base_url ?>/admin/contact">
+                                <a href="<?= SITE_URL ?>/admin/contact">
                                     <i class="fa-solid fa-phone"></i>
                                     <span>Contact Request</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= $base_url ?>/admin/help">
+                                <a href="<?= SITE_URL ?>/admin/help">
                                     <i class="fa-solid fa-question"></i>
                                     <span>Help Request</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= $base_url ?>/admin/product">
+                                <a href="<?= SITE_URL ?>/admin/product">
                                     <i class="fa-solid fa-boxes-stacked"></i>
                                     <span>Products</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= $base_url ?>/admin/cart">
+                                <a href="<?= SITE_URL ?>/admin/cart">
                                     <i class="fa-solid fa-cart-shopping"></i>
                                     <span>Cart Management</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= $base_url ?>/admin/post">
+                                <a href="<?= SITE_URL ?>/admin/post">
                                     <i class="fa-solid fa-newspaper"></i>
                                     <span>Posts</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= $base_url ?>/admin/log">
+                                <a href="<?= SITE_URL ?>/admin/log">
                                     <i class="fa-solid fa-file-lines"></i>
                                     <span>Logger</span>
                                 </a>

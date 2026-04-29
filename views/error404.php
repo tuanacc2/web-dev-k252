@@ -191,7 +191,7 @@
         </p>
 
         <div class="button-group">
-            <a href="<?= $base_url ?? '/' ?>" class="btn-custom btn-primary-custom">
+            <a href="<?= SITE_URL ?? '/' ?>" class="btn-custom btn-primary-custom">
                 <i class="fas fa-home"></i> Go to Home
             </a>
             <button class="btn-custom btn-secondary-custom" onclick="history.back()">
@@ -204,8 +204,8 @@
             <ul>
                 <li>Check the URL for typos</li>
                 <li>Return to the&nbsp;<strong>home page</strong>&nbsp;and navigate from there</li>
-                <li><a href="<?= $base_url ?? '' ?>/help">Visit our help page</a>&nbsp;for more assistance</li>
-                <li><a href="<?= $base_url ?? '' ?>/contact">Contact us</a>&nbsp;if you need further help</li>
+                <li><a href="<?= SITE_URL ?? '' ?>/help">Visit our help page</a>&nbsp;for more assistance</li>
+                <li><a href="<?= SITE_URL ?? '' ?>/contact">Contact us</a>&nbsp;if you need further help</li>
             </ul>
         </div>
     </div>

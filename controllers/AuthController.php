@@ -12,7 +12,6 @@ class AuthController {
     }
 
     public function login() {
-        global $base_url;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $input_username = $_POST['username'];
@@ -26,7 +25,7 @@ class AuthController {
                     $_SESSION['admin_auth'] = true;
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
                     
-                    header("Location: $base_url/admin/dashboard");
+                    header("Location: ".SITE_URL."/admin/dashboard");
                     exit();
                 } elseif ($user && password_verify($input_password, $user['password'])) {
                     $_SESSION['user'] = $user['username'];
@@ -35,7 +34,7 @@ class AuthController {
 
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " logged in");
 
-                    header("Location: $base_url/dashboard");
+                    header("Location: ".SITE_URL."/dashboard");
                     exit();
                 } else {
                     throw new Exception("Invalid username or password.");
@@ -51,13 +50,11 @@ class AuthController {
 
     public function logout() {
         session_destroy();
-        global $base_url;
-        header("Location: $base_url/homepage");
+        header("Location: ".SITE_URL."/homepage");
         exit();
     }
 
     public function register() {
-        global $base_url;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $input_username = $_POST["username"];
@@ -81,7 +78,7 @@ class AuthController {
 
                 $this->logModel->log(Action::Register->value, $user['id'], $input_username . " registered an account");
 
-                header("Location: $base_url/auth/login");
+                header("Location: ".SITE_URL."/auth/login");
             } catch (Exception $e) {
                 $error_message = "An error occurred during registration. Please try again. ". $e->getMessage();
                 require_once 'views/auth/register.php';

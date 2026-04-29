@@ -1,7 +1,4 @@
 <?php
-
-$base_url = dirname($_SERVER['website_root'] ?? $_SERVER['SCRIPT_NAME'], 1);
-
 // 1. Set the session cookie lifetime (30 minutes)
 $lifetime = 1800;
 
@@ -23,7 +20,7 @@ if (isset($_SESSION['last_activity']) && ($now - $_SESSION['last_activity'] > $l
     // Session expired: Clear and destroy
     session_unset();
     session_destroy();
-    header("Location: $base_url/auth/login?message=expired");
+    header("Location: ".SITE_URL."/auth/login?message=expired");
     exit();
 }
 

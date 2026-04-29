@@ -1,6 +1,3 @@
-<?php
-$base_url = $base_url ?? '';
-?>
 <!DOCTYPE html>
 <html lang="en">
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +14,7 @@ $base_url = $base_url ?? '';
                     <?= htmlspecialchars($error_message) ?>
                 </div>
             <?php endif; ?>
-            <form method="POST" action="<?= $base_url ?>/auth/login" class="max-w-sm">
+            <form method="POST" action="<?= SITE_URL ?>/auth/login" class="max-w-sm">
                 <div class="mb-4">
                     <label for="username" class="block text-gray-700">Tên tài khoản:</label>
                     <input type="text" id="username" name="username" value="<?= isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']) : '' ?>" required class="w-full px-3 py-2 border rounded">
@@ -30,7 +27,7 @@ $base_url = $base_url ?? '';
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Đăng nhập
                     </button>
-                    <a class="ml-auto" href="<?= $base_url ?>/auth/register"> Chưa có tài khoản - Đăng ký</a>
+                    <a class="ml-auto" href="<?= SITE_URL ?? '' ?>/auth/register"> Chưa có tài khoản - Đăng ký</a>
                 </div>
                 
             </form>
