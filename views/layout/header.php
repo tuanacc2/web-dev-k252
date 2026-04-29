@@ -1,3 +1,6 @@
+<?php
+$base_url = $base_url ?? '';
+?>
 <header class="w-full sticky top-0 z-50">
     <!-- Notification -->
     <div class="flex items-center justify-center bg-[#1f1c17] text-[#fefbf4] text-sm leading-5 h-[30px]">
@@ -45,7 +48,7 @@
         </div>
         <!-- RIGHT (desktop menu) -->
         <div class="hidden lg:flex items-center gap-6">
-        <a href="#" class="nav-hover">Đăng nhập</a>
+        <a href="<?= $base_url ?>/auth/login" class="nav-hover">Đăng nhập</a>
         <a href="#"
             class="open-contact nav-hover"
             onclick="document.getElementById('contact-modal').classList.remove('hidden')">
