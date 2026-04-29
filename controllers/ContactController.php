@@ -1,7 +1,13 @@
 <?php
+<<<<<<< HEAD
 require_once BASE_DIR .'/models/ContactModel.php';
 class ContactController {
     private ContactModel $model;
+=======
+require_once __DIR__ . '/../models/ContactModel.php';
+class ContactController {
+    private $model;
+>>>>>>> fe9e72f1d11cf7a39b93a183fdfed1ff65f82720
     public function __construct() {
         $this->model = new ContactModel();
     }
@@ -9,7 +15,10 @@ class ContactController {
     // 📌 4. Xử lý submit contact (user gửi)
     // =========================
     public function store() {
+<<<<<<< HEAD
         global $base_url;
+=======
+>>>>>>> fe9e72f1d11cf7a39b93a183fdfed1ff65f82720
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Content-Type: application/json; charset=utf-8');
         $name = trim($_POST['name'] ?? '');
@@ -51,8 +60,11 @@ class ContactController {
         ]);
         exit;
         }
+<<<<<<< HEAD
 
         require_once 'views/contact.php';
+=======
+>>>>>>> fe9e72f1d11cf7a39b93a183fdfed1ff65f82720
     }
 }
 

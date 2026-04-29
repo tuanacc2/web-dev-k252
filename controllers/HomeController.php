@@ -1,6 +1,6 @@
 <?php
-
 class HomeController {
+
     public function home() {
         global $base_url;
         require_once 'views/homepage.php';

@@ -19,6 +19,17 @@ CREATE TABLE users (
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (avatar_id) REFERENCES images(id) ON DELETE SET NULL
 ); 
+-- Danh sách người dùng và admin
+CREATE TABLE contacts ( 
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phoneNumber VARCHAR(20),
+    question TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    hasSeen TINYINT(1) DEFAULT 0,
+    hasReplied TINYINT(1) DEFAULT 0
+);
 
 -- Thông tin liên hệ
 CREATE TABLE contacts ( 

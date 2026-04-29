@@ -14,11 +14,12 @@ class Database {
             $port_dsn = $this->port ? ";port={$this->port}" : "";
             $this->conn = new PDO("mysql:host=$this->host" . $port_dsn, $this->user, $this->pass);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // Kết nối chính thức vào Database vừa tạo
-            $this->conn->exec("USE `$this->db`");
-
+            // chọn database
+            $this->conn->exec("USE `{$this->db}`");
+            // LOG thành công ra terminal
+            error_log("[DB] Connected successfully to {$this->db} on port {$this->port}");
         } catch (PDOException $e) {
+            error_log("[DB ERROR] " . $e->getMessage());
             error_log("[DB ERROR] " . $e->getMessage());
             die("Lỗi Database: " . $e->getMessage());
         }

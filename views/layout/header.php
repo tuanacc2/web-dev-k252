@@ -40,7 +40,11 @@
         <!-- LOGO (center) -->
         <div class="absolute left-1/2 -translate-x-1/2">
             <a href="?action=homepage">
+<<<<<<< HEAD
             <img src="<?= SITE_URL ?? '' ?>/assets/public/resources/logo/logo.f502f17.svg" alt="Logo" class="h-8">      
+=======
+            <img src="/public/assets/resources/logo/logo.f502f17.svg" alt="Logo" class="h-8">      
+>>>>>>> fe9e72f1d11cf7a39b93a183fdfed1ff65f82720
             </a>  
         </div>
         <!-- RIGHT (desktop menu) -->
@@ -187,5 +191,10 @@
 </div>
 
 
+<<<<<<< HEAD
 <script src="<?= SITE_URL ?? '' ?>/assets/public/js/header.js"></script>
 <script src="<?= SITE_URL ?? '' ?>/assets/public/js/contactForm.js"></script>
+=======
+<script src="/public/assets/js/header.js"></script>
+<script src="/public/assets/js/contactForm.js"></script>
+>>>>>>> fe9e72f1d11cf7a39b93a183fdfed1ff65f82720
