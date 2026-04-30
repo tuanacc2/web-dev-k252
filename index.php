@@ -23,6 +23,8 @@ require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/PostController.php';
 
 require_once __DIR__ . '/controllers/admin/AdminUserController.php';
+require_once __DIR__ . '/controllers/admin/AdminContactController.php';
+require_once __DIR__ . '/controllers/admin/AdminCartController.php';
 require_once __DIR__ . '/controllers/admin/AuditLoggerController.php';
 require_once __DIR__ . '/controllers/admin/AdminDashboardController.php';
 
@@ -80,6 +82,8 @@ enum AdminPage: string {
     case Dashboard = 'dashboard';
     case Homepage = 'homepage';
     case Contact = 'contact';
+    case ContactDetail = 'contact-detail';
+    case ContactAnswer = 'contact-answer';
     case About = 'about';
     case Help = 'help';
     case User = 'user';
@@ -155,12 +159,15 @@ switch ($controller) {
             break; 
         }
         match($action) {
-            AdminPage::Dashboard->value => (new AdminDashboardController())->dashboard(),
-            AdminPage::User->value      => (new AdminUserController())->users(),
-            AdminPage::Post->value      => require_once "views/error404.php",
-            AdminPage::Product->value   => require_once "views/error404.php",
-            AdminPage::AuditLog->value  => (new AuditLoggerController())->logs(),
-            default                     => require_once "views/error404.php"
+            AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
+            AdminPage::Contact->value       => (new AdminContactController())->contact(),
+            AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
+            AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
+            AdminPage::User->value          => (new AdminUserController())->users(),
+            AdminPage::Post->value          => require_once "views/error404.php",
+            AdminPage::Product->value       => require_once "views/error404.php",
+            AdminPage::AuditLog->value      => (new AuditLoggerController())->logs(),
+            default                         => require_once "views/error404.php"
         };
         break;
     default:
