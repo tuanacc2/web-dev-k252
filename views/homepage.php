@@ -150,7 +150,10 @@
 
     <!-- Scrolling text-->
     <div class="overflow-hidden bg-[#fefbf4] text-black py-2 relative
-               text-[50px] md:text-[80px] lg:text-[150px]" 
+                flex items-center
+               text-[50px] md:text-[80px] lg:text-[150px]
+               h-[100px] md:h-[160px] lg:h-[300px]
+               " 
     style=" border-top: 1px solid #C5A25D; border-bottom: 1px solid #C5A25D;   
     font-family: 'Anton', sans-serif;font-weight: 400;font-style: normal;">
         <div class="marquee-track">

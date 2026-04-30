@@ -160,7 +160,7 @@
             <!-- MESSENGER -->
             <a href="https://m.me/100094046926830" target="_blank"
             class="flex flex-col items-center justify-center border border-[#C5A25D]
-                    py-3 rounded-md transition
+                    py-1 rounded-md transition
                     hover:bg-[#fee5b4] hover:text-white group">
 
                 <!-- SVG Messenger -->
@@ -186,7 +186,7 @@
             <!-- ZALO -->
             <a href="https://zalo.me/0962294335" target="_blank"
             class="flex flex-col items-center justify-center border border-[#C5A25D]
-                    py-3 rounded-md transition
+                    py-1 rounded-md transition
                     hover:bg-[#fee5b4] hover:text-white group">
 
                 <!-- SVG Zalo -->
