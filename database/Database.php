@@ -2,7 +2,7 @@
 class Database {
     private static ?Database $instance = null;
     private string $host = "localhost";
-    private string $port = "3306";
+    private string $port = "3307";
     private string $user = "root";
     private string $pass = "";
     private string $db   = "mydbass";
