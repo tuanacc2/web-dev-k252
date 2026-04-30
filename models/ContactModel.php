@@ -8,7 +8,7 @@ class ContactModel {
     }
 
     public function getAll() {
-        $stmt = $this->db->prepare("SELECT * FROM contacts ORDER BY created_at DESC");
+        $stmt = $this->db->prepare("SELECT * FROM contacts");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -28,31 +28,34 @@ class ContactModel {
         return $stmt->execute([$name, $email, $phone, $question]);
     }
 
-    // 📌 Đánh dấu đã xem
+    // Đánh dấu đã xem
     public function markSeen(int $id) {
         $stmt = $this->db->prepare("UPDATE contacts SET hasSeen = 1 WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
-    // 📌 Đánh dấu đã trả lời
+    // Đánh dấu đã trả lời
     public function markReplied(int $id) {
         $stmt = $this->db->prepare("UPDATE contacts SET hasReplied = 1 WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
-    // 📌 Xóa contact
+    public function markAnswered(int $id) {
+        return $this->markReplied($id);
+    }
+
     public function delete(int $id) {
         $stmt = $this->db->prepare("DELETE FROM contacts WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
-    // 📌 Lọc chưa xem
+    // Lọc chưa xem
     public function getUnseen() {
         $stmt = $this->db->prepare("SELECT * FROM contacts WHERE hasSeen = 0 ORDER BY created_at DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    // 📌 Lọc chưa trả lờ
+    //Lọc chưa trả lời
     public function getUnreplied() {
         $stmt = $this->db->prepare("SELECT * FROM contacts WHERE hasReplied = 0 ORDER BY created_at DESC");
         $stmt->execute();
