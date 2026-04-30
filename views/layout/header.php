@@ -39,7 +39,7 @@
         </button>
         <!-- LOGO (center) -->
         <div class="absolute left-1/2 -translate-x-1/2">
-            <a href="?action=homepage">
+            <a href="<?= SITE_URL ?? '' ?>/homepage" >
             <img src="<?= SITE_URL ?? '' ?>/assets/public/resources/logo/logo.f502f17.svg" alt="Logo" class="h-8">      
             </a>  
         </div>
@@ -98,7 +98,7 @@
         opacity: 1;
     }
 </style>
-
+<!--Contact modal-->
 <div id="contact-modal"
      class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
      onclick="if(event.target.id === 'contact-modal') this.classList.add('hidden')">
@@ -186,6 +186,41 @@
     </div>
 </div>
 
-
 <script src="<?= SITE_URL ?? '' ?>/assets/public/js/header.js"></script>
-<script src="<?= SITE_URL ?? '' ?>/assets/public/js/contactForm.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contact-form");
+    if (!form) return;
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        // clear error
+        setError("err-name", "");
+        setError("err-email", "");
+        setError("err-phone", "");
+        setError("err-question", "");
+        const formData = new FormData(form);
+
+        const res = await fetch(`<?= SITE_URL ?>/contact`, {
+            method: "POST",
+            body: formData
+        });
+        const data = await res.json();
+        // ❌ ERROR
+        if (data.status === "error") {
+            const err = data.errors;
+            if (err.name) setError("err-name", err.name);
+            if (err.email) setError("err-email", err.email);
+            if (err.phoneNumber) setError("err-phone", err.phoneNumber);
+            if (err.question) setError("err-question", err.question);
+            return;
+        }
+        // ✅ SUCCESS
+        alert("Gửi thành công!");
+        form.reset();
+    });
+    function setError(id, msg) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = msg;
+    }
+});
+</script>
