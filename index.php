@@ -32,7 +32,6 @@ enum Page: string {
     case Auth = 'auth';
     case Help = 'help';
     case Contact ='contact';
-    case Dashboard = 'dashboard';
     case User = 'user';
     case Setting = 'setting';
     case Post = 'post';
@@ -127,10 +126,7 @@ switch ($controller) {
         break;
     case Page::Contact->value:
         (new ContactController())->store();
-        break;
-    case Page::Dashboard->value: 
-        (new HomeController())->dashboard();
-        break;  
+        break; 
     case Page::Setting->value:
     case Page::Post->value:
         (new PostController())->posts();

@@ -12,8 +12,4 @@ class HomeController {
     public function help() {
         require_once 'views/help.php';
     }
-
-    public function dashboard() {
-        require_once 'views/dashboard.php';
-    }
 }

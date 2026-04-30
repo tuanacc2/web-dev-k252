@@ -41,14 +41,13 @@ class AuthController {
 
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " logged in");
 
-                    header("Location: ".SITE_URL."/dashboard");
+                    header("Location: ".SITE_URL."/homepage");
                     exit();
                 } else {
                     throw new Exception("Invalid username or password.");
                 }
             } catch (Exception $e) {
-                $error_message = "An error occurred during login. Please try again. ". $e->getMessage();
-                require_once 'views/auth/login.php';
+                $error_message = "An error occurred during login. Please try again.";
             }              
         } else {
             require_once 'views/auth/login.php';
@@ -79,16 +78,20 @@ class AuthController {
                 // Proceed with user registration
                 $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
                 $this->authModel->addNewUser($input_username, $input_email, $hashed_password, $input_phone, $input_address);
-                $_SESSION['user'] = $input_username;
 
                 $user = $this->authModel->getUserByUsername($input_username);
 
+                $_SESSION['user'] = $user['username'];
+                $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
+                $_SESSION['avatar'] = "/assets/images/default_user_avatar/avatar1.jpg";
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['login_status'] = true;
+
                 $this->logModel->log(Action::Register->value, $user['id'], $input_username . " registered an account");
 
-                header("Location: ".SITE_URL."/auth/login");
+                header("Location: ".SITE_URL."/homepage");
             } catch (Exception $e) {
-                $error_message = "An error occurred during registration. Please try again. ". $e->getMessage();
-                require_once 'views/auth/register.php';
+                $error_message = "An error occurred during registration. Please try again.";
             }              
         } else {
             require_once 'views/auth/register.php';

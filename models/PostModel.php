@@ -7,15 +7,31 @@ class PostModel {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function getPost(string $search = "", int $limit = 10, int $offset = 0) {
-        $search_query = $search ? 
-            "WHERE title LIKE '%" . $search . "%' ORDER BY created_at DESC LIMIT :limit OFFSET :offset" : 
-            "ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
-        $stmt = $this->db->prepare("SELECT * FROM posts " . $search_query);
-        $stmt->execute([
-            ":limit" => $limit,
-            ":offset" => $offset
-        ]);
+    public function getPost(string $search = "", int $limit = 0, int $offset = 0) {
+        $sql = "SELECT * FROM posts ";
+
+        if ($search) {
+            $sql .= "WHERE title LIKE :search ";
+        }
+
+        $sql .= "ORDER BY created_at DESC ";
+
+        if ($limit) {
+            $sql .= "LIMIT :limit OFFSET :offset";
+        }
+
+        $stmt = $this->db->prepare($sql);
+        
+        if (!empty($search)) {
+            $stmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+        }
+
+        if ($limit > 0) {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

@@ -28,7 +28,7 @@
         <a href="#" class="nav-hover">Sản phẩm</a>
         <a href="#" class="nav-hover">Về chúng tôi</a>
         <a href="#" class="nav-hover">Cocoon</a>
-        <a href="?action=posts" class="nav-hover">Bài viết</a>
+        <a href="<?= SITE_URL ?? '' ?>/post" class="nav-hover">Bài viết</a>
         </div>
 
         <!-- MOBILE MENU BUTTON -->
@@ -39,13 +39,16 @@
         </button>
         <!-- LOGO (center) -->
         <div class="absolute left-1/2 -translate-x-1/2">
-            <a href="?action=homepage">
+            <a href="<?= SITE_URL ?? '' ?>/homepage">
             <img src="<?= SITE_URL ?? '' ?>/assets/public/resources/logo/logo.f502f17.svg" alt="Logo" class="h-8">      
             </a>  
         </div>
         <!-- RIGHT (desktop menu) -->
         <div class="hidden lg:flex items-center gap-6">
-        <a href="<?= SITE_URL ?? '' ?>/auth/login" class="nav-hover">Đăng nhập</a>
+        <a href="javascript:void(0)" class="open-contact nav-hover"
+            onclick="document.getElementById('login-modal').classList.remove('hidden')">
+            Đăng nhập
+        </a>
         <a href="#"
             class="open-contact nav-hover"
             onclick="document.getElementById('contact-modal').classList.remove('hidden')">
@@ -74,7 +77,7 @@
             <a href="#">
                 <p class="font-semibold">Về chúng tôi</p>
             </a>
-            <a href="?action=posts">
+            <a href="<?= SITE_URL ?? '' ?>/post">
                 <p class="font-semibold">Bài viết</p>
             </a>
             <a href="#"
@@ -93,9 +96,19 @@
 
 <style>
     #contact-form input::placeholder,
-    #contact-form textarea::placeholder {
+    #contact-form textarea::placeholder,
+    #login-form input::placeholder, 
+    #login-form textarea::placeholder,
+    #register-form input::placeholder,
+    #register-form textarea::placeholder {
         color: #C5A25D;
         opacity: 1;
+    }
+
+    .clickable-text {
+        color: #C5A25D;
+        opacity: 1;
+        text-decoration: underline;
     }
 </style>
 
@@ -186,6 +199,154 @@
     </div>
 </div>
 
+<!--Login Modal-->
+
+<div id="login-modal"
+     class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+     onclick="if(event.target.id === 'login-modal') this.classList.add('hidden')">
+
+    <div class=" bg-[#fefbf4] w-[90%] max-w-[500px] p-12 rounded-lg relative">
+        
+        <button class="absolute top-2 right-3 text-2xl"
+                onclick="document.getElementById('login-modal').classList.add('hidden')">
+            ✕
+        </button>
+
+        <p class="text-[#1f1c17] font-semibold pb-4 mb-4 text-xl"><span>Đăng nhập</span></p>
+        <p class="text-[#1f1c17] font-serif py-4 mb-4 text-3xl"><span>Chào mừng bạn trở lại</span></p>
+        <p>Bạn chưa có tài khoản? &nbsp;
+            <a class="ml-auto clickable-text" href="javascript:void(0)"
+                onclick="
+                    document.getElementById('login-modal').classList.add('hidden'), 
+                    document.getElementById('register-modal').classList.remove('hidden')">
+                Tạo tài khoản
+            </a>
+        </p>
+
+        <form method="POST" action="<?= SITE_URL ?>/auth/login" id="login-form" class="mt-7">
+            <div>
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-layers mr-2" style="color: #C5A25D"></i>
+                    <input type="text" name="username" placeholder="Nhập tên tài khoản" 
+                        class="w-full h-10">
+                </div>
+                <div id="err-username" class="text-red-500 text-sm"></div>
+            </div>
+            <div class="mt-4">
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-lock mr-2" style="color: #C5A25D"></i>
+                    <input type="password" name="password" placeholder="Nhập mật khẩu" 
+                        class="w-full h-10">
+                </div> 
+                <div id="err-password" class="text-red-500 text-sm"></div>
+            </div>
+            <div class="flex flex-row">
+                <a class="ml-auto clickable-text p-1" href="javascript:void(0)">
+                Quên mật khẩu
+                </a> 
+            </div>
+
+            <div class="mt-6 flex justify-center">
+                <button
+                    form="login-form"
+                    class=" w-full !bg-[#1f1c17] !text-white !text-xl !px-0 !py-4 !rounded-md
+                            hover:!bg-[#2d140d] !transition !duration-300">
+                ĐĂNG NHẬP
+                </button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+<!--Register Modal-->
+
+<div id="register-modal"
+     class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+     onclick="if(event.target.id === 'register-modal') this.classList.add('hidden')">
+
+    <div class=" bg-[#fefbf4] w-[90%] max-w-[500px] p-12 rounded-lg relative">
+        
+        <button class="absolute top-2 right-3 text-2xl"
+                onclick="document.getElementById('register-modal').classList.add('hidden')">
+            ✕
+        </button>
+
+        <p class="text-[#1f1c17] font-semibold pb-4 mb-4 text-xl">
+            <a  class="text-2xl"
+                href="javascript:void(0)"
+                onclick="
+                    document.getElementById('register-modal').classList.add('hidden'), 
+                    document.getElementById('login-modal').classList.remove('hidden')">
+                ←
+            </a>
+            <span>Đăng ký</span>
+        </p>
+        <p class="text-[#1f1c17] font-serif py-4 mb-4 text-3xl"><span>Tạo tài khoản</span></p>
+
+        <form method="POST" action="<?= SITE_URL ?>/auth/register" id="register-form" class="mt-7">
+            <div>
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-layers mr-2" style="color: #C5A25D"></i>
+                    <input type="text" name="username" placeholder="Nhập tên tài khoản" 
+                        class="w-full h-10">
+                </div>
+            </div>
+            <div class="mt-4 flex flex-row items-center justify-between">
+                <div>
+                    <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                        <i class="ti-user mr-2" style="color: #C5A25D"></i>
+                        <input type="text" name="last_name" placeholder="Nhập họ" class="w-full h-10 p-2 ">
+                    </div>
+                    <div id="err-name" class="text-red-500 text-sm"></div>
+                </div>
+                <div>
+                    <input type="text" name="first-name" placeholder="Nhập tên" class="w-full h-10 p-2 " style="border-bottom: 1px solid #C5A25D ;">
+                    <div id="err-name" class="text-red-500 text-sm"></div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-lock mr-2" style="color: #C5A25D"></i>
+                    <input type="password" name="password" placeholder="Nhập mật khẩu" 
+                        class="w-full h-10">
+                </div>
+                <div id="err-password" class="text-red-500 text-sm"></div>
+            </div>
+            <div class="mt-4">
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-email mr-2" style="color: #C5A25D"></i>
+                    <input type="email" name="email" placeholder="Nhập email" class="w-full h-10 p-2">
+                </div>
+                <div id="err-email" class="text-red-500 text-sm"></div>
+            </div>
+            <div class="mt-4">
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-mobile mr-2" style="color: #C5A25D"></i>
+                    <input type="tel" name="phone" placeholder="Nhập số điện thoại" class="w-full h-10 p-2 ">
+                </div>
+                <div id="err-phone" class="text-red-500 text-sm"></div>
+            </div>
+            <div class="mt-4">
+                <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
+                    <i class="ti-home mr-2" style="color: #C5A25D"></i>
+                    <input type="text" name="address" placeholder="Nhập địa chỉ" class="w-full h-10 p-2 ">
+                </div>
+                <div id="err-address" class="text-red-500 text-sm"></div>
+            </div>
+
+            <div class="mt-6 flex justify-center">
+                <button
+                    form="register-form"
+                    class=" w-full !bg-[#1f1c17] !text-white !text-xl !px-0 !py-4 !rounded-md
+                            hover:!bg-[#2d140d] !transition !duration-300">
+                ĐĂNG KÝ
+                </button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
 
 <script src="<?= SITE_URL ?? '' ?>/assets/public/js/header.js"></script>
 <script src="<?= SITE_URL ?? '' ?>/assets/public/js/contactForm.js"></script>

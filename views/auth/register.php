@@ -20,6 +20,14 @@
                     <input type="text" id="username" name="username" required class="w-full px-3 py-2 border rounded">
                 </div>
                 <div class="mb-4">
+                    <label for="last_namee" class="block text-gray-700">Họ:</label>
+                    <input type="text" id="last_name" name="last_name" required class="w-full px-3 py-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="first_name" class="block text-gray-700">Tên:</label>
+                    <input type="text" id="first_name" name="first_name" required class="w-full px-3 py-2 border rounded">
+                </div>
+                <div class="mb-4">
                     <label for="password" class="block text-gray-700">Mật khẩu:</label>
                     <input type="password" id="password" name="password" required class="w-full px-3 py-2 border rounded">
                 </div>
