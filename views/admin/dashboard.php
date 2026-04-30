@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ICO Dashboard - SRTdash Admin</title>
+    <title>SRTDash Admin - Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="ICO cryptocurrency dashboard with real-time market data, sales reports, and trading analytics.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -276,15 +276,15 @@
                         <div class="breadcrumbs-area clearfix">
                             <h1 class="page-title float-start">Dashboard</h1>
                             <ul class="breadcrumbs float-start">
-                                <li><a href="index.html">Home</a></li>
+                                <li><a href="<?= SITE_URL ?>/admin/dashboard">Home</a></li>
                                 <li><span>Dashboard</span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile float-end">
-                            <picture><source srcset="<?= SITE_URL ?? '' ?>/assets/admin/images/author/avatar.avif" type="image/avif"><img class="avatar user-thumb" src="<?= SITE_URL ?? '' ?>/assets/admin/images/author/avatar.png" alt="avatar"></picture>
-                            <h4 class="user-name dropdown-toggle" data-bs-toggle="dropdown">Aigars Silkalns <i class="fa-solid fa-angle-down"></i></h4>
+                            <picture><img class="avatar user-thumb" src="<?= $_SESSION['admin_avatar'] ?? '/assets/admin/images/author/avatar.png'?>" alt="avatar"></picture>
+                            <h4 class="user-name dropdown-toggle" data-bs-toggle="dropdown"><?= $_SESSION['admin_name'] ?? 'Admin' ?><i class="fa-solid fa-angle-down"></i></h4>
                             <div class="dropdown-menu user-dropdown">
                                 <a class="dropdown-item" href="profile.html"><i class="fa-solid fa-user"></i> My Profile</a>
                                 <a class="dropdown-item" href="notifications.html"><i class="fa-solid fa-envelope"></i> Inbox <span class="badge rounded-pill bg-primary ms-auto">3</span></a>

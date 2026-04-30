@@ -1,14 +1,17 @@
 <?php
 class AdminUserModel {
-    private $db;
+    private PDO $db;
 
     public function __construct() {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function getAllUsers() {
-        $stmt = $this->db->prepare("SELECT * FROM users");
-        $stmt->execute();
+    public function getAllUsers(int $limit = 20, int $offset = 0) {
+        $stmt = $this->db->prepare("SELECT * FROM users ORDER BY id ASC LIMIT :limit OFFSET :offset");
+        $stmt->execute([
+            ":limit" => $limit,
+            ":offset" => $offset
+        ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

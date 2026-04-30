@@ -18,7 +18,7 @@ enum Action: string {
 }
 
 class AuditLoggerModel {
-    private \PDO $db;
+    private PDO $db;
 
     public function __construct() {
         $this->db = Database::getInstance()->conn;
@@ -36,16 +36,34 @@ class AuditLoggerModel {
         ]);
     }
 
-    public function getLogs(string $keyword = "") {
-        $sql = "SELECT * FROM logs";
-        if (!empty($keyword)) {
-            $sql .= " WHERE * LIKE ?";
-            $stmt = $this->db->prepare($sql);
-            $like_keyword = "%$keyword%";
-            $stmt->bindParam("s", $like_keyword);
-        } else {
-            $stmt = $this->db->prepare($sql);
+    public function getLogs(string $search = "", int $limit = 0, int $offset = 0) {
+        $sql = "
+            SELECT l.*, u.username
+            FROM logs l
+            LEFT JOIN users u ON l.user_id = u.id 
+        ";
+
+        if (!empty($search)) {
+            $sql .= " WHERE u.username LIKE :search OR l.description LIKE :search OR l.action LIKE :search";
         }
+
+        $sql .= " ORDER BY l.id DESC";
+
+        if ($limit > 0) {
+            $sql .= " LIMIT :limit OFFSET :offset";
+        }
+
+        $stmt = $this->db->prepare($sql);
+        
+        if (!empty($search)) {
+            $stmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+        }
+
+        if ($limit > 0) {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        }
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -1,14 +1,17 @@
 <?php
 require_once BASE_DIR .'/models/AuthModel.php';
 require_once BASE_DIR .'/models/AuditLoggerModel.php';
+require_once BASE_DIR .'/models/ImageModel.php';
 
 class AuthController {
     private AuditLoggerModel $logModel;
     private AuthModel $authModel;
+    private ImageModel $imageModel;
 
     public function __construct() { 
         $this->logModel = new AuditLoggerModel();
         $this->authModel = new AuthModel();
+        $this->imageModel = new ImageModel();
     }
 
     public function login() {
@@ -21,6 +24,8 @@ class AuthController {
 
                 if ($user && $input_password === $user['password'] && $user['role'] === 'admin') {
                     $_SESSION['admin_user'] = $user['username'];
+                    $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
+                    $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
                     $_SESSION['admin_user_id'] = $user['id'];
                     $_SESSION['admin_auth'] = true;
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
@@ -29,6 +34,8 @@ class AuthController {
                     exit();
                 } elseif ($user && password_verify($input_password, $user['password'])) {
                     $_SESSION['user'] = $user['username'];
+                    $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
+                    $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['login_status'] = true;
 

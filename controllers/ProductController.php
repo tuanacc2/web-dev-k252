@@ -19,6 +19,6 @@ class ProductController {
     public function productDetail(int $product_id) {
         $product = $this->productModel->getProductById($product_id);
 
-        require_once 'views/product_detail.php';
+        require_once 'views/productDetail.php';
     }
 }
