@@ -17,6 +17,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <!--Robo mono-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <!-- Sick slider -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
@@ -28,6 +32,14 @@
         100% {
             transform: translateX(-50%);
         }
+        }
+        @keyframes floatY {
+            0%   { transform: translate3d(0, 0px, 0); }
+            50%  { transform: translate3d(0, -10px, 0); }
+            100% { transform: translate3d(0, 0px, 0); }
+        }
+        .animate-float {
+            animation: floatY 4s ease-in-out infinite;
         }
 
         .marquee-track {
@@ -99,8 +111,8 @@
     <?php include __DIR__ . '/layout/header.php'; ?>
     <!-- Main content -->
     <!-- Advertisement -->
-    <div class="slider">
-        <div>
+    <div class="slider" style=" font-family: 'Roboto Mono', monospace;">
+        <div class="text-[#1f1c17]">
             <div class="flex flex-col lg:flex-row h-full">
                 <!-- LEFT: IMAGE -->
                 <div class="w-full lg:w-1/2 h-full">
@@ -109,21 +121,31 @@
 
                 <!-- RIGHT: TEXT (chỉ hiện lg) -->
                 <div class="hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-[#fff6cd] p-10">
-                    <div>
-                        <h2 class="text-4xl font-bold mb-4">
-                            Cocoon đã có mặt tại Pháp
-                        </h2>
-                        <p class="text-gray-600 mb-6">
-                            Nội dung mô tả ở đây...
+                    <div class="flex flex-col gap-8 w-[80%]">
+                        <!---- Thumbnail -->
+                        <p class="text-4xl font-light">
+                            MỞ BÁN
                         </p>
-                        <button class="px-6 py-3 bg-black text-white">
-                            Xem ngay →
-                        </button>
+                        <!--Title-->
+                        <p class="text-6xl font-semibold" >
+                            Giftbox "Cocoon đã có mặt tại Pháp"
+                        </p>
+                        <!--Content-->
+                        <p>
+                            Nếu được gọi tên hành trình vươn ra thế giới của Cocoon, chúng tôi sẽ gọi đó là hành trình “nảy mầm”. Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.
+                        </p>
+                        <!--Link-->
+                        <a href="#" 
+                            class="px-6 py-3 bg-black !text-white w-max font-normal rounded-md
+                                    transition-all duration-300
+                                    hover:bg-[#271f1d] hover:text-black hover:scale-105">
+                                Xem ngay →
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div>
+        <div class="text-[#fefbf4]">
             <div class="flex flex-col lg:flex-row h-full">
                 <!-- LEFT: IMAGE -->
                 <div class="w-full lg:w-1/2 h-full">
@@ -132,20 +154,65 @@
 
                 <!-- RIGHT: TEXT (chỉ hiện lg) -->
                 <div class="hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-[#54a14a] p-10">
-                    <div>
-                        <h2 class="text-4xl font-bold mb-4">
-                            Cocoon đã có mặt tại Pháp
-                        </h2>
-                        <p class="text-gray-600 mb-6">
-                            Nội dung mô tả ở đây...
+                    <div class="flex flex-col gap-8 w-[80%]">
+                        <!---- Thumbnail -->
+                        <p class="text-4xl font-light">
+                            RA MẮT SẢN PHẨM MỚI
                         </p>
-                        <button class="px-6 py-3 bg-black text-white">
+                        <!--Title-->
+                        <p class="text-6xl font-semibold" >
+                            Nước tẩy trang sen Hậu Giang
+                        </p>
+                        <!--Content-->
+                        <p>
+                            Cocoon x Phương Mỹ Chi ra mắt nước tẩy trang thế hệ mới: Nước Tẩy Trang Sen Hậu Giang - làm sạch sâu lớp trang điểm và bụi siêu mịn PM1.0 nhờ công nghệ độc quyền NatraGem™ S150, hỗ trợ cân bằng hệ vi sinh trên da với phức hợp prebiotics, phù hợp cho mọi loại da, kể cả da rất nhạy cảm.                        </p>
+                        <!--Link-->
+                        <a href="#" 
+                            class="px-6 py-3 bg-black !text-white w-max font-normal rounded-md
+                                    transition-all duration-300
+                                    hover:bg-[#271f1d] hover:text-black hover:scale-105">
                             Xem ngay →
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Main products -->
+    <div class="relative w-full flex flex-col lg:flex-row items-center justify-center gap-6 px-6 lg:px-20 my-5"
+        style="font-family: 'Roboto Mono', monospace;"> 
+        <div class="hidden lg:flex lg:w-1/3 h-[500px]">
+            <p class="text-3xl font-normal text-[#1f1c17] text-center pt-20">
+                Nước tẩy trang sen Hậu Giang
+            </p>
+        </div>
+        <div class="w-full lg:w-1/3 h-[500px] flex items-center justify-center relative overflow-hidden">
+
+            <img src="/assets/images/product/Layout_9c389236be.png"
+                class="w-full h-full max-w-full max-h-full object-contain" />
+
+            <img src="/assets/images/product/Chai_Sen_924c4d6134.png"
+                class="absolute inset-0 w-full h-full max-w-full max-h-full object-contain animate-float" />
+
+            <img src="/assets/images/product/Canh_Sen_4fbdabf024.png"
+                class="absolute inset-0 w-full h-full max-w-full max-h-full object-contain" />
+        </div>
+        <div class="w-full flex lg:hidden items-center justify-center">
+            <p class="text-3xl font-normal text-[#1f1c17] text-center pt-5">
+                Nước tẩy trang sen Hậu Giang
+            </p>
+        </div>
+        <!-- Description -->
+        <div class="w-full lg:w-1/3 lg:h-[500px] flex flex-col items-center justify-center">
+            <p class="text-xl font-normal text-[#9a978f]">
+                Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế. 
+            </p>
+            <a href="#" 
+                class="px-6 py-3 !text-[#1f1c17] w-max font-normal">
+                Mua ngay →
+            </a>
+        </div>
+
     </div>
 
     <!-- Scrolling text-->
@@ -161,9 +228,6 @@
             <span class="mx-10">MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT</span>
         </div>
     </div>
-
-
-
 
     <!--  Footer section -->
     <?php include __DIR__ . '/layout/footer.php'; ?>
