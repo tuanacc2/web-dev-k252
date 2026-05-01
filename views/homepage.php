@@ -108,82 +108,47 @@
 <div class="w-full min-h-screen bg-[#fefbf4]">
 
     <!-- Header section -->
-    <?php include __DIR__ . '/layout/header.php'; ?>
     <!-- Main content -->
     <!-- Advertisement -->
     <div class="slider" style=" font-family: 'Roboto Mono', monospace;">
-        <div class="text-[#1f1c17]">
-            <div class="flex flex-col lg:flex-row h-full">
-                <!-- LEFT: IMAGE -->
-                <div class="w-full lg:w-1/2 h-full">
-                    <img src="/assets/images/banner/Social_post_Mo_ban_Giftbox_Cocoon_da_co_mat_tai_Phap_01_d99eec03fc.jpg" class="w-full h-full object-cover" />
-                </div>
+        <?php if (!empty($advertisements)): ?>
+            <?php foreach ($advertisements as $advertisement): ?>
+                <div class="text-[#1f1c17]" style="color: <?= htmlspecialchars($advertisement['textColor'] ?? '#1f1c17') ?>; background-color: <?= htmlspecialchars($advertisement['backgroundColor'] ?? 'transparent') ?>;">
+                    <div class="flex flex-col lg:flex-row h-full">
+                        <!-- LEFT: IMAGE -->
+                        <div class="w-full lg:w-1/2 h-full">
+                            <img src="<?= htmlspecialchars($advertisement['leftImage'] ?? '') ?>" class="w-full h-full object-cover" alt="Advertisement">
+                        </div>
 
-                <!-- RIGHT: TEXT (chỉ hiện lg) -->
-                <div class="hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-[#fff6cd] p-10">
-                    <div class="flex flex-col gap-8 w-[80%]">
-                        <!---- Thumbnail -->
-                        <p class="text-4xl font-light">
-                            MỞ BÁN
-                        </p>
-                        <!--Title-->
-                        <p class="text-6xl font-semibold" >
-                            Giftbox "Cocoon đã có mặt tại Pháp"
-                        </p>
-                        <!--Content-->
-                        <p>
-                            Nếu được gọi tên hành trình vươn ra thế giới của Cocoon, chúng tôi sẽ gọi đó là hành trình “nảy mầm”. Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.
-                        </p>
-                        <!--Link-->
-                        <a href="#" 
-                            class="px-6 py-3 bg-black !text-white w-max font-normal rounded-md
-                                    transition-all duration-300
-                                    hover:bg-[#271f1d] hover:text-black hover:scale-105">
-                                Xem ngay →
-                        </a>
+                        <!-- RIGHT: TEXT (chỉ hiện lg) -->
+                        <div class="hidden lg:flex lg:w-1/2 h-full items-center justify-center p-10">
+                            <div class="flex flex-col gap-8 w-[80%]">
+                                <p class="text-4xl font-light">
+                                    <?= htmlspecialchars($advertisement['thumbnail'] ?? '') ?>
+                                </p>
+                                <p class="text-6xl font-semibold">
+                                    <?= htmlspecialchars($advertisement['title'] ?? '') ?>
+                                </p>
+                                <p>
+                                    <?= htmlspecialchars($advertisement['content'] ?? '') ?>
+                                </p>
+                                <a href="<?= htmlspecialchars($advertisement['link'] ?? '#') ?>"
+                                    class="px-6 py-3 bg-black !text-white w-max font-normal rounded-md transition-all duration-300 hover:bg-[#271f1d] hover:text-black hover:scale-105">
+                                    Xem ngay →
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="text-[#fefbf4]">
-            <div class="flex flex-col lg:flex-row h-full">
-                <!-- LEFT: IMAGE -->
-                <div class="w-full lg:w-1/2 h-full">
-                    <img src="/assets/images/banner/hinh1pmc_837dbe7578.jpg" class="w-full h-full object-cover" />
-                </div>
-
-                <!-- RIGHT: TEXT (chỉ hiện lg) -->
-                <div class="hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-[#54a14a] p-10">
-                    <div class="flex flex-col gap-8 w-[80%]">
-                        <!---- Thumbnail -->
-                        <p class="text-4xl font-light">
-                            RA MẮT SẢN PHẨM MỚI
-                        </p>
-                        <!--Title-->
-                        <p class="text-6xl font-semibold" >
-                            Nước tẩy trang sen Hậu Giang
-                        </p>
-                        <!--Content-->
-                        <p>
-                            Cocoon x Phương Mỹ Chi ra mắt nước tẩy trang thế hệ mới: Nước Tẩy Trang Sen Hậu Giang - làm sạch sâu lớp trang điểm và bụi siêu mịn PM1.0 nhờ công nghệ độc quyền NatraGem™ S150, hỗ trợ cân bằng hệ vi sinh trên da với phức hợp prebiotics, phù hợp cho mọi loại da, kể cả da rất nhạy cảm.                        </p>
-                        <!--Link-->
-                        <a href="#" 
-                            class="px-6 py-3 bg-black !text-white w-max font-normal rounded-md
-                                    transition-all duration-300
-                                    hover:bg-[#271f1d] hover:text-black hover:scale-105">
-                            Xem ngay →
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
     <!-- Main products -->
     <div class="relative w-full flex flex-col lg:flex-row items-center justify-center gap-6 px-6 lg:px-20 my-5"
         style="font-family: 'Roboto Mono', monospace;"> 
         <div class="hidden lg:flex lg:w-1/3 h-[500px]">
             <p class="text-3xl font-normal text-[#1f1c17] text-center pt-20">
-                Nước tẩy trang sen Hậu Giang
+                <?= htmlspecialchars($mainProducts[0]['title'] ?? 'Nước tẩy trang sen Hậu Giang') ?>
             </p>
         </div>
         <div class="w-full lg:w-1/3 h-[500px] flex items-center justify-center relative overflow-hidden">
@@ -191,7 +156,7 @@
             <img src="/assets/images/product/Layout_9c389236be.png"
                 class="w-full h-full max-w-full max-h-full object-contain" />
 
-            <img src="/assets/images/product/Chai_Sen_924c4d6134.png"
+            <img src="<?= htmlspecialchars($mainProducts[0]['image'] ?? '/assets/images/product/Chai_Sen_924c4d6134.png') ?>"
                 class="absolute inset-0 w-full h-full max-w-full max-h-full object-contain animate-float" />
 
             <img src="/assets/images/product/Canh_Sen_4fbdabf024.png"
@@ -199,13 +164,13 @@
         </div>
         <div class="w-full flex lg:hidden items-center justify-center">
             <p class="text-3xl font-normal text-[#1f1c17] text-center pt-5">
-                Nước tẩy trang sen Hậu Giang
+                <?= htmlspecialchars($mainProducts[0]['title'] ?? 'Nước tẩy trang sen Hậu Giang') ?>
             </p>
         </div>
         <!-- Description -->
         <div class="w-full lg:w-1/3 lg:h-[500px] flex flex-col items-center justify-center">
             <p class="text-xl font-normal text-[#9a978f]">
-                Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế. 
+                <?= htmlspecialchars($mainProducts[0]['description'] ?? 'Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.') ?>
             </p>
             <a href="#" 
                 class="px-6 py-3 !text-[#1f1c17] w-max font-normal">
@@ -224,8 +189,17 @@
     style=" border-top: 1px solid #C5A25D; border-bottom: 1px solid #C5A25D;   
     font-family: 'Anton', sans-serif;font-weight: 400;font-style: normal;">
         <div class="marquee-track">
-            <span class="mx-10">MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT</span>
-            <span class="mx-10">MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT</span>
+            <?php if (!empty($scrollTexts)): ?>
+                <?php foreach ($scrollTexts as $scrollText): ?>
+                    <span class="mx-10"><?= htmlspecialchars($scrollText['content'] ?? '') ?></span>
+                <?php endforeach; ?>
+                <?php foreach ($scrollTexts as $scrollText): ?>
+                    <span class="mx-10"><?= htmlspecialchars($scrollText['content'] ?? '') ?></span>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <span class="mx-10">MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT</span>
+                <span class="mx-10">MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT</span>
+            <?php endif; ?>
         </div>
     </div>
     <!-- Cefitication -->
@@ -235,31 +209,18 @@
             <p class=" text-2xl font-black text-center"> CHỨNG NHẬN BỞI CÁC TỔ CHỨC QUỐC TẾ </p>
         </div>
         <div class="relative w-full flex flex-col lg:flex-row items-center justify-center gap-6 px-6 lg:px-20 my-5">
-            <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
-                <img src="/assets/images/cef/e3084968637945bfc13699f3682f28a6_24f04f4362.svg" class="w-40 h-40 object-contain" />
-                <div class="flex flex-col gap-3 w-[80%]">
-                    <p class="text-xl font-bold text-center">PETA</p>
-                    <p class="text-base font-semibold text-center">ANIMAL TEST-FREE & VEGAN</p>
-                    <p class="text-base font-normal text-center  text-[#9a978f]">Chương trình Beauty Without Bunnies của tổ chức bảo vệ quyền lợi động vật toàn cầu PETA là chương trình bảo vệ và cam kết không có sự tàn ác đối với động vật uy tín trên thế giới.</p>
-                </div>
-            </div>
-            <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
-                <img src="/assets/images/cef/leaping_bunny_bdcbdfe9f1.svg" class="w-40 h-40 object-contain" />
-                <div class="flex flex-col gap-3 w-[80%]">
-                    <p class="text-xl font-bold text-center">LEAPING BUNNY</p>
-                    <p class="text-base font-semibold text-center">CHƯƠNG TRÌNH LEAPING BUNNY</p>
-                    <p class="text-base font-normal text-center  text-[#9a978f]">Chương trình Leaping Bunny của tổ chức Cruelty Free International được xem là "tiêu chuẩn vàng" toàn cầu cho các sản phẩm không thử nghiệm trên động vật.</p>
-                </div>
-            </div>
-            <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
-                <img src="/assets/images/cef/vegan_society_41cc2b390a.svg" class="w-40 h-40 object-contain" />
-                <div class="flex flex-col gap-3 w-[80%]">
-                    <p class="text-xl font-bold text-center">VEGAN SOCIETY</p>
-                    <p class="text-base font-semibold text-center">HIỆP HỘI THUẦN CHAY QUỐC TẾ</p>
-                    <p class="text-base font-normal text-center  text-[#9a978f]">The Vegan Society (Hiệp hội thuần chay quốc tế) là một trong những chứng nhận uy tín xác thực cho các sản phẩm không có thành phần từ động vật và không thử nghiệm trên động vật.</p>
-                </div>
-
-            </div> 
+            <?php if (!empty($certifications)): ?>
+                <?php foreach ($certifications as $certification): ?>
+                    <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
+                        <img src="<?= htmlspecialchars($certification['logo'] ?? '') ?>" class="w-40 h-40 object-contain" alt="Certification logo" />
+                        <div class="flex flex-col gap-3 w-[80%]">
+                            <p class="text-xl font-bold text-center"><?= htmlspecialchars($certification['title'] ?? '') ?></p>
+                            <p class="text-base font-semibold text-center"><?= htmlspecialchars($certification['subtitle'] ?? '') ?></p>
+                            <p class="text-base font-normal text-center text-[#9a978f]"><?= htmlspecialchars($certification['content'] ?? '') ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
         </div>
     </div>
@@ -286,7 +247,7 @@
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
                             <p class="text-[#1f1c17] font-medium">Cocoon đã có mặt tại Pháp!</p>
-                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
                                 Điều này đã mở ra cơ hội cho mỹ phẩm thuần chay từ Việt Nam bước vào một trong những trung tâm làm đẹp hàng đầu thế giới.
                             </p>
                         </div>
@@ -300,7 +261,7 @@
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
                             <p class="text-[#1f1c17] font-medium">Chương trình "Thu hồi pin cũ - Bảo vệ trái đất xanh" năm 2026</p>
-                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
                                 Tiếp nối những hành trình bền bỉ vì môi trường, Cocoon và Trường ĐH Sư phạm TP.HCM tiếp tục phát động chương trình “Thu Hồi Pin Cũ – Bảo Vệ Trái Đất Xanh” lần thứ 5
                             </p>
                         </div>
@@ -314,7 +275,7 @@
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
                             <p class="text-[#1f1c17] font-medium">Cocoon x AAF: Ký kết hợp tác "Chung tay cứu trợ chó mèo lang thang" lần II</p>
-                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
                                 Thông qua việc duy trì chương trình “Chung tay cứu trợ chó mèo lang thang” cùng AAF, Cocoon mong muốn được góp thêm một phần nhỏ bé trong việc cung cấp nguồn lực cho các trạm cứu hộ, giúp duy trì và nâng cao phúc lợi của chó mèo lang thang, đồng thời, lan tỏa sự khích lệ và sẻ chia từ cộng đồng đến với những cá nhân, tập thể đang điều hành trạm và thực hiện công tác cứu hộ chó mèo.
                             </p>
                         </div>
@@ -346,7 +307,7 @@
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
                             <p class="text-[#1f1c17] font-medium">Cocoon đã có mặt tại Pháp!</p>
-                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
                                 Điều này đã mở ra cơ hội cho mỹ phẩm thuần chay từ Việt Nam bước vào một trong những trung tâm làm đẹp hàng đầu thế giới.
                             </p>
                         </div>
@@ -360,7 +321,7 @@
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
                             <p class="text-[#1f1c17] font-medium">Chương trình "Thu hồi pin cũ - Bảo vệ trái đất xanh" năm 2026</p>
-                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
                                 Tiếp nối những hành trình bền bỉ vì môi trường, Cocoon và Trường ĐH Sư phạm TP.HCM tiếp tục phát động chương trình “Thu Hồi Pin Cũ – Bảo Vệ Trái Đất Xanh” lần thứ 5
                             </p>
                         </div>
@@ -374,7 +335,7 @@
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
                             <p class="text-[#1f1c17] font-medium">Cocoon x AAF: Ký kết hợp tác "Chung tay cứu trợ chó mèo lang thang" lần II</p>
-                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                            <p class="overflow-hidden" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
                                 Thông qua việc duy trì chương trình “Chung tay cứu trợ chó mèo lang thang” cùng AAF, Cocoon mong muốn được góp thêm một phần nhỏ bé trong việc cung cấp nguồn lực cho các trạm cứu hộ, giúp duy trì và nâng cao phúc lợi của chó mèo lang thang, đồng thời, lan tỏa sự khích lệ và sẻ chia từ cộng đồng đến với những cá nhân, tập thể đang điều hành trạm và thực hiện công tác cứu hộ chó mèo.
                             </p>
                         </div>
@@ -385,7 +346,6 @@
     </div>
 
     <!--  Footer section -->
-    <?php include __DIR__ . '/layout/footer.php'; ?>
     <!-- Slick slider JS -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>

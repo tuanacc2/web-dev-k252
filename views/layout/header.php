@@ -27,7 +27,7 @@
         </svg>
         <a href="#" class="nav-hover">Sản phẩm</a>
         <a href="#" class="nav-hover">Về chúng tôi</a>
-        <a href="#" class="nav-hover">Cocoon</a>
+        <a href="#" class="nav-hover"><?= $companyName ?></a>
         <a href="<?= SITE_URL ?? '' ?>/post" class="nav-hover">Bài viết</a>
         </div>
 
@@ -40,7 +40,7 @@
         <!-- LOGO (center) -->
         <div class="absolute left-1/2 -translate-x-1/2">
             <a href="<?= SITE_URL ?? '' ?>/homepage">
-            <img src="<?= SITE_URL ?? '' ?>/assets/public/resources/logo/logo.f502f17.svg" alt="Logo" class="h-8">      
+                <img src="<?= (SITE_URL ?? '') . $logo ?>" alt="Logo" class="h-8">            
             </a>  
         </div>
         <!-- RIGHT (desktop menu) -->
@@ -123,7 +123,7 @@
             ✕
         </button>
 
-        <p class="text-[#1f1c17] font-semibold mb-4 text-xl"><span>Liên hệ</span><span> Cocoon</span></p>
+        <p class="text-[#1f1c17] font-semibold mb-4 text-xl"><span>Liên hệ</span><span> <?= $companyName ?></span></p>
 
         <form id="contact-form" class="mt-7">
             <div>
@@ -157,8 +157,8 @@
         </div>
         <div class="grid grid-cols-2 gap-4 text-sm">
 
-            <!-- MESSENGER -->
-            <a href="https://m.me/100094046926830" target="_blank"
+            <!-- MESSENGER --> 
+            <a href="<?=$messenger?>" target="_blank"
             class="flex flex-col items-center justify-center border border-[#C5A25D]
                     py-1 rounded-md transition
                     hover:bg-[#fee5b4] hover:text-white group">
@@ -184,7 +184,7 @@
             </a>
 
             <!-- ZALO -->
-            <a href="https://zalo.me/0962294335" target="_blank"
+            <a href="<?= $zalo ?>" target="_blank"
             class="flex flex-col items-center justify-center border border-[#C5A25D]
                     py-1 rounded-md transition
                     hover:bg-[#fee5b4] hover:text-white group">

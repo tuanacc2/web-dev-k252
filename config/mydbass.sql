@@ -179,6 +179,74 @@ VALUES (
     'admin', 
     current_timestamp()
 );
+-- Thong tin cong ty----
+CREATE TABLE infomations ( 
+	id INT AUTO_INCREMENT PRIMARY KEY, 
+	name VARCHAR(255) NOT NULL,
+    type TEXT NOT NULL, 
+    value TEXT
+);
+INSERT INTO infomations (id, name, type, value) 
+VALUES 
+(NULL, 'Logo', 'image', '/assets/public/images/logo.f502f17.svg'),
+(NULL, 'Company Name', 'text', 'CapooCompany'),
+(NULL, 'Phone', 'text', '0123456789'),
+(NULL, 'Email', 'text', 'tuavip069@gmail.com'),
+(NULL, 'Address', 'text', 'Da Nang, Viet Nam'),
+(NULL, 'Messenger', 'link', 'https://m.me/100094046926830'),
+(NULL, 'Zalo', 'link', 'https://zalo.me/0962294335'),
+(NULL, 'Facebook', 'link', 'https://www.facebook.com/profile.php?id=100094046926830'),
+(NULL, 'Instagram', 'link', 'https://www.instagram.com/_tuncapo_/'),
+(NULL, 'Twitter', 'link', '#');
+-- Advertisement ----
+CREATE TABLE advertisements ( 
+	id INT AUTO_INCREMENT PRIMARY KEY, 
+    leftImage TEXT,
+    thumbnail TEXT,
+    title TEXT,
+    content TEXT,
+    link TEXT,
+    textColor VARCHAR(20),
+    backgroundColor VARCHAR(20)
+);
+INSERT INTO advertisements (id, leftImage, thumbnail, title, content, link, textColor, backgroundColor)
+VALUES
+(NULL, '/assets/images/banner/Social_post_Mo_ban_Giftbox_Cocoon_da_co_mat_tai_Phap_01_d99eec03fc.jpg', 'MỞ BÁN', 'Giftbox "Cocoon đã có mặt tại Pháp"', 'Nếu được gọi tên hành trình vươn ra thế giới của Cocoon, chúng tôi sẽ gọi đó là hành trình “nảy mầm”. Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.', '#', '#1f1c17', '#fff6cd'),
+(NULL, '/assets/images/banner/hinh1pmc_837dbe7578.jpg', 'RA MẮT SẢN PHẨM MỚI', 'Nước tẩy trang sen Hậu Giang', 'Cocoon x Phương Mỹ Chi ra mắt nước tẩy trang thế hệ mới: Nước Tẩy Trang Sen Hậu Giang - làm sạch sâu lớp trang điểm và bụi siêu mịn PM1.0 nhờ công nghệ độc quyền NatraGem™ S150, hỗ trợ cân bằng hệ vi sinh trên da với phức hợp prebiotics, phù hợp cho mọi loại da, kể cả da rất nhạy cảm.', '#', '#fefbf4', '#54a14a');
 
+-- Scroll text ----
+CREATE TABLE scrolltext (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content TEXT NOT NULL
+);
 
+INSERT INTO scrolltext (id, content)
+VALUES
+(NULL, 'MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT');
 
+-- Certifications ----
+CREATE TABLE certifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    logo TEXT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    subtitle VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL
+);
+
+INSERT INTO certifications (id, logo, title, subtitle, content)
+VALUES
+(NULL, '/assets/images/cef/e3084968637945bfc13699f3682f28a6_24f04f4362.svg', 'PETA', 'ANIMAL TEST-FREE & VEGAN', 'Chương trình Beauty Without Bunnies của tổ chức bảo vệ quyền lợi động vật toàn cầu PETA là chương trình bảo vệ và cam kết không có sự tàn ác đối với động vật uy tín trên thế giới.'),
+(NULL, '/assets/images/cef/leaping_bunny_bdcbdfe9f1.svg', 'LEAPING BUNNY', 'CHƯƠNG TRÌNH LEAPING BUNNY', 'Chương trình Leaping Bunny của tổ chức Cruelty Free International được xem là "tiêu chuẩn vàng" toàn cầu cho các sản phẩm không thử nghiệm trên động vật.'),
+(NULL, '/assets/images/cef/vegan_society_41cc2b390a.svg', 'VEGAN SOCIETY', 'HIỆP HỘI THUẦN CHAY QUỐC TẾ', 'The Vegan Society (Hiệp hội thuần chay quốc tế) là một trong những chứng nhận uy tín xác thực cho các sản phẩm không có thành phần từ động vật và không thử nghiệm trên động vật.');
+
+-- Main product showcase ----
+CREATE TABLE main_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    image TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+INSERT INTO main_products (id, title, image, description)
+VALUES
+(NULL, 'Nước tẩy trang sen Hậu Giang', '/assets/images/product/Chai_Sen_924c4d6134.png', 'Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.');
