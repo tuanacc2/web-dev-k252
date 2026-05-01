@@ -228,6 +228,41 @@
             <span class="mx-10">MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT</span>
         </div>
     </div>
+    <!-- Cefitication -->
+    <div style="font-family: 'Roboto Mono', monospace;" class="text-[#1f1c17] mt-10">
+        <!-- thumbnail -->
+        <div class="w-full flex items-center justify-center py-6">
+            <p class=" text-2xl font-black text-center"> CHỨNG NHẬN BỞI CÁC TỔ CHỨC QUỐC TẾ </p>
+        </div>
+        <div class="relative w-full flex flex-col lg:flex-row items-center justify-center gap-6 px-6 lg:px-20 my-5">
+            <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
+                <img src="/assets/images/cef/e3084968637945bfc13699f3682f28a6_24f04f4362.svg" class="w-40 h-40 object-contain" />
+                <div class="flex flex-col gap-3 w-[80%]">
+                    <p class="text-xl font-bold text-center">PETA</p>
+                    <p class="text-base font-semibold text-center">ANIMAL TEST-FREE & VEGAN</p>
+                    <p class="text-base font-normal text-center  text-[#9a978f]">Chương trình Beauty Without Bunnies của tổ chức bảo vệ quyền lợi động vật toàn cầu PETA là chương trình bảo vệ và cam kết không có sự tàn ác đối với động vật uy tín trên thế giới.</p>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
+                <img src="/assets/images/cef/leaping_bunny_bdcbdfe9f1.svg" class="w-40 h-40 object-contain" />
+                <div class="flex flex-col gap-3 w-[80%]">
+                    <p class="text-xl font-bold text-center">LEAPING BUNNY</p>
+                    <p class="text-base font-semibold text-center">CHƯƠNG TRÌNH LEAPING BUNNY</p>
+                    <p class="text-base font-normal text-center  text-[#9a978f]">Chương trình Leaping Bunny của tổ chức Cruelty Free International được xem là "tiêu chuẩn vàng" toàn cầu cho các sản phẩm không thử nghiệm trên động vật.</p>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
+                <img src="/assets/images/cef/vegan_society_41cc2b390a.svg" class="w-40 h-40 object-contain" />
+                <div class="flex flex-col gap-3 w-[80%]">
+                    <p class="text-xl font-bold text-center">VEGAN SOCIETY</p>
+                    <p class="text-base font-semibold text-center">HIỆP HỘI THUẦN CHAY QUỐC TẾ</p>
+                    <p class="text-base font-normal text-center  text-[#9a978f]">The Vegan Society (Hiệp hội thuần chay quốc tế) là một trong những chứng nhận uy tín xác thực cho các sản phẩm không có thành phần từ động vật và không thử nghiệm trên động vật.</p>
+                </div>
+
+            </div> 
+
+        </div>
+    </div>
 
     <!--  Footer section -->
     <?php include __DIR__ . '/layout/footer.php'; ?>
