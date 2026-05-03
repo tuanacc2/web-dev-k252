@@ -45,10 +45,39 @@
         </div>
         <!-- RIGHT (desktop menu) -->
         <div class="hidden lg:flex items-center gap-6">
-        <a href="javascript:void(0)" class="open-contact nav-hover"
+        <?php if (isset($_SESSION['login_status']) ? $_SESSION['login_status'] : false) { ?>
+        <form method="POST" action="<?= SITE_URL ?? '' ?>/auth/logout" id="logout-form"></form>
+        <el-dropdown class="nav-hover">
+            <button class="nav-hover">Tài khoản</button>
+            <el-menu anchor="bottom end" popover class="w-56 origin-top-right rounded-md bg-white shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+                <div class="py-1">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden">
+                        <i class="ti-user p-1"></i>
+                        Thông tin tài khoản
+                    </a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden">
+                        <i class="ti-receipt p-1"></i>
+                        Lịch sử mua hàng
+                    </a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden">
+                        <i class="ti-more p-1"></i>
+                        More...
+                    </a>
+                    <div class="block w-full px-4 py-2 text-left text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden">
+                        <button form="logout-form" type="submit" >
+                            <i class="ti-shift-right p-1"></i>
+                            Đăng xuất
+                        </button>
+                    </div>
+                </div>
+            </el-menu>
+        </el-dropdown>
+        <?php } else { ?>
+        <a href="javascript:void(0)" class="nav-hover"
             onclick="document.getElementById('login-modal').classList.remove('hidden')">
             Đăng nhập
         </a>
+        <?php } ?>    
         <a href="#"
             class="open-contact nav-hover"
             onclick="document.getElementById('contact-modal').classList.remove('hidden')">
