@@ -250,3 +250,18 @@ CREATE TABLE main_products (
 INSERT INTO main_products (id, title, image, description)
 VALUES
 (NULL, 'Nước tẩy trang sen Hậu Giang', '/assets/images/product/Chai_Sen_924c4d6134.png', 'Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.');
+-- Bài viết các bản tin
+CREATE TABLE contentController ( 
+	id INT AUTO_INCREMENT PRIMARY KEY, 
+    siteName VARCHAR(255) NOT NULL,
+    elementName VARCHAR(255) NOT NULL,
+    isVisible TINYINT(1) DEFAULT 1
+); 
+INSERT INTO contentController (id, siteName, elementName, isVisible)
+VALUES
+(NULL, 'homepage', 'advertisement', 1),
+(NULL, 'homepage', 'scrollText', 1),
+(NULL, 'homepage', 'certification', 1),
+(NULL, 'homepage', 'main-product', 1),
+(NULL, 'homepage', 'latestNew', 1),
+(NULL, 'homepage', 'product', 1);

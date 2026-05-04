@@ -1,3 +1,17 @@
+<?php
+require_once BASE_DIR . '/helpers/InfomationModel.php';
+$info = getSiteInfo(); 
+$companyName=$info['Company Name'] ?? '';
+$phone=$info['Phone'] ?? '';
+$email=$info['Email'] ?? '';
+$address=$info['Address'] ?? '';
+$messenger=$info['Messenger'] ?? '';
+$zalo=$info['Zalo'] ?? '';
+$facebook=$info['Facebook'] ?? '';
+$instagram=$info['Instagram'] ?? '';
+$twitter=$info['Twitter'] ?? '';
+$logo=$info['Logo'] ?? '';
+?>
 <header class="w-full sticky top-0 z-50">
     <!-- Notification -->
     <div class="flex items-center justify-center bg-[#1f1c17] text-[#fefbf4] text-sm leading-5 h-[30px]">
