@@ -21,8 +21,21 @@ class AuthController {
                 $input_password = $_POST['password'];
 
                 $user = $this->authModel->getUserByUsername($input_username);
+                $storedPassword = (string)($user['password'] ?? '');
+                $passwordInfo = password_get_info($storedPassword);
+                $isHashedPassword = ($passwordInfo['algo'] ?? 0) !== 0;
+                $isPasswordValid = $isHashedPassword
+                    ? password_verify($input_password, $storedPassword)
+                    : hash_equals($storedPassword, $input_password);
 
-                if ($user && $input_password === $user['password'] && $user['role'] === 'admin') {
+                // Upgrade legacy plain-text password to a secure hash after successful login.
+                if ($user && $isPasswordValid && !$isHashedPassword) {
+                    $newHash = password_hash($input_password, PASSWORD_DEFAULT);
+                    $this->authModel->updatePasswordHashById((int)$user['id'], $newHash);
+                    $user['password'] = $newHash;
+                }
+
+                if ($user && $isPasswordValid && $user['role'] === 'admin') {
                     $_SESSION['admin_user'] = $user['username'];
                     $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
                     $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
@@ -32,7 +45,7 @@ class AuthController {
                     
                     header("Location: ".SITE_URL."/admin/dashboard");
                     exit();
-                } elseif ($user && password_verify($input_password, $user['password'])) {
+                } elseif ($user && $isPasswordValid) {
                     $_SESSION['user'] = $user['username'];
                     $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
                     $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
@@ -48,6 +61,7 @@ class AuthController {
                 }
             } catch (Exception $e) {
                 $error_message = "An error occurred during login. Please try again.";
+                require_once 'views/auth/login.php';
             }              
         } else {
             require_once 'views/auth/login.php';
@@ -68,6 +82,8 @@ class AuthController {
                 $input_email = $_POST["email"];
                 $input_phone = $_POST["phone"];
                 $input_address = $_POST["address"];
+                $input_first_name = $_POST["first_name"] ?? '';
+                $input_last_name = $_POST["last_name"] ?? '';
 
                 if ($this->authModel->isUsernameTaken($input_username)) {
                     $error_message = "Username already taken.";
@@ -77,7 +93,11 @@ class AuthController {
 
                 // Proceed with user registration
                 $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
-                $this->authModel->addNewUser($input_username, $input_email, $hashed_password, $input_phone, $input_address);
+                $newId = $this->authModel->addNewUser($input_username, $hashed_password, $input_first_name, $input_last_name, $input_email, $input_phone, $input_address);
+
+                if (!$newId) {
+                    throw new Exception('Failed to create user');
+                }
 
                 $user = $this->authModel->getUserByUsername($input_username);
 
@@ -92,6 +112,7 @@ class AuthController {
                 header("Location: ".SITE_URL."/homepage");
             } catch (Exception $e) {
                 $error_message = "An error occurred during registration. Please try again.";
+                require_once 'views/auth/register.php';
             }              
         } else {
             require_once 'views/auth/register.php';
