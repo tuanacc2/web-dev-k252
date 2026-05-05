@@ -17,7 +17,7 @@
         </p>    
     </div>
     <!-- Navigation -->
-    <div style="border-bottom: 1px solid #C5A25D ;" class="relative flex items-center justify-between px-4 py-3 text-[#1f1c17] pt-[20px] pb-[20px]" >
+    <div style="border-bottom: 1px solid #C5A25D ;" class="relative bg-[#fefbf4] flex items-center justify-between px-4 py-3 text-[#1f1c17] pt-[20px] pb-[20px]" >
         <!-- LEFT (desktop menu) -->
         <div class="hidden lg:flex items-center gap-6">
         <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@
         </svg>
         <a href="#" class="nav-hover">Sản phẩm</a>
         <a href="#" class="nav-hover">Về chúng tôi</a>
-        <a href="#" class="nav-hover">Cocoon</a>
+        <a href="#" class="nav-hover"><?= $companyName ?></a>
         <a href="<?= SITE_URL ?? '' ?>/post" class="nav-hover">Bài viết</a>
         </div>
 
@@ -40,7 +40,7 @@
         <!-- LOGO (center) -->
         <div class="absolute left-1/2 -translate-x-1/2">
             <a href="<?= SITE_URL ?? '' ?>/homepage">
-            <img src="<?= SITE_URL ?? '' ?>/assets/public/resources/logo/logo.f502f17.svg" alt="Logo" class="h-8">      
+                <img src="<?= (SITE_URL ?? '') . $logo ?>" alt="Logo" class="h-8">            
             </a>  
         </div>
         <!-- RIGHT (desktop menu) -->
@@ -152,7 +152,7 @@
             ✕
         </button>
 
-        <p class="text-[#1f1c17] font-semibold mb-4 text-xl"><span>Liên hệ</span><span> Cocoon</span></p>
+        <p class="text-[#1f1c17] font-semibold mb-4 text-xl"><span>Liên hệ</span><span> <?= $companyName ?></span></p>
 
         <form id="contact-form" class="mt-7">
             <div>
@@ -186,10 +186,10 @@
         </div>
         <div class="grid grid-cols-2 gap-4 text-sm">
 
-            <!-- MESSENGER -->
-            <a href="https://m.me/100094046926830" target="_blank"
+            <!-- MESSENGER --> 
+            <a href="<?=$messenger?>" target="_blank"
             class="flex flex-col items-center justify-center border border-[#C5A25D]
-                    py-3 rounded-md transition
+                    py-1 rounded-md transition
                     hover:bg-[#fee5b4] hover:text-white group">
 
                 <!-- SVG Messenger -->
@@ -213,9 +213,9 @@
             </a>
 
             <!-- ZALO -->
-            <a href="https://zalo.me/0962294335" target="_blank"
+            <a href="<?= $zalo ?>" target="_blank"
             class="flex flex-col items-center justify-center border border-[#C5A25D]
-                    py-3 rounded-md transition
+                    py-1 rounded-md transition
                     hover:bg-[#fee5b4] hover:text-white group">
 
                 <!-- SVG Zalo -->
@@ -284,7 +284,6 @@
                 </button>
             </div>
         </form>
-        </div>
     </div>
 </div>
 
@@ -293,14 +292,11 @@
 <div id="register-modal"
      class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
      onclick="if(event.target.id === 'register-modal') this.classList.add('hidden')">
-
     <div class=" bg-[#fefbf4] w-[90%] max-w-[500px] p-12 rounded-lg relative">
-        
         <button class="absolute top-2 right-3 text-2xl"
                 onclick="document.getElementById('register-modal').classList.add('hidden')">
             ✕
         </button>
-
         <p class="text-[#1f1c17] font-semibold pb-4 mb-4 text-xl">
             <a  class="text-2xl"
                 href="javascript:void(0)"
@@ -312,7 +308,6 @@
             <span>Đăng ký</span>
         </p>
         <p class="text-[#1f1c17] font-serif py-4 mb-4 text-3xl"><span>Tạo tài khoản</span></p>
-
         <form method="POST" action="<?= SITE_URL ?>/auth/register" id="register-form" class="mt-7">
             <div>
                 <div class="flex flex-row items-center" style="border-bottom: 1px solid #C5A25D ;">
@@ -373,7 +368,6 @@
                 </button>
             </div>
         </form>
-        </div>
     </div>
 </div>
 
