@@ -1,4 +1,4 @@
-<?php $title = "Homepage"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,9 +108,22 @@
 <div class="w-full min-h-screen bg-[#fefbf4]">
 
     <!-- Header section -->
+     <?php 
+    require_once 'views/layout/header.php';
+    $contentVisibilityMap = [];
+    foreach ($content ?? [] as $item) {
+        if (isset($item['elementName'])) {
+            $contentVisibilityMap[$item['elementName']] = (int) ($item['isVisible'] ?? 1);
+        }
+    }
+
+    $isSectionVisible = function (string $elementName) use ($contentVisibilityMap): bool {
+        return !isset($contentVisibilityMap[$elementName]) || (int) $contentVisibilityMap[$elementName] !== 0;
+    };
+    ?>
     <!-- Main content -->
     <!-- Advertisement -->
-    <div class="slider" style=" font-family: 'Roboto Mono', monospace;">
+    <div id="advertisement" class="slider" style="display: <?= $isSectionVisible('advertisement') ? 'block' : 'none' ?>; font-family: 'Roboto Mono', monospace;">
         <?php if (!empty($advertisements)): ?>
             <?php foreach ($advertisements as $advertisement): ?>
                 <div class="text-[#1f1c17]" style="color: <?= htmlspecialchars($advertisement['textColor'] ?? '#1f1c17') ?>; background-color: <?= htmlspecialchars($advertisement['backgroundColor'] ?? 'transparent') ?>;">
@@ -144,8 +157,8 @@
         <?php endif; ?>
     </div>
     <!-- Main products -->
-    <div class="relative w-full flex flex-col lg:flex-row items-center justify-center gap-6 px-6 lg:px-20 my-5"
-        style="font-family: 'Roboto Mono', monospace;"> 
+    <div id="main-product" class="relative w-full flex flex-col lg:flex-row items-center justify-center gap-6 px-6 lg:px-20 my-5"
+        style="display: <?= $isSectionVisible('main-product') ? 'flex' : 'none' ?>; font-family: 'Roboto Mono', monospace;"> 
         <div class="hidden lg:flex lg:w-1/3 h-[500px]">
             <p class="text-3xl font-normal text-[#1f1c17] text-center pt-20">
                 <?= htmlspecialchars($mainProducts[0]['title'] ?? 'Nước tẩy trang sen Hậu Giang') ?>
@@ -181,12 +194,12 @@
     </div>
 
     <!-- Scrolling text-->
-    <div class="overflow-hidden bg-[#fefbf4] text-black py-2 relative
+    <div id="scrollText" class="overflow-hidden bg-[#fefbf4] text-black py-2 relative
                 flex items-center
                text-[50px] md:text-[80px] lg:text-[150px]
                h-[100px] md:h-[160px] lg:h-[300px]
                " 
-    style=" border-top: 1px solid #C5A25D; border-bottom: 1px solid #C5A25D;   
+    style="display: <?= $isSectionVisible('scrollText') ? 'flex' : 'none' ?>; border-top: 1px solid #C5A25D; border-bottom: 1px solid #C5A25D;   
     font-family: 'Anton', sans-serif;font-weight: 400;font-style: normal;">
         <div class="marquee-track">
             <?php if (!empty($scrollTexts)): ?>
@@ -203,7 +216,7 @@
         </div>
     </div>
     <!-- Cefitication -->
-    <div style="font-family: 'Roboto Mono', monospace;" class="text-[#1f1c17] mt-10">
+    <div id="certification" style="display: <?= $isSectionVisible('certification') ? 'block' : 'none' ?>; font-family: 'Roboto Mono', monospace;" class="text-[#1f1c17] mt-10">
         <!-- thumbnail -->
         <div class="w-full flex items-center justify-center py-6">
             <p class=" text-2xl font-black text-center"> CHỨNG NHẬN BỞI CÁC TỔ CHỨC QUỐC TẾ </p>
@@ -224,8 +237,8 @@
 
         </div>
     </div>
-    <!-- Newest news -->
-    <div class="w-full flex justify-center pt-10" style="font-family: 'Roboto Mono', monospace;">
+    <!-- Newest news --> 
+    <div id="latestNew" class="w-full flex justify-center pt-10" style="display: <?= $isSectionVisible('latestNew') ? 'flex' : 'none' ?>; font-family: 'Roboto Mono', monospace;">
         <div class="w-[90%] lg:w-[90%]">
             <!-- heading --> 
             <div class="w-full flex items-center justify-between py-6">
@@ -285,7 +298,7 @@
         </div>
     </div>
     <!-- Product -->
-    <div class="w-full flex justify-center pt-10" style="font-family: 'Roboto Mono', monospace;">
+    <div id="product" class="w-full flex justify-center pt-10" style="display: <?= $isSectionVisible('product') ? 'flex' : 'none' ?>; font-family: 'Roboto Mono', monospace;">
         <div class="w-[90%] lg:w-[90%]">
             <!-- heading --> 
             <div class="w-full flex items-center justify-between py-6">
@@ -361,5 +374,6 @@
         });
     </script>
 </div>
+<?php require_once 'views/layout/footer.php'; ?>
 </body>
 </html>

@@ -4,6 +4,7 @@ require_once BASE_DIR .'/models/AdvertisementsModel.php';
 require_once BASE_DIR .'/models/ScrollTextModel.php';
 require_once BASE_DIR .'/models/CertificationModel.php';
 require_once BASE_DIR .'/models/MainProductModel.php';
+require_once BASE_DIR .'/models/ContentControllerModel.php';
 
 class HomeController {
     private InformationModel $informationModel;
@@ -11,12 +12,14 @@ class HomeController {
     private ScrollTextModel $scrollTextModel;
     private CertificationModel $certificationModel;
     private MainProductModel $mainProductModel;
+    private ContentControllerModel $contentControllerModel;
     public function __construct() {
         $this->informationModel = new InformationModel();
         $this->advertisementsModel = new AdvertisementsModel();
         $this->scrollTextModel = new ScrollTextModel();
         $this->certificationModel = new CertificationModel();
         $this->mainProductModel = new MainProductModel();
+        $this->contentControllerModel = new ContentControllerModel();
     }
 
 
@@ -72,7 +75,6 @@ class HomeController {
         }
         require_once 'views/layout/header.php';
         require_once 'views/homepage.php';
-        require_once 'views/layout/footer.php';
     }
 
     public function about() {
