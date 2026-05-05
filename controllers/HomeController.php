@@ -77,8 +77,54 @@ class HomeController {
         require_once 'views/homepage.php';
     }
 
-    public function about() {
-        require_once 'views/about.php';
+    public function aboutUs() {
+        $information=$this->informationModel->getAll();
+        $companyName='';
+        $phone='';
+        $email='';
+        $address='';
+        $messenger='';
+        $zalo='';
+        $facebook='';
+        $instagram='';
+        $twitter='';
+        $logo='';
+        foreach($information as $info){
+            switch($info['name']){
+                case 'Company Name':
+                    $companyName=$info['value'];
+                    break;
+                case 'Phone':
+                    $phone=$info['value'];
+                    break;
+                case 'Email':
+                    $email=$info['value'];
+                    break;
+                case 'Address':
+                    $address=$info['value'];
+                    break;
+                case 'Messenger':
+                    $messenger=$info['value'];
+                    break;
+                case 'Zalo':
+                    $zalo=$info['value'];
+                    break;
+                case 'Facebook':
+                    $facebook=$info['value'];
+                    break;
+                case 'Instagram':
+                    $instagram=$info['value'];
+                    break;
+                case 'Logo':
+                    $logo=$info['value'];
+                    break;
+                case 'Twitter':
+                    $twitter=$info['value'];
+                    break;
+            }
+        }
+
+        require_once 'views/about_us.php';
     }
 
     public function help() {

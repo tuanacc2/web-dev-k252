@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
+
 define('BASE_DIR', __DIR__);
 
 $scriptPath = $_SERVER['SCRIPT_NAME'];
@@ -112,10 +114,12 @@ $controller = $parts[0];
 $action = $parts[1] ?? '';
 $id = $parts[2] ?? null;
 
-$controller = Page::tryFrom($controller)->value;
+$page = Page::tryFrom($controller);
+$controller = $page?->value;
 
 
 if (!$controller || !Page::isValid($controller) ||
+    ($controller == Page::Home->value && !in_array($action, ['', 'about_us'], true)) ||
     ($controller == Page::Auth && !AuthPage::isValid($action)) ||
     ($controller == Page::User && !UserPage::isValid($action)) ||
     ($controller == Page::Admin && !AdminPage::isValid($action))) {
@@ -125,7 +129,10 @@ if (!$controller || !Page::isValid($controller) ||
 
 switch ($controller) {
     case Page::Home->value: 
-        (new HomeController())->home(); 
+        match($action) {
+            'about_us' => (new HomeController())->aboutUs(),
+            default => (new HomeController())->home(),
+        };
         break;
     case Page::Help->value:
         (new HomeController())->help();
