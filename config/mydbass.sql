@@ -1,5 +1,5 @@
 -- Lưu dữ liệu ảnh trong server
-CREATE TABLE images (
+CREATE TABLE IF NOT EXISTS images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     file_name VARCHAR(255) NOT NULL,
     target_id INT NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE images (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- Danh sách người dùng và admin
-CREATE TABLE users ( 
+CREATE TABLE IF NOT EXISTS users ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	username VARCHAR(50) UNIQUE NOT NULL, 
 	password VARCHAR(255) NOT NULL, 
@@ -22,7 +22,7 @@ CREATE TABLE users (
 	FOREIGN KEY (avatar_id) REFERENCES images(id) ON DELETE SET NULL
 ); 
 -- Danh sách người dùng và admin
-CREATE TABLE contacts ( 
+CREATE TABLE IF NOT EXISTS contacts ( 
     id INT AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
@@ -33,27 +33,16 @@ CREATE TABLE contacts (
     hasReplied TINYINT(1) DEFAULT 0
 );
 
--- Thông tin liên hệ
-CREATE TABLE contacts ( 
-    id INT AUTO_INCREMENT PRIMARY KEY, 
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    phoneNumber VARCHAR(20),
-    question TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    hasSeen TINYINT(1) DEFAULT 0,
-    hasReplied TINYINT(1) DEFAULT 0
-);
 
 -- Các category của sản phẩm / dịch vụ và bài đăng
-CREATE TABLE categories ( 
+CREATE TABLE IF NOT EXISTS categories ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	name VARCHAR(255) NOT NULL, 
 	type ENUM('product', 'post') NOT NULL 
 );
 
 -- Sản phẩm / dịch vụ
-CREATE TABLE products ( 
+CREATE TABLE IF NOT EXISTS products ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(255) NOT NULL, 
     category_id INT NOT NULL,
@@ -67,7 +56,7 @@ CREATE TABLE products (
 );
 
 -- Bài viết các bản tin
-CREATE TABLE posts ( 
+CREATE TABLE IF NOT EXISTS posts ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	title VARCHAR(255) NOT NULL, 
 	category_id INT NOT NULL,
@@ -79,7 +68,7 @@ CREATE TABLE posts (
 ); 
 
 -- Bình luận về sản phẩm / dịch vụ và bài viết
-CREATE TABLE comments ( 
+CREATE TABLE IF NOT EXISTS comments ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	target_id INT NOT NULL,
     target_type ENUM('product', 'post') NOT NULL,
@@ -91,14 +80,14 @@ CREATE TABLE comments (
 ); 
  
 -- FAQs (literally)
-CREATE TABLE faqs ( 
+CREATE TABLE IF NOT EXISTS faqs ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	question TEXT NOT NULL, 
 	answer TEXT NOT NULL 
 );
 
 -- Sản phẩm đang trong giỏ hàng
-CREATE TABLE cart ( 
+CREATE TABLE IF NOT EXISTS cart ( 
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL, 
     product_id INT NOT NULL, 
@@ -110,7 +99,7 @@ CREATE TABLE cart (
 );
 
 -- Lịch sử mua hàng
-CREATE TABLE order_history (
+CREATE TABLE IF NOT EXISTS order_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_price DECIMAL(10,2) NOT NULL,
@@ -122,7 +111,7 @@ CREATE TABLE order_history (
 );
 
 -- Chi tiết đơn hàng (1 đơn hàng có nhiều sản phẩm)
-CREATE TABLE order_details (
+CREATE TABLE IF NOT EXISTS order_details (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -142,7 +131,7 @@ ALTER TABLE comments ADD COLUMN rating TINYINT NULL;
 -- Lưu các thay đổi của database
 DROP TABLE IF EXISTS logs;
 
-CREATE TABLE logs (
+CREATE TABLE IF NOT EXISTS logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NULL,
     action VARCHAR(255) NOT NULL,
@@ -161,6 +150,8 @@ INSERT INTO `users` (
         `id`, 
         `username`, 
         `password`, 
+        `first_name`,
+        `last_name`,
         `email`, 
         `avatar_id`, 
         `phoneNumber`, 
@@ -172,6 +163,8 @@ VALUES (
     NULL, 
     'admin', 
     '0', 
+    'Nguyen',
+    'Van A',
     'admin123@gmail.com', 
     NULL, 
     '0123456789', 
@@ -180,7 +173,7 @@ VALUES (
     current_timestamp()
 );
 -- Thong tin cong ty----
-CREATE TABLE infomations ( 
+CREATE TABLE IF NOT EXISTS infomations ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	name VARCHAR(255) NOT NULL,
     type TEXT NOT NULL, 
@@ -199,7 +192,7 @@ VALUES
 (NULL, 'Instagram', 'link', 'https://www.instagram.com/_tuncapo_/'),
 (NULL, 'Twitter', 'link', '#');
 -- Advertisement ----
-CREATE TABLE advertisements ( 
+CREATE TABLE IF NOT EXISTS advertisements ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
     leftImage TEXT,
     thumbnail TEXT,
@@ -215,7 +208,7 @@ VALUES
 (NULL, '/assets/images/banner/hinh1pmc_837dbe7578.jpg', 'RA MẮT SẢN PHẨM MỚI', 'Nước tẩy trang sen Hậu Giang', 'Cocoon x Phương Mỹ Chi ra mắt nước tẩy trang thế hệ mới: Nước Tẩy Trang Sen Hậu Giang - làm sạch sâu lớp trang điểm và bụi siêu mịn PM1.0 nhờ công nghệ độc quyền NatraGem™ S150, hỗ trợ cân bằng hệ vi sinh trên da với phức hợp prebiotics, phù hợp cho mọi loại da, kể cả da rất nhạy cảm.', '#', '#fefbf4', '#54a14a');
 
 -- Scroll text ----
-CREATE TABLE scrolltext (
+CREATE TABLE IF NOT EXISTS scrolltext (
     id INT AUTO_INCREMENT PRIMARY KEY,
     content TEXT NOT NULL
 );
@@ -225,7 +218,7 @@ VALUES
 (NULL, 'MỸ PHẨM 100% THUẦN CHAY CHO NÉT ĐẸP THUẦN VIỆT');
 
 -- Certifications ----
-CREATE TABLE certifications (
+CREATE TABLE IF NOT EXISTS certifications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     logo TEXT NOT NULL,
     title VARCHAR(255) NOT NULL,
@@ -240,7 +233,7 @@ VALUES
 (NULL, '/assets/images/cef/vegan_society_41cc2b390a.svg', 'VEGAN SOCIETY', 'HIỆP HỘI THUẦN CHAY QUỐC TẾ', 'The Vegan Society (Hiệp hội thuần chay quốc tế) là một trong những chứng nhận uy tín xác thực cho các sản phẩm không có thành phần từ động vật và không thử nghiệm trên động vật.');
 
 -- Main product showcase ----
-CREATE TABLE main_products (
+CREATE TABLE IF NOT EXISTS main_products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     image TEXT NOT NULL,
@@ -251,7 +244,7 @@ INSERT INTO main_products (id, title, image, description)
 VALUES
 (NULL, 'Nước tẩy trang sen Hậu Giang', '/assets/images/product/Chai_Sen_924c4d6134.png', 'Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.');
 -- Bài viết các bản tin
-CREATE TABLE contentController ( 
+CREATE TABLE IF NOT EXISTS contentController ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
     siteName VARCHAR(255) NOT NULL,
     elementName VARCHAR(255) NOT NULL,
