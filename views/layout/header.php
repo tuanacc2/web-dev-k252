@@ -40,7 +40,7 @@ $logo=$info['Logo'] ?? '';
             </g>
         </svg>
         <a href="#" class="nav-hover">Sản phẩm</a>
-        <a href="#" class="nav-hover">Về chúng tôi</a>
+        <a href="<?= SITE_URL ?? '' ?>/homepage/about_us" class="nav-hover">Về chúng tôi</a>
         <a href="#" class="nav-hover"><?= $companyName ?></a>
         <a href="<?= SITE_URL ?? '' ?>/post" class="nav-hover">Bài viết</a>
         </div>
@@ -117,7 +117,7 @@ $logo=$info['Logo'] ?? '';
             <a href="#" >
                 <p class="font-semibold">Sản phẩm</p>
             </a>
-            <a href="#">
+            <a href="<?= SITE_URL ?? '' ?>/homepage/about_us">
                 <p class="font-semibold">Về chúng tôi</p>
             </a>
             <a href="<?= SITE_URL ?? '' ?>/post">
