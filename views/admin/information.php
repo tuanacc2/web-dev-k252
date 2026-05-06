@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/themify-icons.css">
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/metismenujs.min.css">
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/swiper-bundle.min.css">
+    <!-- Simple-DataTables css -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/simple-datatables@10/dist/style.min.css">
     <!-- others css -->
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/typography.css">
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/default-css.css">
@@ -53,7 +55,7 @@
                                     <span>Edit page</span>
                                 </a>
                                 <ul class="collapse"> 
-                                    <li  class="active"><a href="<?= SITE_URL ?>/admin/infomation">Infomation</a></li>
+                                    <li  class="active"><a href="<?= SITE_URL ?>/admin/information">Infomation</a></li>
                                     <li><a href="<?= SITE_URL ?>/admin/homepage">Homepage</a></li>
                                     <li><a href="<?= SITE_URL ?>/admin/about">About us</a></li>
                                 </ul>
@@ -153,6 +155,62 @@
             </div>
             <!-- page title area end -->
             <div class="main-content-inner" id="main-content">
+                <div class="row">
+                    <!-- data table start -->
+                    <div class="col-12 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="data-tables">
+                                    <table id="dataTable" class="text-center">
+                                        <thead class="bg-light text-capitalize">
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (!empty($items) && is_array($items)): ?>
+                                                <?php foreach ($items as $item): ?>
+                                                    <?php
+                                                        $type = $item['type'] ?? '';
+                                                        $value = $item['value'] ?? '';
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= htmlspecialchars($item['id'] ?? '') ?></td>
+                                                        <td><?= htmlspecialchars($item['name'] ?? '') ?></td>
+                                                        <td><?= htmlspecialchars($type) ?></td>
+                                                        <td>
+                                                            <?php if ($type === 'image' && $value): ?>
+                                                                <img
+                                                                    src="<?= htmlspecialchars((SITE_URL ?? '') . $value) ?>"
+                                                                    alt="<?= htmlspecialchars($item['name'] ?? 'image') ?>"
+                                                                    style="height: 40px;"
+                                                                >
+                                                            <?php elseif ($type === 'link' && $value): ?>
+                                                                <a href="<?= htmlspecialchars($value) ?>" target="_blank" rel="noopener noreferrer">
+                                                                    <?= htmlspecialchars($value) ?>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <?= htmlspecialchars($value) ?>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td colspan="4">No information found.</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- data table end -->
+                </div>
             </div>
         </div>
         <!-- main content area end -->
@@ -347,6 +405,15 @@
     <script src="<?= SITE_URL ?? '' ?>/assets/admin/js/bootstrap.bundle.min.js"></script>
     <script src="<?= SITE_URL ?? '' ?>/assets/admin/js/swiper-bundle.min.js"></script>
     <script src="<?= SITE_URL ?? '' ?>/assets/admin/js/metismenujs.min.js"></script>
+
+    <!-- Simple-DataTables -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@10/dist/umd/simple-datatables.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('dataTable');
+            if (el) new simpleDatatables.DataTable(el, { perPage: 10 });
+        });
+    </script>
 
     <!-- Chart.js 4 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>

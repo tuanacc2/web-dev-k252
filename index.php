@@ -28,6 +28,7 @@ require_once __DIR__ . '/controllers/admin/AdminCartController.php';
 require_once __DIR__ . '/controllers/admin/AuditLoggerController.php';
 require_once __DIR__ . '/controllers/admin/AdminDashboardController.php';
 require_once __DIR__ . '/controllers/admin/AdminInformationController.php';
+require_once __DIR__ . '/controllers/admin/AdminHomepageController.php';
 
 
 enum Page: string {
@@ -163,6 +164,7 @@ switch ($controller) {
         match($action) {
             AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
             AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
+            AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
             AdminPage::Contact->value       => (new AdminContactController())->contact(),
             AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
             AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),

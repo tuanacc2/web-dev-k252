@@ -173,7 +173,7 @@ VALUES (
     current_timestamp()
 );
 -- Thong tin cong ty----
-CREATE TABLE IF NOT EXISTS infomations ( 
+CREATE TABLE IF NOT EXISTS informations ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	name VARCHAR(255) NOT NULL,
     type TEXT NOT NULL, 

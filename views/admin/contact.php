@@ -63,7 +63,7 @@
                                     <span>Edit page</span>
                                 </a>
                                 <ul>
-                                    <li><a href="<?= SITE_URL ?>/admin/infomation">Infomation</a></li>
+                                    <li><a href="<?= SITE_URL ?>/admin/information">Infomation</a></li>
                                     <li><a href="<?= SITE_URL ?>/admin/homepage">Homepage</a></li>
                                     <li><a href="<?= SITE_URL ?>/admin/about">About us</a></li>
                                 </ul>
