@@ -29,6 +29,7 @@ class HomeController {
         $scrollTexts = $this->scrollTextModel->getAll();
         $certifications = $this->certificationModel->getAll();
         $mainProducts = $this->mainProductModel->getAll();
+        $content = $this->contentControllerModel->getBySiteName('homepage');
         require_once 'views/homepage.php';
     }
 

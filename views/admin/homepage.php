@@ -156,6 +156,56 @@
 			<!-- page title area end -->
 			<div class="main-content-inner" id="main-content">
 				<div class="row">
+					<!-- content controller start -->
+					<div class="col-12 mt-5">
+						<div class="card">
+							<div class="card-body">
+								<h4 class="header-title">Content Controller</h4>
+								<form method="post" action="<?= SITE_URL ?>/admin/homepage">
+									<div class="data-tables">
+										<table id="dataTableContent" class="text-center">
+											<thead class="bg-light text-capitalize">
+												<tr>
+													<th>Id</th>
+													<th>Site</th>
+													<th>Element</th>
+													<th>Visible</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php if (!empty($contentControllers) && is_array($contentControllers)): ?>
+													<?php foreach ($contentControllers as $content): ?>
+														<tr>
+															<td><?= htmlspecialchars($content['id'] ?? '') ?></td>
+															<td><?= htmlspecialchars($content['siteName'] ?? '') ?></td>
+															<td><?= htmlspecialchars($content['elementName'] ?? '') ?></td>
+															<td>
+																<input
+																	type="checkbox"
+																	name="visibility[<?= (int) ($content['id'] ?? 0) ?>]"
+																	value="1"
+																	<?= !empty($content['isVisible']) ? 'checked' : '' ?>
+																>
+															</td>
+														</tr>
+													<?php endforeach; ?>
+												<?php else: ?>
+													<tr>
+														<td colspan="4">No content controllers found.</td>
+													</tr>
+												<?php endif; ?>
+											</tbody>
+										</table>
+									</div>
+									<div class="mt-3">
+										<button type="submit" class="btn btn-primary">Update Visibility</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- content controller end -->
+
 					<!-- advertisements table start -->
 					<div class="col-12 mt-5">
 						<div class="card">
@@ -163,7 +213,7 @@
 								<h4 class="header-title">Advertisements</h4>
 								<div class="data-tables">
 									<table id="dataTableAds" class="text-center">
-										<thead class="bg-light text-capitalize">
+											<thead class="bg-light text-capitalize">
 											<tr>
 												<th>Id</th>
 												<th>Left Image</th>
@@ -373,10 +423,12 @@
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@10/dist/umd/simple-datatables.min.js"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
+			var contentTable = document.getElementById('dataTableContent');
 			var adsTable = document.getElementById('dataTableAds');
 			var scrollTable = document.getElementById('dataTableScroll');
 			var certTable = document.getElementById('dataTableCert');
 
+			if (contentTable) new simpleDatatables.DataTable(contentTable, { perPage: 10 });
 			if (adsTable) new simpleDatatables.DataTable(adsTable, { perPage: 10 });
 			if (scrollTable) new simpleDatatables.DataTable(scrollTable, { perPage: 10 });
 			if (certTable) new simpleDatatables.DataTable(certTable, { perPage: 10 });
