@@ -4,11 +4,15 @@ enum ImageType: string {
     case Avatar = 'avatar';
     case Product = 'product';
     case Post = 'post';
+    case Advertisement = 'advertisement';
+    case Certification = 'certification';
 }
 
 
 class ImageModel {
     private PDO $db;
+    private $allowTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg', 'image/svg+xml'];
+
 
     public function __construct() {
         $this->db = Database::getInstance()->conn;
@@ -52,6 +56,15 @@ class ImageModel {
             default => SITE_URL . "/assets/images/default_post/post1.png"
         };
     }
+    private function getUploadDir(ImageType $type): string {
+        return match ($type) {
+            ImageType::Avatar => "assets/upload/avatars/",
+            ImageType::Product => "assets/upload/products/",
+            ImageType::Post => "assets/upload/posts/",
+            ImageType::Advertisement => "assets/upload/advertisements/",
+            ImageType::Certification => "assets/upload/certifications/",
+        };
+    }
 
     public function addImage(string $fileName, int $targetId, int $targetType) {
         $timestamp = date("Y-m-d H:i:s");
@@ -62,4 +75,33 @@ class ImageModel {
         $stmt->bindValue(':created_at', $timestamp, PDO::PARAM_STR);
         return $stmt->execute();
     }
+
+
+    public function uploadImage(array $file, ImageType $type): string {
+        $uploadDir = $this->getUploadDir($type);
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+            throw new RuntimeException("Upload error");
+        }
+        $tmpName = $file['tmp_name'] ?? '';
+        if ($tmpName === '') {
+            throw new RuntimeException("Missing temp file");
+        }
+        $mime = mime_content_type($tmpName);
+        if (!in_array($mime, $this->allowTypes, true)) {
+            throw new InvalidArgumentException("Invalid file type: $mime");
+        }
+        $originalName = $file['name'] ?? '';
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        $fileName = bin2hex(random_bytes(16)) . ($extension !== '' ? '.' . $extension : '');
+        $destination = $uploadDir . $fileName;
+        if (!move_uploaded_file($tmpName, $destination)) {
+            throw new RuntimeException("Failed to move file");
+        }
+        return '/' . ltrim($destination, '/');
+    }
+
+        
 }

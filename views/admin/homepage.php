@@ -211,6 +211,41 @@
 						<div class="card">
 							<div class="card-body">
 								<h4 class="header-title">Advertisements</h4>
+								<form method="post" action="<?= SITE_URL ?>/admin/advertisement" enctype="multipart/form-data" class="mb-4">
+									<div class="row g-3">
+										<div class="col-md-6">
+											<label for="adLeftImage" class="form-label">Left Image</label>
+											<input type="file" class="form-control" id="adLeftImage" name="leftImage" accept="image/*" required>
+										</div>
+										<div class="col-md-6">
+											<label for="adThumbnail" class="form-label">Thumbnail</label>
+											<input type="text" class="form-control" id="adThumbnail" name="thumbnail" placeholder="VD: MỞ BÁN" required>
+										</div>
+										<div class="col-md-6">
+											<label for="adTitle" class="form-label">Title</label>
+											<input type="text" class="form-control" id="adTitle" name="title" required>
+										</div>
+										<div class="col-md-6">
+											<label for="adLink" class="form-label">Link</label>
+											<input type="url" class="form-control" id="adLink" name="link" placeholder="https://">
+										</div>
+										<div class="col-12">
+											<label for="adContent" class="form-label">Content</label>
+											<textarea class="form-control" id="adContent" name="content" rows="3" required></textarea>
+										</div>
+										<div class="col-md-6">
+											<label for="adTextColor" class="form-label">Text Color</label>
+											<input type="text" class="form-control" id="adTextColor" name="textColor" placeholder="#1f1c17">
+										</div>
+										<div class="col-md-6">
+											<label for="adBackgroundColor" class="form-label">Background Color</label>
+											<input type="text" class="form-control" id="adBackgroundColor" name="backgroundColor" placeholder="#fff6cd">
+										</div>
+									</div>
+									<div class="mt-3">
+										<button type="submit" class="btn btn-primary">Create Advertisement</button>
+									</div>
+								</form>
 								<div class="data-tables">
 									<table id="dataTableAds" class="text-center">
 											<thead class="bg-light text-capitalize">
@@ -223,6 +258,7 @@
 												<th>Link</th>
 												<th>Text Color</th>
 												<th>Background Color</th>
+												<th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -232,8 +268,14 @@
 														<td><?= htmlspecialchars($ad['id'] ?? '') ?></td>
 														<td>
 															<?php if (!empty($ad['leftImage'])): ?>
+																<?php
+																	$leftImage = $ad['leftImage'] ?? '';
+																	if ($leftImage !== '' && $leftImage[0] !== '/') {
+																		$leftImage = '/' . $leftImage;
+																	}
+																?>
 																<img
-																	src="<?= htmlspecialchars((SITE_URL ?? '') . $ad['leftImage']) ?>"
+																	src="<?= htmlspecialchars((SITE_URL ?? '') . $leftImage) ?>"
 																	alt="left image"
 																	style="height: 40px;"
 																>
@@ -251,11 +293,43 @@
 														</td>
 														<td><?= htmlspecialchars($ad['textColor'] ?? '') ?></td>
 														<td><?= htmlspecialchars($ad['backgroundColor'] ?? '') ?></td>
+														<td>
+															<details>
+																<summary class="btn btn-outline-primary btn-sm">Edit</summary>
+																<form method="post" action="<?= SITE_URL ?>/admin/advertisement-update/<?= (int) ($ad['id'] ?? 0) ?>" enctype="multipart/form-data" class="mt-2">
+																	<div class="mb-2">
+																		<input type="file" class="form-control" name="leftImage" accept="image/*">
+																	</div>
+																	<div class="mb-2">
+																		<input type="text" class="form-control" name="thumbnail" value="<?= htmlspecialchars($ad['thumbnail'] ?? '') ?>" required>
+																	</div>
+																	<div class="mb-2">
+																		<input type="text" class="form-control" name="title" value="<?= htmlspecialchars($ad['title'] ?? '') ?>" required>
+																	</div>
+																	<div class="mb-2">
+																		<textarea class="form-control" name="content" rows="3" required><?= htmlspecialchars($ad['content'] ?? '') ?></textarea>
+																	</div>
+																	<div class="mb-2">
+																		<input type="url" class="form-control" name="link" value="<?= htmlspecialchars($ad['link'] ?? '') ?>" placeholder="https://">
+																	</div>
+																	<div class="mb-2">
+																		<input type="text" class="form-control" name="textColor" value="<?= htmlspecialchars($ad['textColor'] ?? '') ?>" placeholder="#1f1c17">
+																	</div>
+																	<div class="mb-2">
+																		<input type="text" class="form-control" name="backgroundColor" value="<?= htmlspecialchars($ad['backgroundColor'] ?? '') ?>" placeholder="#fff6cd">
+																	</div>
+																	<button type="submit" class="btn btn-primary btn-sm">Save</button>
+																</form>
+															</details>
+															<form method="post" action="<?= SITE_URL ?>/admin/advertisement-delete/<?= (int) ($ad['id'] ?? 0) ?>" onsubmit="return confirm('Delete this advertisement?');">
+																<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+															</form>
+														</td>
 													</tr>
 												<?php endforeach; ?>
 											<?php else: ?>
 												<tr>
-													<td colspan="8">No advertisements found.</td>
+													<td colspan="9">No advertisements found.</td>
 												</tr>
 											<?php endif; ?>
 										</tbody>
@@ -284,12 +358,17 @@
 												<?php foreach ($scrollTexts as $scroll): ?>
 													<tr>
 														<td><?= htmlspecialchars($scroll['id'] ?? '') ?></td>
-														<td><?= htmlspecialchars($scroll['content'] ?? '') ?></td>
+														<td>
+															<form method="post" action="<?= SITE_URL ?>/admin/scrolltext-update/<?= (int) ($scroll['id'] ?? 0) ?>" class="d-flex align-items-center gap-2">
+																<input type="text" class="form-control" name="content" value="<?= htmlspecialchars($scroll['content'] ?? '') ?>" required>
+																<button type="submit" class="btn btn-primary btn-sm">Save</button>
+															</form>
+														</td>
 													</tr>
 												<?php endforeach; ?>
 											<?php else: ?>
 												<tr>
-													<td colspan="2">No scroll text found.</td>
+														<td colspan="2">No scroll text found.</td>
 												</tr>
 											<?php endif; ?>
 										</tbody>
@@ -305,6 +384,29 @@
 						<div class="card">
 							<div class="card-body">
 								<h4 class="header-title">Certifications</h4>
+								<form method="post" action="<?= SITE_URL ?>/admin/certification" enctype="multipart/form-data" class="mb-4">
+									<div class="row g-3">
+										<div class="col-md-6">
+											<label for="certLogo" class="form-label">Logo</label>
+											<input type="file" class="form-control" id="certLogo" name="logo" accept="image/*" required>
+										</div>
+										<div class="col-md-6">
+											<label for="certTitle" class="form-label">Title</label>
+											<input type="text" class="form-control" id="certTitle" name="title" required>
+										</div>
+										<div class="col-md-6">
+											<label for="certSubtitle" class="form-label">Subtitle</label>
+											<input type="text" class="form-control" id="certSubtitle" name="subtitle" required>
+										</div>
+										<div class="col-12">
+											<label for="certContent" class="form-label">Content</label>
+											<textarea class="form-control" id="certContent" name="content" rows="3" required></textarea>
+										</div>
+									</div>
+									<div class="mt-3">
+										<button type="submit" class="btn btn-primary">Create Certification</button>
+									</div>
+								</form>
 								<div class="data-tables">
 									<table id="dataTableCert" class="text-center">
 										<thead class="bg-light text-capitalize">
@@ -314,6 +416,7 @@
 												<th>Title</th>
 												<th>Subtitle</th>
 												<th>Content</th>
+												<th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -323,8 +426,14 @@
 														<td><?= htmlspecialchars($cert['id'] ?? '') ?></td>
 														<td>
 															<?php if (!empty($cert['logo'])): ?>
+																<?php
+																	$logoPath = $cert['logo'] ?? '';
+																	if ($logoPath !== '' && $logoPath[0] !== '/') {
+																		$logoPath = '/' . $logoPath;
+																	}
+																?>
 																<img
-																	src="<?= htmlspecialchars((SITE_URL ?? '') . $cert['logo']) ?>"
+																	src="<?= htmlspecialchars((SITE_URL ?? '') . $logoPath) ?>"
 																	alt="logo"
 																	style="height: 40px;"
 																>
@@ -333,11 +442,34 @@
 														<td><?= htmlspecialchars($cert['title'] ?? '') ?></td>
 														<td><?= htmlspecialchars($cert['subtitle'] ?? '') ?></td>
 														<td><?= htmlspecialchars($cert['content'] ?? '') ?></td>
+														<td>
+															<details>
+																<summary class="btn btn-outline-primary btn-sm">Edit</summary>
+																<form method="post" action="<?= SITE_URL ?>/admin/certification-update/<?= (int) ($cert['id'] ?? 0) ?>" enctype="multipart/form-data" class="mt-2">
+																	<div class="mb-2">
+																		<input type="file" class="form-control" name="logo" accept="image/*">
+																	</div>
+																	<div class="mb-2">
+																		<input type="text" class="form-control" name="title" value="<?= htmlspecialchars($cert['title'] ?? '') ?>" required>
+																	</div>
+																	<div class="mb-2">
+																		<input type="text" class="form-control" name="subtitle" value="<?= htmlspecialchars($cert['subtitle'] ?? '') ?>" required>
+																	</div>
+																	<div class="mb-2">
+																		<textarea class="form-control" name="content" rows="3" required><?= htmlspecialchars($cert['content'] ?? '') ?></textarea>
+																	</div>
+																	<button type="submit" class="btn btn-primary btn-sm">Save</button>
+																</form>
+															</details>
+															<form method="post" action="<?= SITE_URL ?>/admin/certification-delete/<?= (int) ($cert['id'] ?? 0) ?>" onsubmit="return confirm('Delete this certification?');" class="mt-2">
+																<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+															</form>
+														</td>
 													</tr>
 												<?php endforeach; ?>
 											<?php else: ?>
 												<tr>
-													<td colspan="5">No certifications found.</td>
+														<td colspan="6">No certifications found.</td>
 												</tr>
 											<?php endif; ?>
 										</tbody>

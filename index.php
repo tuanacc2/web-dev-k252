@@ -31,6 +31,9 @@ require_once __DIR__ . '/controllers/admin/AuditLoggerController.php';
 require_once __DIR__ . '/controllers/admin/AdminDashboardController.php';
 require_once __DIR__ . '/controllers/admin/AdminInformationController.php';
 require_once __DIR__ . '/controllers/admin/AdminHomepageController.php';
+require_once __DIR__ . '/controllers/admin/AdminAdvertisementController.php';
+require_once __DIR__ . '/controllers/admin/AdminScrollTextController.php';
+require_once __DIR__ . '/controllers/admin/AdminCertificationController.php';
 
 
 enum Page: string {
@@ -96,6 +99,13 @@ enum AdminPage: string {
     case Cart = 'cart';
     case Post = 'post';
     case AuditLog = 'log';
+    case Advertisement = 'advertisement';
+    case AdvertisementDelete = 'advertisement-delete';
+    case AdvertisementUpdate = 'advertisement-update';
+    case ScrollTextUpdate = 'scrolltext-update';
+    case CertificationUpdate = 'certification-update';
+    case Certification = 'certification';
+    case CertificationDelete = 'certification-delete';
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -172,13 +182,22 @@ switch ($controller) {
             AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
             AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
             AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
+
             AdminPage::Contact->value       => (new AdminContactController())->contact(),
             AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
             AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
+            
             AdminPage::User->value          => (new AdminUserController())->users(),
             AdminPage::Post->value          => require_once "views/error404.php",
             AdminPage::Product->value       => require_once "views/error404.php",
             AdminPage::AuditLog->value      => (new AuditLoggerController())->logs(),
+            AdminPage::Advertisement->value => (new AdminAdvertisementController())->store(),
+            AdminPage::AdvertisementDelete->value => (new AdminAdvertisementController())->delete($id),
+            AdminPage::AdvertisementUpdate->value => (new AdminAdvertisementController())->update($id),
+            AdminPage::ScrollTextUpdate->value => (new AdminScrollTextController())->update($id),
+            AdminPage::CertificationUpdate->value => (new AdminCertificationController())->update($id),
+            AdminPage::Certification->value => (new AdminCertificationController())->store(),
+            AdminPage::CertificationDelete->value => (new AdminCertificationController())->delete($id),
             default                         => require_once "views/error404.php"
         };
         break;

@@ -32,7 +32,7 @@ class PostController {
     public function posts() {
         // Default header & footer
         $information=$this->informationModel->getAll();
-        $advertisements = $this->advertisementsModel->getHomepageAdvertisements();
+        $advertisements = $this->advertisementsModel->getAll();
         $scrollTexts = $this->scrollTextModel->getAll();
         $certifications = $this->certificationModel->getAll();
         $mainProducts = $this->mainProductModel->getAll();

@@ -12,4 +12,11 @@ class ScrollTextModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function updateContent(int $id, string $content): bool {
+        $stmt = $this->db->prepare("UPDATE scrolltext SET content = :content WHERE id = :id");
+        $stmt->bindValue(':content', $content, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }
