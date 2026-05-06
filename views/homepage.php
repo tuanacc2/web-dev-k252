@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/public/css/header.css">
+    <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/fontawesome.min.css">
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/themify-icons.css">
 
     <!-- Google Fonts -->
@@ -130,7 +131,7 @@
                     <div class="flex flex-col lg:flex-row h-full">
                         <!-- LEFT: IMAGE -->
                         <div class="w-full lg:w-1/2 h-full">
-                            <img src="<?= SITE_URL . htmlspecialchars($advertisement['leftImage'] ?? '') ?>" class="w-full h-full object-cover" alt="Advertisement">
+                            <img src="<?= (SITE_URL  ?? '') . htmlspecialchars($advertisement['leftImage'] ?? '') ?>" class="w-full h-full object-cover" alt="Advertisement">
                         </div>
 
                         <!-- RIGHT: TEXT (chỉ hiện lg) -->
@@ -166,13 +167,13 @@
         </div>
         <div class="w-full lg:w-1/3 h-[500px] flex items-center justify-center relative overflow-hidden">
 
-            <img src="<?= SITE_URL ?>/assets/images/product/Layout_9c389236be.png"
+            <img src="<?= SITE_URL ?? '' ?>/assets/images/product/Layout_9c389236be.png"
                 class="w-full h-full max-w-full max-h-full object-contain" />
 
-            <img src="<?= SITE_URL . htmlspecialchars($mainProducts[0]['image'] ?? '/assets/images/product/Chai_Sen_924c4d6134.png') ?>"
+            <img src="<?= (SITE_URL ?? '') . htmlspecialchars($mainProducts[0]['image'] ?? '/assets/images/product/Chai_Sen_924c4d6134.png') ?>"
                 class="absolute inset-0 w-full h-full max-w-full max-h-full object-contain animate-float" />
 
-            <img src="<?= SITE_URL ?>/assets/images/product/Canh_Sen_4fbdabf024.png"
+            <img src="<?= SITE_URL ?? '' ?>/assets/images/product/Canh_Sen_4fbdabf024.png"
                 class="absolute inset-0 w-full h-full max-w-full max-h-full object-contain" />
         </div>
         <div class="w-full flex lg:hidden items-center justify-center">
@@ -225,7 +226,7 @@
             <?php if (!empty($certifications)): ?>
                 <?php foreach ($certifications as $certification): ?>
                     <div class="w-full lg:w-1/3 flex flex-col items-center justify-center gap-2">
-                        <img src="<?= SITE_URL . htmlspecialchars($certification['logo'] ?? '') ?>" class="w-40 h-40 object-contain" alt="Certification logo" />
+                        <img src="<?= (SITE_URL ?? '') . htmlspecialchars($certification['logo'] ?? '') ?>" class="w-40 h-40 object-contain" alt="Certification logo" />
                         <div class="flex flex-col gap-3 w-[80%]">
                             <p class="text-xl font-bold text-center"><?= htmlspecialchars($certification['title'] ?? '') ?></p>
                             <p class="text-base font-semibold text-center"><?= htmlspecialchars($certification['subtitle'] ?? '') ?></p>
@@ -243,7 +244,7 @@
             <!-- heading --> 
             <div class="w-full flex items-center justify-between py-6">
                 <p class=" text-xl md:text-5xl text-[#1f1c17] italic font-bold"> Bài viết mới nhất </p>
-                <a href="<?= SITE_URL ?? '' ?>/post" 
+                <a href="<?= SITE_URL ?? '' ?>/post"
                     class="text-sm md:text-base px-6 py-3 bg-black !text-white w-max font-normal rounded-md 
                             transition-all duration-300
                             hover:bg-[#271f1d] hover:text-black hover:scale-105">
@@ -255,7 +256,7 @@
                 <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
                     <a href="#" class="hover:shadow hover:scale-105 transition-transform duration-200">
                         <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= SITE_URL ?>/assets/images/post/DSC_02381_1_b0fdd5538a.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            <img src="<?= SITE_URL ?? '' ?>/assets/images/post/DSC_02381_1_b0fdd5538a.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
                         </div>
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
@@ -269,7 +270,7 @@
                 <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
                     <a href="#" class="hover:shadow hover:scale-105 transition-transform duration-200">
                         <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= SITE_URL ?>/assets/images/post/Hinh_chinh_Website_f198b59b8b.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            <img src="<?= SITE_URL ?? '' ?>/assets/images/post/Hinh_chinh_Website_f198b59b8b.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
                         </div>
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
@@ -283,7 +284,7 @@
                 <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
                     <a href="#" class="hover:shadow hover:scale-105 transition-transform duration-200">
                         <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= SITE_URL ?>/assets/images/post/z7287578147555_0996a52163d907ff128570862cc441cb_5a19daf561.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            <img src="<?= SITE_URL ?? '' ?>/assets/images/post/z7287578147555_0996a52163d907ff128570862cc441cb_5a19daf561.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
                         </div>
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
@@ -315,7 +316,7 @@
                 <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
                     <a href="#" class="hover:shadow hover:scale-105 transition-transform duration-200">
                         <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= SITE_URL ?>/assets/images/post/DSC_02381_1_b0fdd5538a.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            <img src="<?= SITE_URL ?? '' ?>/assets/images/post/DSC_02381_1_b0fdd5538a.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
                         </div>
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
@@ -329,7 +330,7 @@
                 <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
                     <a href="#" class="hover:shadow hover:scale-105 transition-transform duration-200">
                         <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= SITE_URL ?>/assets/images/post/Hinh_chinh_Website_f198b59b8b.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            <img src="<?= SITE_URL ?? '' ?>/assets/images/post/Hinh_chinh_Website_f198b59b8b.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
                         </div>
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>
@@ -343,7 +344,7 @@
                 <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
                     <a href="#" class="hover:shadow hover:scale-105 transition-transform duration-200">
                         <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= SITE_URL ?>   /assets/images/post/z7287578147555_0996a52163d907ff128570862cc441cb_5a19daf561.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            <img src="<?= SITE_URL ?? '' ?>/assets/images/post/z7287578147555_0996a52163d907ff128570862cc441cb_5a19daf561.jpg" class="block w-full" style="height: 350px; object-fit: cover;" />
                         </div>
                         <div class="flex flex-col gap-3 w-full">
                             <p class="text-sm font-semibold text-[#C5A25D]">01.01.05</p>

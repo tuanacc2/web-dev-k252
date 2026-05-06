@@ -19,20 +19,24 @@ class AuthController {
             try {
                 $input_username = $_POST['username'];
                 $input_password = $_POST['password'];
+                $errors = []; $redirect = "";
 
-                $user = $this->authModel->getUserByUsername($input_username);
+                $user = $this->authModel->getUserByUsername($input_username);  
 
-                if ($user && $input_password === $user['password'] && $user['role'] === 'admin') {
+                if (!$user) {
+                    $error_message = "Username not existed.";                  
+                    $errors['username'] = "Tên tài khoản không tồn tại";
+                } elseif ($input_password === $user['password'] && $user['role'] === 'admin') {
                     $_SESSION['admin_user'] = $user['username'];
                     $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
                     $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
                     $_SESSION['admin_user_id'] = $user['id'];
                     $_SESSION['admin_auth'] = true;
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
-                    
-                    header("Location: ".SITE_URL."/admin/dashboard");
-                    exit();
-                } elseif ($user && password_verify($input_password, $user['password'])) {
+                   
+                    $redirect = SITE_URL . '/admin/dashboard';
+
+                } elseif (password_verify($input_password, $user['password'])) {
                     $_SESSION['user'] = $user['username'];
                     $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
                     $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
@@ -41,13 +45,41 @@ class AuthController {
 
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " logged in");
 
-                    header("Location: ".SITE_URL."/homepage");
-                    exit();
+                    $redirect = SITE_URL . '/homepage';
+
                 } else {
-                    throw new Exception("Invalid username or password.");
+                    if ($input_username === 'admin') {
+                        $error_message = "Username not existed.";                  
+                        $errors['username'] = "Tên tài khoản không tồn tại";
+                    } else {
+                        $error_message = "Wrong password.";                  
+                        $errors['password'] = "Mật khẩu không chính xác";
+                    }
                 }
+
+                if (!empty($errors)) {
+                    echo json_encode([
+                        "status" => "error",
+                        "errors" => $errors
+                    ]);
+                    exit;
+                }
+
+                echo json_encode([
+                    "status" => "success",
+                    'redirect' => $redirect
+                ]);
+                exit;
+
             } catch (Exception $e) {
                 $error_message = "An error occurred during login. Please try again.";
+                print($error_message);
+
+                echo json_encode([
+                    "status" => "error",
+                    "errors" => ["system" => "System error: " . $error_message]
+                ]);
+                exit;
             }              
         } else {
             require_once 'views/auth/login.php';
@@ -64,20 +96,41 @@ class AuthController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $input_username = $_POST["username"];
+                $input_lastname = $_POST["lastname"];
+                $input_firstname = $_POST["firstname"];
                 $input_password = $_POST["password"];
                 $input_email = $_POST["email"];
                 $input_phone = $_POST["phone"];
                 $input_address = $_POST["address"];
 
+                $errors = []; $redirect = "";
+
                 if ($this->authModel->isUsernameTaken($input_username)) {
-                    $error_message = "Username already taken.";
-                    require_once 'views/auth/register.php';
-                    return;
+                    $error_message = "Username already taken.";                  
+                    $errors['username'] = "Tên tài khoản đã có người sở hữu";
+                }
+
+                if ($this->authModel->isEmailTaken($input_email)) {
+                    $error_message = "Email already used.";                  
+                    $errors['email'] = "Email này đã được sử dụng";
+                }
+
+                if ($this->authModel->isPhoneTaken($input_phone)) {
+                    $error_message = "Phone number already used.";                  
+                    $errors['phone'] = "SĐT này đã được sử dụng";
+                }
+
+                if (!empty($errors)) {
+                    echo json_encode([
+                        "status" => "error",
+                        "errors" => $errors
+                    ]);
+                    exit;
                 }
 
                 // Proceed with user registration
                 $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
-                $this->authModel->addNewUser($input_username, $input_email, $hashed_password, $input_phone, $input_address);
+                $this->authModel->addNewUser($input_username, $input_lastname, $input_firstname, $hashed_password, $input_email, $input_phone, $input_address);
 
                 $user = $this->authModel->getUserByUsername($input_username);
 
@@ -89,9 +142,22 @@ class AuthController {
 
                 $this->logModel->log(Action::Register->value, $user['id'], $input_username . " registered an account");
 
-                header("Location: ".SITE_URL."/homepage");
+                $redirect = SITE_URL . '/homepage';
+
+                echo json_encode([
+                    "status" => "success",
+                    'redirect' => $redirect
+                ]);
+                exit;    
             } catch (Exception $e) {
                 $error_message = "An error occurred during registration. Please try again.";
+                print($error_message);
+
+                echo json_encode([
+                    "status" => "error",
+                    "errors" => ["system" => "System error: " . $error_message]
+                ]);
+                exit;
             }              
         } else {
             require_once 'views/auth/register.php';

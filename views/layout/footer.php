@@ -11,10 +11,10 @@
             <div>
                 <h3 class="text-white font-bold mb-3 text-sm md:text-base">Liên kết nhanh</h3>
                 <ul class="text-xs md:text-sm space-y-2">
-                    <li><a href="/" class="hover:text-white transition">Trang chủ</a></li>
-                    <li><a href="/products" class="hover:text-white transition">Sản phẩm</a></li>
-                    <li><a href="/posts" class="hover:text-white transition">Blog</a></li>
-                    <li><a href="/contact" class="hover:text-white transition">Liên hệ</a></li>
+                    <li><a href="<?= SITE_URL ?? '' ?>" class="hover:text-white transition">Trang chủ</a></li>
+                    <li><a href="<?= SITE_URL ?? '' ?>/product" class="hover:text-white transition">Sản phẩm</a></li>
+                    <li><a href="<?= SITE_URL ?? '' ?>/post" class="hover:text-white transition">Blog</a></li>
+                    <li><a href="<?= SITE_URL ?? '' ?>/contact" class="hover:text-white transition">Liên hệ</a></li>
                 </ul>
             </div>
 
@@ -22,7 +22,7 @@
             <div>
                 <h3 class="text-white font-bold mb-3 text-sm md:text-base">Hỗ trợ</h3>
                 <ul class="text-xs md:text-sm space-y-2">
-                    <li><a href="/help" class="hover:text-white transition">Trợ giúp</a></li>
+                    <li><a href="<?= SITE_URL ?? '' ?>/help" class="hover:text-white transition">Trợ giúp</a></li>
                     <li><a href="#" class="hover:text-white transition">Chính sách</a></li>
                     <li><a href="#" class="hover:text-white transition">Điều khoản</a></li>
                     <li><a href="#" class="hover:text-white transition">Bảo mật</a></li>

@@ -12,9 +12,21 @@ class AuthModel {
         return $stmt->fetchColumn() > 0;
     }
 
-    public function addNewUser(string $username, string $email, string $password, string $phone, string $address) {
-        $stmt = $this->db->prepare("INSERT INTO users (username, email, password, phoneNumber, address) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$username, $email, $password, $phone, $address]);
+    public function isEmailTaken(string $email) {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function isPhoneTaken(string $phone) {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM users WHERE phoneNumber = ?");
+        $stmt->execute([$phone]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function addNewUser(string $username, string $lastname, string $firstname, string $email, string $password, string $phone, string $address = '') {
+        $stmt = $this->db->prepare("INSERT INTO users (username, last_name, first_name, password, email, phoneNumber, address) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$username, $lastname, $firstname, $password, $email, $phone, $address]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
