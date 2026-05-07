@@ -34,6 +34,7 @@ require_once __DIR__ . '/controllers/admin/AdminHomepageController.php';
 require_once __DIR__ . '/controllers/admin/AdminAdvertisementController.php';
 require_once __DIR__ . '/controllers/admin/AdminScrollTextController.php';
 require_once __DIR__ . '/controllers/admin/AdminCertificationController.php';
+require_once __DIR__ . '/controllers/admin/AdminMainProductController.php';
 
 
 enum Page: string {
@@ -88,6 +89,7 @@ enum AuthPage: string {
 enum AdminPage: string {
     case Dashboard = 'dashboard';
     case CompanyInfo = 'information';
+    case CompanyInfoUpdate = 'information-update';
     case Homepage = 'homepage';
     case Contact = 'contact';
     case ContactDetail = 'contact-detail';
@@ -106,6 +108,9 @@ enum AdminPage: string {
     case CertificationUpdate = 'certification-update';
     case Certification = 'certification';
     case CertificationDelete = 'certification-delete';
+    case MainProduct = 'mainproduct';
+    case MainProductUpdate = 'mainproduct-update';
+    case MainProductDelete = 'mainproduct-delete';
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -181,6 +186,7 @@ switch ($controller) {
         match($action) {
             AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
             AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
+            AdminPage::CompanyInfoUpdate->value => (new AdminInformationController())->update($id),
             AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
 
             AdminPage::Contact->value       => (new AdminContactController())->contact(),
@@ -198,6 +204,9 @@ switch ($controller) {
             AdminPage::CertificationUpdate->value => (new AdminCertificationController())->update($id),
             AdminPage::Certification->value => (new AdminCertificationController())->store(),
             AdminPage::CertificationDelete->value => (new AdminCertificationController())->delete($id),
+            AdminPage::MainProduct->value => (new AdminMainProductController())->store(),
+            AdminPage::MainProductUpdate->value => (new AdminMainProductController())->update($id),
+            AdminPage::MainProductDelete->value => (new AdminMainProductController())->delete($id),
             default                         => require_once "views/error404.php"
         };
         break;

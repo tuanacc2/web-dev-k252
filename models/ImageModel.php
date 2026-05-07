@@ -6,6 +6,8 @@ enum ImageType: string {
     case Post = 'post';
     case Advertisement = 'advertisement';
     case Certification = 'certification';
+    case MainProduct = 'main_product';
+    case Information = 'information';
 }
 
 
@@ -53,6 +55,8 @@ class ImageModel {
             ImageType::Avatar->value => SITE_URL . "/assets/images/default_user_avatar/avatar1.jpg",
             ImageType::Product->value => SITE_URL . "/assets/images/default_product/product1.jpg",
             ImageType::Post->value => SITE_URL . "/assets/images/default_post/post1.png",
+            ImageType::MainProduct->value => SITE_URL . "/assets/images/default_product/product1.jpg",
+            ImageType::Information->value => SITE_URL . "/assets/images/default_post/post1.png",
             default => SITE_URL . "/assets/images/default_post/post1.png"
         };
     }
@@ -63,6 +67,8 @@ class ImageModel {
             ImageType::Post => "assets/upload/posts/",
             ImageType::Advertisement => "assets/upload/advertisements/",
             ImageType::Certification => "assets/upload/certifications/",
+            ImageType::MainProduct => "assets/upload/main_products/",
+            ImageType::Information => "assets/upload/informations/",
         };
     }
 
