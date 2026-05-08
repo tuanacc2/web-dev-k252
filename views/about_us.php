@@ -77,41 +77,34 @@
             </div>
 
             <div class="space-y-8 lg:space-y-10">
+                <?php if (!empty($aboutSections['about_content'])): ?>
                 <section class="rounded-[2rem] border border-[#e8dcc2] bg-[#fff7e8] p-7 lg:p-10 shadow-[0_16px_40px_rgba(31,28,23,0.04)]">
                     <div class="about-prose text-[#4a463f] leading-8 text-[15px] lg:text-[16px] max-w-4xl">
-                        <h2>Ý nghĩa thương hiệu</h2>
-                        <p>
-                            Cocoon nghĩa là cái kén, cái kén như là “ngôi nhà” để ủ ấp, nuôi dưỡng con sâu nhỏ để đến một ngày sẽ hoá thành nàng bướm xinh đẹp và lộng lẫy. Từ ý nghĩa như thế, Cocoon chính là “ngôi nhà” để chăm sóc làn da, mái tóc của người Việt Nam, giúp cho họ trở nên xinh đẹp, hoàn thiện hơn và toả sáng theo cách của chính họ.
-                        </p>
-                        <p>
-                            Cocoon ra đời với một lý do đơn giản là làm đẹp cho người Việt từ chính những nguồn nguyên liệu gần gũi, quen thuộc. Tạo hoá cũng rất ưu ái cho thiên nhiên Việt Nam chúng ta một thế giới thực vật vô cùng phong phú đủ cả trái đến thảo dược. Bên trong chúng ẩn chứa những dược chất quý giá không chỉ ăn rất ngon mà còn rất tốt khi đưa lên làn da và mái tóc.
-                        </p>
-                        <p>
-                            Mỹ phẩm cũng giống như thực phẩm đều là những “món ăn bổ dưỡng” mang đến vẻ đẹp cho con người. Đó chính là lý do thôi thúc Cocoon nghiên cứu và không ngừng cho ra đời những sản phẩm mỹ phẩm 100% thuần chay giữ trọn dưỡng chất của thực vật Việt Nam, an toàn, lành tính, không sử dụng thành phần từ động vật và nói không với thử nghiệm trên động vật.
-                        </p>
+                        <?= $aboutSections['about_content'] ?>
                     </div>
                 </section>
+                <?php endif; ?>
 
                 <section class="grid md:grid-cols-3 gap-5 lg:gap-6">
                     <div class="rounded-[1.5rem] bg-[#fff8ef] border border-[#eadfc9] p-6 lg:p-7">
-                        <p class="about-eyebrow mb-3">Triết lý</p>
-                            <h3 class="text-2xl font-bold mb-3">Lấy sự an toàn làm nền tảng</h3>
+                        <p class="about-eyebrow mb-3"><?= htmlspecialchars($aboutSections['philosophy_eyebrow'] ?? '') ?></p>
+                        <h3 class="text-2xl font-bold mb-3"><?= htmlspecialchars($aboutSections['philosophy_title'] ?? '') ?></h3>
                         <p class="text-[#4a463f] leading-8 text-[15px]">
-                            Chúng tôi ưu tiên các thành phần quen thuộc, chọn lọc kỹ lưỡng và phát triển theo tiêu chuẩn hiện đại.
+                            <?= htmlspecialchars($aboutSections['philosophy_content'] ?? '') ?>
                         </p>
                     </div>
                     <div class="rounded-[1.5rem] bg-[#fff8ef] border border-[#eadfc9] p-6 lg:p-7">
-                        <p class="about-eyebrow mb-3">Giá trị</p>
-                            <h3 class="text-2xl font-bold mb-3">Tôn trọng làn da Việt</h3>
+                        <p class="about-eyebrow mb-3"><?= htmlspecialchars($aboutSections['values_eyebrow'] ?? '') ?></p>
+                        <h3 class="text-2xl font-bold mb-3"><?= htmlspecialchars($aboutSections['values_title'] ?? '') ?></h3>
                         <p class="text-[#4a463f] leading-8 text-[15px]">
-                            Mỗi công thức đều hướng tới sự phù hợp, nhẹ dịu và hiệu quả sử dụng lâu dài.
+                            <?= htmlspecialchars($aboutSections['values_content'] ?? '') ?>
                         </p>
                     </div>
                     <div class="rounded-[1.5rem] bg-[#fff8ef] border border-[#eadfc9] p-6 lg:p-7">
-                        <p class="about-eyebrow mb-3">Định hướng</p>
-                            <h3 class="text-2xl font-bold mb-3">Phát triển bền vững</h3>
+                        <p class="about-eyebrow mb-3"><?= htmlspecialchars($aboutSections['vision_eyebrow'] ?? '') ?></p>
+                        <h3 class="text-2xl font-bold mb-3"><?= htmlspecialchars($aboutSections['vision_title'] ?? '') ?></h3>
                         <p class="text-[#4a463f] leading-8 text-[15px]">
-                            Chúng tôi ưu tiên các lựa chọn thân thiện hơn với môi trường trong từng bước phát triển sản phẩm.
+                            <?= htmlspecialchars($aboutSections['vision_content'] ?? '') ?>
                         </p>
                     </div>
                 </section>
@@ -119,29 +112,23 @@
                 <section class="rounded-[2rem] border border-[#e8dcc2] bg-[#fffaf0] p-7 lg:p-10">
                     <div class="grid lg:grid-cols-[1fr_1.15fr] gap-8 lg:gap-12 items-start">
                         <div>
-                            <p class="about-eyebrow mb-4">Sứ mệnh & cam kết</p>
-                            <h2 class="text-3xl lg:text-4xl font-semibold leading-tight mb-4 text-[#1f1c17]">Phát triển đẹp hơn từ những điều rất gần gũi</h2>
+                            <p class="about-eyebrow mb-4"><?= htmlspecialchars($aboutSections['mission_vision_eyebrow'] ?? '') ?></p>
+                            <h2 class="text-3xl lg:text-4xl font-semibold leading-tight mb-4 text-[#1f1c17]"><?= htmlspecialchars($aboutSections['mission_vision_title'] ?? '') ?></h2>
                             <p class="text-[#4a463f] leading-8">
-                                Chúng tôi được sinh ra để mang lại cho bạn một làn da, một mái tóc luôn khỏe mạnh, trẻ trung và tràn đầy sức sống từ những nguyên liệu đơn giản và gần gũi mà bạn ăn hằng ngày.
+                                <?= htmlspecialchars($aboutSections['mission_vision_intro'] ?? '') ?>
                             </p>
                         </div>
 
                         <div class="about-prose text-[#4a463f] leading-8 text-[15px] lg:text-[16px]">
-                            <h2>Sứ mệnh</h2>
-                            <p>
-                                Chúng tôi luôn giữ một nhiệm vụ trong tâm trí: áp dụng các lợi ích của thực phẩm quanh ta kết hợp với sự hiểu biết khoa học để tạo ra các sản phẩm mỹ phẩm an toàn và hiệu quả cho tất cả mọi người.
-                            </p>
+                            <?php if (!empty($aboutSections['mission_content'])): ?>
+                                <h2>Sứ mệnh</h2>
+                                <p><?= $aboutSections['mission_content'] ?></p>
+                            <?php endif; ?>
 
-                            <h2>Cam kết</h2>
-                            <p>
-                                <strong>100% nguyên liệu có nguồn gốc rõ ràng và an toàn cho làn da:</strong> tất cả thành phần nguyên liệu đều có chứng từ chứng minh nguồn gốc xuất xứ và được nghiên cứu, kiểm tra kỹ lưỡng trước khi đưa ra thị trường.
-                            </p>
-                            <p>
-                                <strong>100% thuần chay:</strong> chúng tôi không sử dụng các nguyên liệu có nguồn gốc từ động vật như mật ong, sáp ong, mỡ lông cừu, nhau thai cừu, dịch ốc sên, dầu gan cá mập hay tơ tằm.
-                            </p>
-                            <p>
-                                <strong>100% không bao giờ thử nghiệm trên động vật:</strong> các công thức mỹ phẩm của Cocoon được nghiên cứu và thử nghiệm bằng các bài kiểm tra trong phòng thí nghiệm hoặc trên các tình nguyện viên.
-                            </p>
+                            <?php if (!empty($aboutSections['commitment_content'])): ?>
+                                <h2>Cam kết</h2>
+                                <p><?= $aboutSections['commitment_content'] ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </section>

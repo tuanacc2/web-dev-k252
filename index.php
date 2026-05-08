@@ -39,6 +39,8 @@ require_once __DIR__ . '/controllers/admin/AdminAdvertisementController.php';
 require_once __DIR__ . '/controllers/admin/AdminScrollTextController.php';
 require_once __DIR__ . '/controllers/admin/AdminCertificationController.php';
 require_once __DIR__ . '/controllers/admin/AdminMainProductController.php';
+require_once __DIR__ . '/controllers/admin/AdminFaqController.php';
+
 
 enum Page: string {
     case Home = 'homepage';
@@ -98,6 +100,7 @@ enum AdminPage: string {
     case ContactDetail = 'contact-detail';
     case ContactAnswer = 'contact-answer';
     case About = 'about';
+    case Faq = 'faq';
     case Help = 'help';
     case Category = 'category';
     case User = 'user';
@@ -139,7 +142,7 @@ $controller = $page?->value;
 
 
 if (!$controller || !Page::isValid($controller) ||
-    ($controller == Page::Home->value && !in_array($action, ['', 'about_us'], true)) ||
+    ($controller == Page::Home->value && !in_array($action, ['', 'about_us', 'faq'], true)) ||
     ($controller == Page::Auth && !AuthPage::isValid($action)) ||
     ($controller == Page::User && !UserPage::isValid($action)) ||
     ($controller == Page::Post->value && !in_array($action, ['', 'view'], true)) || // PostController chỉ có 2 route: /post và /post/view/{id}
@@ -152,6 +155,7 @@ switch ($controller) {
     case Page::Home->value: 
         match($action) {
             'about_us' => (new HomeController())->aboutUs(),
+            'faq' => (new HomeController())->faq(),
             default => (new HomeController())->home(),
         };
         break;
@@ -229,7 +233,9 @@ switch ($controller) {
                 AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
                 AdminPage::CompanyInfoUpdate->value => (new AdminInformationController())->update($subAction),
             AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
-    
+            AdminPage::About->value         => (new AdminInformationController())->about(),
+            AdminPage::Faq->value           => (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') ? (new AdminFaqController())->save() : (new AdminFaqController())->index(),
+
             AdminPage::Contact->value       => (new AdminContactController())->contact(),
                 AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
                 AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),

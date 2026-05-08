@@ -1,0 +1,80 @@
+[
+    {
+        "id": 1,
+        "category": "Thương hiệu & Triết lý",
+        "question": "Mỹ phẩm Cocoon có phải là thương hiệu Việt Nam không và có thuần chay 100% không?",
+        "answer": "Đúng vậy, Cocoon là thương hiệu mỹ phẩm 100% sản xuất tại Việt Nam. Tất cả các sản phẩm của Cocoon đều là mỹ phẩm thuần chay (vegan), đã được chứng nhận bởi các tổ chức quốc tế như The Vegan Society và PETA. Chúng tôi hoàn toàn không sử dụng các nguyên liệu từ động vật như mật ong, sáp ong hay mỡ cừu."
+    },
+    {
+        "id": 2,
+        "category": "Chất lượng & An toàn",
+        "question": "Cocoon có thử nghiệm sản phẩm trên động vật không?",
+        "answer": "Hoàn toàn không. Cocoon cam kết không thử nghiệm trên động vật trong bất kỳ giai đoạn nào của quá trình sản xuất. Thương hiệu đã được tổ chức Cruelty Free International xác nhận thông qua chương trình Leaping Bunny."
+    },
+    {
+        "id": 3,
+        "category": "Sản phẩm",
+        "question": "Mẹ bầu và phụ nữ đang cho con bú có sử dụng được sản phẩm Cocoon không?",
+        "answer": "Hầu hết các sản phẩm của Cocoon đều có bảng thành phần từ thực vật lành tính và an toàn cho phụ nữ mang thai. Tuy nhiên, đối với một số dòng sản phẩm có chứa hoạt chất chuyên sâu, bạn nên tham khảo ý kiến bác sĩ hoặc kiểm tra kỹ bảng thành phần (được niêm yết công khai) trước khi sử dụng."
+    },
+    {
+        "id": 4,
+        "category": "Sản phẩm",
+        "question": "Tại sao màu sắc và mùi hương của sản phẩm đôi khi không đồng nhất giữa các lô sản xuất?",
+        "answer": "Vì Cocoon sử dụng các chiết xuất từ thực vật tự nhiên (như cà phê, bí đao, vỏ bưởi...), đặc tính của nguyên liệu có thể thay đổi nhẹ tùy theo mùa vụ thu hoạch và thời tiết. Điều này dẫn đến sự khác biệt nhỏ về màu sắc hoặc mùi hương nhưng không hề làm ảnh hưởng đến chất lượng và hiệu quả của sản phẩm."
+    },
+    {
+        "id": 5,
+        "category": "Chất lượng & An toàn",
+        "question": "Sản phẩm Cocoon có chứa Paraben, cồn hay Sulfate không?",
+        "answer": "Cocoon tuân thủ triết lý nói không với các chất gây hại. Các sản phẩm của chúng tôi cam kết: Không Paraben, không cồn (alcohol free), không dầu khoáng và không thử nghiệm trên động vật. Một số dòng làm sạch cũng không chứa Sulfate để bảo vệ độ ẩm tự nhiên của da."
+    },
+    {
+        "id": 6,
+        "category": "Kiểm tra hàng thật",
+        "question": "Làm thế nào để tôi kiểm tra được sản phẩm Cocoon chính hãng?",
+        "answer": "Bạn có thể kiểm tra sản phẩm chính hãng qua các dấu hiệu: Tem niêm phong của nhà sản xuất, mã vạch (barcode) rõ nét, và quét mã QR trên bao bì sản phẩm để truy xuất nguồn gốc thông qua các ứng dụng check mã uy tín."
+    },
+    {
+        "id": 7,
+        "category": "Chính sách mua hàng",
+        "question": "Tôi có thể mua sản phẩm Cocoon chính hãng ở đâu?",
+        "answer": "Bạn có thể mua trực tiếp tại website chính thức cocoonvietnam.com, các gian hàng Mall trên Shopee\/Lazada\/TikTok Shop hoặc các hệ thống bán lẻ mỹ phẩm uy tín như Hasaki, Guardian, Watsons và các đại lý ủy quyền trên toàn quốc."
+    },
+    {
+        "id": 8,
+        "category": "Chính sách đổi trả",
+        "question": "Chính sách đổi trả của Cocoon như thế nào khi gặp lỗi sản phẩm?",
+        "answer": "Cocoon hỗ trợ đổi trả trong vòng 7 ngày kể từ khi nhận hàng nếu sản phẩm bị lỗi từ nhà sản xuất (hư hỏng bao bì, vòi nhấn lỗi) hoặc bị hư hại do quá trình vận chuyển. Khách hàng cần cung cấp video mở hàng (unboxing) để được hỗ trợ nhanh nhất."
+    },
+    {
+        "id": 9,
+        "category": "Chính sách vận chuyển",
+        "question": "Thời gian và phí giao hàng khi đặt online là bao nhiêu?",
+        "answer": "Thời gian giao hàng thường mất từ 1-3 ngày làm việc (với khu vực nội thành) và 3-5 ngày (với khu vực tỉnh thành khác). Phí vận chuyển sẽ được tính dựa trên đơn vị vận chuyển liên kết, thường có chính sách miễn phí vận chuyển cho các đơn hàng đạt giá trị tối thiểu theo quy định từng thời điểm."
+    },
+    {
+        "id": 10,
+        "category": "Bảo quản",
+        "question": "Lưu ý gì về cách bảo quản sản phẩm Cocoon để đạt hiệu quả tốt nhất?",
+        "answer": "Sản phẩm nên được bảo quản ở nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp và nơi có nhiệt độ cao. Đối với một số sản phẩm đặc thù như tinh chất (serum) hoặc mặt nạ, bạn có thể bảo quản trong ngăn mát tủ lạnh để tăng cảm giác sảng khoái khi sử dụng."
+    },
+    {
+        "id": 11,
+        "category": "",
+        "question": "aaaaaaaaaa",
+        "answer": "bbbbbbbbb"
+    },
+    {
+        "id": 12,
+        "category": "",
+        "question": "ccc",
+        "answer": "aaaaaa"
+    },
+    {
+        "id": 13,
+        "category": "",
+        "question": "sssssssss",
+        "answer": "ddddddddddddddd"
+    }
+]

@@ -24,7 +24,7 @@ class AuthController {
                 $user = $this->authModel->getUserByUsername($input_username);  
 
                 if (!$user) {
-                    $error_message = "Username not existed.";                  
+                    $error_message = "Username not existed.";
                     $errors['username'] = "Tên tài khoản không tồn tại";
                 } elseif ($input_password === $user['password'] && $user['role'] === 'admin') {
                     $_SESSION['admin'] = $user['username'];
@@ -52,7 +52,8 @@ class AuthController {
                         $error_message = "Username not existed.";                  
                         $errors['username'] = "Tên tài khoản không tồn tại";
                     } else {
-                        $error_message = "Wrong password.";                  
+                        // invalid password
+                        $error_message = "Wrong password.";
                         $errors['password'] = "Mật khẩu không chính xác";
                     }
                 }

@@ -42,6 +42,7 @@ $logo=$info['Logo'] ?? '';
         <a href="#" class="nav-hover">Sản phẩm</a>
         <a href="<?= SITE_URL ?? '' ?>/homepage/about_us" class="nav-hover">Về chúng tôi</a>
         <a href="#" class="nav-hover"><?= $companyName ?></a>
+        <a href="<?= SITE_URL ?? '' ?>/homepage/faq" class="nav-hover">Câu hỏi thường gặp</a>
         <a href="<?= SITE_URL ?? '' ?>/post" class="nav-hover">Bài viết</a>
         </div>
 
@@ -119,6 +120,9 @@ $logo=$info['Logo'] ?? '';
             </a>
             <a href="<?= SITE_URL ?? '' ?>/homepage/about_us">
                 <p class="font-semibold">Về chúng tôi</p>
+            </a>
+            <a href="<?= SITE_URL ?? '' ?>/homepage/faq">
+                <p class="font-semibold">Câu hỏi thường gặp</p>
             </a>
             <a href="<?= SITE_URL ?? '' ?>/post">
                 <p class="font-semibold">Bài viết</p>

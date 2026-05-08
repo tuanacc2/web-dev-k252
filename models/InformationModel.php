@@ -43,4 +43,10 @@ class InformationModel {
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function add(string $name, string $type, string $value): int {
+        $stmt = $this->db->prepare("INSERT INTO informations (name, type, value) VALUES (?, ?, ?)");
+        $stmt->execute([$name, $type, $value]);
+        return (int) $this->db->lastInsertId();
+    }
 }
