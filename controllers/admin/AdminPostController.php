@@ -80,6 +80,45 @@ class AdminPostController {
         require_once 'views/error404.php';
     }
 
-    public function deletePost(int $post_id) {
+    public function update() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = $_POST['title'] ?? '';
+            $categoryType = $_POST['category'] ?? '';
+            $thumbnail_description = $_POST['description'] ?? '';
+            $content = $_POST['content'] ?? '';
+            $author_id = $_SESSION['user_id'] ?? null;
+            $file = $_FILES['thumbnail'] ?? null;
+
+            if (!$title) {
+                $_SESSION['error'] = 'Please fill in all required fields.';
+                header('Location: ' . SITE_URL . 'admin/post/edit/' . ($post_id ?? ''));
+                exit();
+            }
+
+            try {
+                $postIdInt = (int) ($post_id ?? 0);
+                if ($postIdInt <= 0) {
+                    $_SESSION['error'] = 'Invalid post ID.';
+                    header('Location: ' . SITE_URL . 'admin/post');
+                    exit();
+                }
+
+                $updated = $this->postModel->updatePost($postIdInt, $title, $thumbnail_description, $content, $categoryType, $file);
+                if ($updated) {
+                    $this->logModel->log(Action::UpdatePost->value, $_SESSION['auth_id'], 'Updated post: '.$title, $postIdInt);
+                    $_SESSION['success'] = 'Post updated successfully.';
+                } else {
+                    $_SESSION['error'] = 'Failed to update post.';
+                }
+            } catch (Exception $e) {
+                // Log error or handle it as needed
+                $_SESSION['error'] = 'An error occurred while updating the post.';
+                exit();
+            }
+            
+            header('Location: ' . SITE_URL . 'admin/post');
+        }
+
+        require_once 'views/error404.php';
     }
 }

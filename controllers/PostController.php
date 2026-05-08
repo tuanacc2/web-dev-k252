@@ -17,7 +17,7 @@ class PostController {
         $total = count($this->postModel->getPost($search));
         $totalPage = ceil($total / $limit);
 
-        $posts = $this->postModel->getPost($search, $limit, $offset = ($page - 1) * $limit);
+        $posts = $this->postModel->getPost(search: $search, limit: $limit, offset: ($page - 1) * $limit);
 
         foreach ($posts as &$post) {
             $post['updated_at'] = $post['updated_at'] ? date_create($post['updated_at'])->format('d.m.y') : null;

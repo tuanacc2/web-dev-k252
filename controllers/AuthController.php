@@ -29,7 +29,7 @@ class AuthController {
                 } elseif ($input_password === $user['password'] && $user['role'] === 'admin') {
                     $_SESSION['admin'] = $user['username'];
                     $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
-                    $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
+                    $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar);
                     $_SESSION['admin_id'] = $user['id'];
                     $_SESSION['admin_auth'] = true;
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
@@ -39,7 +39,7 @@ class AuthController {
                 } elseif (password_verify($input_password, $user['password'])) {
                     $_SESSION['user'] = $user['username'];
                     $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
-                    $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
+                    $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar);
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['login_status'] = true;
 
@@ -136,7 +136,7 @@ class AuthController {
 
                 $_SESSION['user'] = $user['username'];
                 $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
-                $_SESSION['avatar'] = "/assets/images/default_user_avatar/avatar1.jpg";
+                $_SESSION['avatar'] = $this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar);
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['login_status'] = true;
 

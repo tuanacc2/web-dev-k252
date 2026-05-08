@@ -49,7 +49,7 @@ class AdminPostModel {
         $thumbnail_id = null;
 
         if ($file && $file['tmp_name']) {
-            $thumbnail_id = $this->imageModel->addImage($file, $post_id, 'post');
+            $thumbnail_id = $this->imageModel->addImage($file, $post_id, ImageType::Post);
             if ($thumbnail_id) {
                 $stmt = $this->db->prepare("UPDATE posts SET thumbnail_id = ? WHERE id = ?");
                 $stmt->execute([$thumbnail_id, $post_id]);
@@ -63,7 +63,7 @@ class AdminPostModel {
         $content_id = $this->contentModel->addContent($content);
 
         if ($file && $file['tmp_name']) {
-            $thumbnail_id = $this->imageModel->addImage($file, $post_id, 'post');
+            $thumbnail_id = $this->imageModel->addImage($file, $post_id, ImageType::Post);
         }
 
         // Ensure content was added successfully before adding the post
@@ -96,7 +96,7 @@ class AdminPostModel {
 
         // Add new thumbnail if a new file is uploaded
         if ($file && $file['tmp_name']) {
-            $thumbnail_id = $this->imageModel->addImage($file, $post_id, 'post');
+            $thumbnail_id = $this->imageModel->addImage($file, $post_id, ImageType::Post);
         }
 
         // Update post content
