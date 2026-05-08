@@ -40,7 +40,7 @@
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
-                    <a href="index.html">
+                    <a href="<?= SITE_URL ?>/admin/dashboard">
                         <picture>
                             <source srcset="<?= SITE_URL ?? '' ?>/assets/admin/images/icon/logo.avif" type="image/avif">
                             <img src="<?= SITE_URL ?? '' ?>/assets/admin/images/icon/logo.png" alt="logo">
@@ -302,7 +302,7 @@
                                 <a class="dropdown-item" href="settings.html"><i class="fa-solid fa-gear"></i> Account Settings</a>
                                 <a class="dropdown-item" href="screenlock.html"><i class="fa-solid fa-lock"></i> Lock Screen</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item user-dropdown-logout" href="#"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+                                <a class="dropdown-item user-dropdown-logout" href="<?= SITE_URL ?>/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
                             </div>
                         </div>
                     </div>

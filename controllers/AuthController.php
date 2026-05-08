@@ -24,35 +24,42 @@ class AuthController {
                 $user = $this->authModel->getUserByUsername($input_username);  
 
                 if (!$user) {
-                    $error_message = "Username not existed.";                  
+                    $error_message = "Username not existed.";
                     $errors['username'] = "Tên tài khoản không tồn tại";
-                } elseif ($input_password === $user['password'] && $user['role'] === 'admin') {
-                    $_SESSION['admin_user'] = $user['username'];
-                    $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
-                    $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
-                    $_SESSION['admin_user_id'] = $user['id'];
-                    $_SESSION['admin_auth'] = true;
-                    $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
-                   
-                    $redirect = SITE_URL . '/admin/dashboard';
-
-                } elseif (password_verify($input_password, $user['password'])) {
-                    $_SESSION['user'] = $user['username'];
-                    $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
-                    $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['login_status'] = true;
-
-                    $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " logged in");
-
-                    $redirect = SITE_URL . '/homepage';
-
                 } else {
-                    if ($input_username === 'admin') {
-                        $error_message = "Username not existed.";                  
-                        $errors['username'] = "Tên tài khoản không tồn tại";
+                    // First, handle modern hashed passwords
+                    if (password_verify($input_password, $user['password'])) {
+                        if (($user['role'] ?? '') === 'admin') {
+                            // admin login with hashed password
+                            $_SESSION['admin_user'] = $user['username'];
+                            $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
+                            $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
+                            $_SESSION['admin_user_id'] = $user['id'];
+                            $_SESSION['admin_auth'] = true;
+                            $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
+                            $redirect = rtrim(SITE_URL, '/') . '/admin/dashboard';
+                        } else {
+                            // normal user with hashed password
+                            $_SESSION['user'] = $user['username'];
+                            $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
+                            $_SESSION['avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
+                            $_SESSION['user_id'] = $user['id'];
+                            $_SESSION['login_status'] = true;
+                            $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " logged in");
+                            $redirect = rtrim(SITE_URL, '/') . '/homepage';
+                        }
+                    } elseif ($input_password === $user['password'] && ($user['role'] ?? '') === 'admin') {
+                        // Legacy plain-text admin (fallback)
+                        $_SESSION['admin_user'] = $user['username'];
+                        $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
+                        $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
+                        $_SESSION['admin_user_id'] = $user['id'];
+                        $_SESSION['admin_auth'] = true;
+                        $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
+                        $redirect = rtrim(SITE_URL, '/') . '/admin/dashboard';
                     } else {
-                        $error_message = "Wrong password.";                  
+                        // invalid password
+                        $error_message = "Wrong password.";
                         $errors['password'] = "Mật khẩu không chính xác";
                     }
                 }
