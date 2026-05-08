@@ -316,8 +316,17 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-sm-flex justify-content-between align-items-center">
-                                    <h4 class="header-title mb-0"></h4>
-                                    <select class="custome-select border-   0 pe-3">
+                                    <div class="search-box float-start">
+                                        <form id="content-search-form" method='GET'    
+                                            action="<?= (SITE_URL ?? '') .'/admin/log?search='.htmlspecialchars($search) ?>">
+                                            <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Search..." required>
+                                            <button type="submit">
+                                                <i class="ti-search"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    
+                                    <select class="custome-select border-0 pe-3">
                                         <option value="0" selected>Last 24 Hours</option>
                                         <option value="1">Last Week</option>
                                         <option value="2">Last Month</option>
@@ -373,7 +382,7 @@
                                                     }
                                                 }
                                             } else { ?>
-                                                <a href="?search=<?= urlencode($search) ?>&page=<?= $i ?>" 
+                                                <a href="?<?= $search ? 'search='.urlencode($search).'&' : '' ?>page=<?= $i ?>" 
                                                     class="btn mb-xl-3 <?= ($i == $page) ? 'btn-primary' : 'btn-secondary' ?>"
                                                 > <?= $i ?> </a>
                                             <?php } ?>

@@ -1,4 +1,6 @@
 <?php
+require_once BASE_DIR . '/config/admin/idQuery.php';
+
 class AuthModel {
     private PDO $db;
 
@@ -25,8 +27,9 @@ class AuthModel {
     }
 
     public function addNewUser(string $username, string $lastname, string $firstname, string $email, string $password, string $phone, string $address = '') {
-        $stmt = $this->db->prepare("INSERT INTO users (username, last_name, first_name, password, email, phoneNumber, address) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$username, $lastname, $firstname, $password, $email, $phone, $address]);
+        $id = IdQuery::getId('users');
+        $stmt = $this->db->prepare("INSERT INTO users (id, username, last_name, first_name, password, email, phoneNumber, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$id, $username, $lastname, $firstname, $password, $email, $phone, $address]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

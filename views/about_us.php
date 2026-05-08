@@ -12,12 +12,16 @@
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/public/css/header.css">
     <link rel="stylesheet" href="<?= SITE_URL ?? '' ?>/assets/admin/css/themify-icons.css">
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!--Robo mono-->
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <!-- Vollkorn -->
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <!-- Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
     <style>
         body {
@@ -42,6 +46,15 @@
             font-weight: 700;
             color: #1f1c17;
         }
+
+        .font-nunito {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .font-vollkorn {
+            font-family: 'Vollkorn', serif;
+        }
+        
     </style>
 </head>
 <body>

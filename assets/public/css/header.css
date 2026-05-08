@@ -16,3 +16,18 @@
         .nav-hover:hover::after {
             width: 100%;
         }
+        .font-anton {
+            font-family: 'Anton', sans-serif;
+        }
+        .font-roboto-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .font-vollkorn {
+            font-family: 'Vollkorn', serif;
+        }
+        .font-nunito {
+            font-family: 'Nunito', sans-serif;
+        }
+        .font-embed {
+            font-family: 'Barlow Condensed', sans-serif;
+        }

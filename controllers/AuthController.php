@@ -27,10 +27,10 @@ class AuthController {
                     $error_message = "Username not existed.";                  
                     $errors['username'] = "Tên tài khoản không tồn tại";
                 } elseif ($input_password === $user['password'] && $user['role'] === 'admin') {
-                    $_SESSION['admin_user'] = $user['username'];
+                    $_SESSION['admin'] = $user['username'];
                     $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
                     $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar->value);
-                    $_SESSION['admin_user_id'] = $user['id'];
+                    $_SESSION['admin_id'] = $user['id'];
                     $_SESSION['admin_auth'] = true;
                     $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
                    

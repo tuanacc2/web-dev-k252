@@ -1,88 +1,28 @@
 <?php
-require_once BASE_DIR .'/models/InformationModel.php';
-require_once BASE_DIR .'/models/AdvertisementsModel.php';
-require_once BASE_DIR .'/models/ScrollTextModel.php';
-require_once BASE_DIR .'/models/CertificationModel.php';
-require_once BASE_DIR .'/models/MainProductModel.php';
-
 require_once BASE_DIR .'/models/PostModel.php';
 
 class PostController {
-    private InformationModel $informationModel;
-    private AdvertisementsModel $advertisementsModel;
-    private ScrollTextModel $scrollTextModel;
-    private CertificationModel $certificationModel;
-    private MainProductModel $mainProductModel;
-
-
     private AuditLoggerModel $logModel;
     private PostModel $postModel;
 
     public function __construct() {
-        $this->informationModel = new InformationModel();
-        $this->advertisementsModel = new AdvertisementsModel();
-        $this->scrollTextModel = new ScrollTextModel();
-        $this->certificationModel = new CertificationModel();
-        $this->mainProductModel = new MainProductModel();
-
         $this->logModel = new AuditLoggerModel();
         $this->postModel = new PostModel();
     }
 
     public function posts() {
-        // Default header & footer
-        $information=$this->informationModel->getAll();
-        $advertisements = $this->advertisementsModel->getHomepageAdvertisements();
-        $scrollTexts = $this->scrollTextModel->getAll();
-        $certifications = $this->certificationModel->getAll();
-        $mainProducts = $this->mainProductModel->getAll();
-        $companyName='';
-        $phone='';
-        $email='';
-        $address='';
-        $messenger='';
-        $zalo='';
-        $facebook='';
-        $instagram='';
-        $twitter='';
-        $logo='';
-        foreach($information as $info){
-            switch($info['name']){
-                case 'Company Name':
-                    $companyName=$info['value'];
-                    break;
-                case 'Phone':
-                    $phone=$info['value'];
-                    break;
-                case 'Email':
-                    $email=$info['value'];
-                    break;
-                case 'Address':
-                    $address=$info['value'];
-                    break;
-                case 'Messenger':
-                    $messenger=$info['value'];
-                    break;
-                case 'Zalo':
-                    $zalo=$info['value'];
-                    break;
-                case 'Facebook':
-                    $facebook=$info['value'];
-                    break;
-                case 'Instagram':
-                    $instagram=$info['value'];
-                    break;
-                case 'Logo':
-                    $logo=$info['value'];
-                    break;
-                case 'Twitter':
-                    $twitter=$info['value'];
-                    break;
-            }
-        } 
-        // End header & footer
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $limit = 12;
+        $page = isset($_GET['page']) && is_int($_GET['page']) ? (int)($_GET['page']) : 1;
+        $total = count($this->postModel->getPost($search));
+        $totalPage = ceil($total / $limit);
 
-        $posts = $this->postModel->getPost();
+        $posts = $this->postModel->getPost($search, $limit, $offset = ($page - 1) * $limit);
+
+        foreach ($posts as &$post) {
+            $post['updated_at'] = $post['updated_at'] ? date_create($post['updated_at'])->format('d.m.y') : null;
+        }
+        unset($post);
 
         require_once 'views/posts.php';
     }
@@ -90,6 +30,21 @@ class PostController {
     public function postDetail(int $post_id) {
         $post = $this->postModel->getPostById($post_id);
 
-        require_once 'views/postDetail.php';
+        if (!$post) {
+        // Handle 404 if post doesn't exist
+            require_once 'views/error404.php';
+            return;
+        }
+
+        $popularPosts = $this->postModel->getRecentPosts();
+
+        $title = $post['title'] ?? 'Bài viết';
+        $createdAt = $post['created_at'] ? date_create($post['created_at'])->format('d.m.y') : null;
+        $updatedAt = $post['updated_at'] ? date_create($post['updated_at'])->format('d.m.y') : null;
+        $author = $post['author'] ?? '';
+        $category = $post['category'] ?? '';
+        $siteContent = $post['content'] ?? '';
+
+        require_once 'views/post/detail.php';
     }
 }

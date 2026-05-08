@@ -16,22 +16,25 @@ if (count($pathArray) > 1) {
 define('SITE_URL', $webRoot ?? '/');
 
 require_once __DIR__ . '/config/session_init.php';
+
 require_once __DIR__ . '/database/Database.php';
-require_once __DIR__ . '/controllers/UserController.php';
+
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/ContactController.php';
 require_once __DIR__ . '/controllers/HomeController.php';
-require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/PostController.php';
+require_once __DIR__ . '/controllers/ProductController.php';
+require_once __DIR__ . '/controllers/UserController.php';
 
-require_once __DIR__ . '/controllers/admin/AdminUserController.php';
-require_once __DIR__ . '/controllers/admin/AdminContactController.php';
 require_once __DIR__ . '/controllers/admin/AdminCartController.php';
-require_once __DIR__ . '/controllers/admin/AuditLoggerController.php';
+require_once __DIR__ . '/controllers/admin/AdminCategoryController.php';
+require_once __DIR__ . '/controllers/admin/AdminContactController.php';
 require_once __DIR__ . '/controllers/admin/AdminDashboardController.php';
-require_once __DIR__ . '/controllers/admin/AdminInformationController.php';
 require_once __DIR__ . '/controllers/admin/AdminHomepageController.php';
-
+require_once __DIR__ . '/controllers/admin/AdminInformationController.php';
+require_once __DIR__ . '/controllers/admin/AdminPostController.php';
+require_once __DIR__ . '/controllers/admin/AdminUserController.php';
+require_once __DIR__ . '/controllers/admin/AuditLoggerController.php';
 
 enum Page: string {
     case Home = 'homepage';
@@ -91,6 +94,7 @@ enum AdminPage: string {
     case ContactAnswer = 'contact-answer';
     case About = 'about';
     case Help = 'help';
+    case Category = 'category';
     case User = 'user';
     case Product = 'product';
     case Cart = 'cart';
@@ -113,7 +117,7 @@ $parts = explode('/', $route);
 
 $controller = $parts[0];
 $action = $parts[1] ?? '';
-$id = $parts[2] ?? null;
+$subAction = $parts[2] ?? null;
 
 $page = Page::tryFrom($controller);
 $controller = $page?->value;
@@ -123,6 +127,7 @@ if (!$controller || !Page::isValid($controller) ||
     ($controller == Page::Home->value && !in_array($action, ['', 'about_us'], true)) ||
     ($controller == Page::Auth && !AuthPage::isValid($action)) ||
     ($controller == Page::User && !UserPage::isValid($action)) ||
+    ($controller == Page::Post->value && !in_array($action, ['', 'view'], true)) || // PostController chỉ có 2 route: /post và /post/view/{id}
     ($controller == Page::Admin && !AdminPage::isValid($action))) {
     header("Location: ".SITE_URL."/");
     exit();
@@ -143,7 +148,11 @@ switch ($controller) {
         break; 
     case Page::Setting->value:
     case Page::Post->value:
-        (new PostController())->posts();
+        if ($action === 'view' && $subAction && is_numeric($subAction)) {
+            (new PostController())->postDetail((int)$subAction); // New method for single post
+        } else {
+            (new PostController())->posts(); // Default list view
+        }
         break;
     case Page::Product->value:
         (new ProductController())->products();
@@ -168,19 +177,54 @@ switch ($controller) {
             require_once "views/error404.php";
             break; 
         }
-        match($action) {
-            AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
-            AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
-            AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
-            AdminPage::Contact->value       => (new AdminContactController())->contact(),
-            AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
-            AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
-            AdminPage::User->value          => (new AdminUserController())->users(),
-            AdminPage::Post->value          => require_once "views/error404.php",
-            AdminPage::Product->value       => require_once "views/error404.php",
-            AdminPage::AuditLog->value      => (new AuditLoggerController())->logs(),
-            default                         => require_once "views/error404.php"
-        };
+        if ($action === '' || $action === 'dashboard') {
+            (new AdminDashboardController())->dashboard();
+            break;
+        }
+        if ($subAction) {
+            switch ($action) {
+                case AdminPage::ContactDetail->value:
+                    (new AdminContactController())->getDetail();
+                    break;
+                case AdminPage::ContactAnswer->value:
+                    (new AdminContactController())->markAnswered();
+                    break;
+                case AdminPage::Category->value:
+                    match($subAction) {
+                        'add' => (new AdminCategoryController())->add(),
+                        'update' => (new AdminCategoryController())->update(),
+                        'delete' => (new AdminCategoryController())->delete(),
+                        default => require_once "views/error404.php"
+                    };
+                case AdminPage::Post->value:
+                    match($subAction) {
+                        'add' => (new AdminPostController())->add(),
+                        'update' => (new AdminPostController())->update(),
+                        'delete' => (new AdminPostController())->delete(),
+                        default => require_once "views/error404.php"
+                    };
+                    break;
+                default:
+                    require_once "views/error404.php";
+                    break;
+            }
+        } else {
+            match($action) {
+                AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
+                AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
+                AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
+                AdminPage::Contact->value       => (new AdminContactController())->contact(),
+                AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
+                AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
+                AdminPage::Category->value      => (new AdminCategoryController())->category(),
+                AdminPage::User->value          => (new AdminUserController())->users(),
+                AdminPage::Post->value          => (new AdminPostController())->posts(),
+                AdminPage::Product->value       => require_once "views/error404.php",
+                AdminPage::AuditLog->value      => (new AuditLoggerController())->logs(),
+                default                         => require_once "views/error404.php"
+            };
+            break;
+        }
         break;
     default:
         (new HomeController())->home();

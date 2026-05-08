@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS images (
     target_type ENUM('avatar', 'product', 'post') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 -- Danh sách người dùng và admin
 CREATE TABLE IF NOT EXISTS users ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -35,17 +36,28 @@ CREATE TABLE IF NOT EXISTS contacts (
 
 
 -- Các category của sản phẩm / dịch vụ và bài đăng
-CREATE TABLE IF NOT EXISTS categories ( 
-	id INT AUTO_INCREMENT PRIMARY KEY, 
-	name VARCHAR(255) NOT NULL, 
-	type ENUM('product', 'post') NOT NULL 
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT DEFAULT NULL,
+    type ENUM('product', 'post') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- This constraint ensures the name is unique for each specific type
+    UNIQUE KEY unique_category_per_type (name, type)
 );
+
+-- Nội dung bài viết / sản phẩm (tách riêng để dễ quản lý, có thể mở rộng thêm các trường như summary, tags,...)
+CREATE TABLE IF NOT EXISTS contents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content LONGTEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Sản phẩm / dịch vụ
 CREATE TABLE IF NOT EXISTS products ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(255) NOT NULL, 
-    category_id INT NOT NULL,
+    category_id INT DEFAULT NULL,
     description TEXT, 
     image_id INT NULL DEFAULT NULL,
     price DECIMAL(10,2) NOT NULL, 
@@ -59,13 +71,19 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS posts ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	title VARCHAR(255) NOT NULL, 
-	category_id INT NOT NULL,
-	content TEXT,
-	author_id INT, 
+    thumbnail_id INT NULL DEFAULT NULL,
+    thumbnail_description TEXT DEFAULT NULL,
+	category_id INT DEFAULT NULL,
+	content_id INT DEFAULT NULL,
+	author_id INT DEFAULT NULL, 
+    status ENUM('public', 'private', 'hidden') DEFAULT 'public',
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (author_id) REFERENCES users(id), 
-	FOREIGN KEY (category_id) REFERENCES categories(id) 
-); 
+	FOREIGN KEY (category_id) REFERENCES categories(id),
+	FOREIGN KEY (thumbnail_id) REFERENCES images(id) ON DELETE SET NULL,
+	FOREIGN KEY (content_id) REFERENCES contents(id) ON DELETE SET NULL
+);
 
 -- Bình luận về sản phẩm / dịch vụ và bài viết
 CREATE TABLE IF NOT EXISTS comments ( 
@@ -150,8 +168,8 @@ INSERT INTO `users` (
         `id`, 
         `username`, 
         `password`, 
-        `first_name`,
         `last_name`,
+        `first_name`,
         `email`, 
         `avatar_id`, 
         `phoneNumber`, 
@@ -258,3 +276,56 @@ VALUES
 (NULL, 'homepage', 'main-product', 1),
 (NULL, 'homepage', 'latestNew', 1),
 (NULL, 'homepage', 'product', 1);
+
+INSERT INTO images (id, file_name, target_id, target_type)
+VALUES
+    (1, '/assets/images/post/DSC_02381_1_b0fdd5538a.jpg', 1, 'post'),
+    (2, '/assets/images/post/Hinh_chinh_Website_f198b59b8b.jpg', 2, 'post'),
+    (3, '/assets/images/post/z7287578147555_0996a52163d907ff128570862cc441cb_5a19daf561.jpg', 3, 'post'),
+    (4, '/assets/images/post/DSC_02381_1_b0fdd5538a.jpg', 1, 'product'),
+    (5, '/assets/images/post/Hinh_chinh_Website_f198b59b8b.jpg', 2, 'product'),
+    (6, '/assets/images/post/z7287578147555_0996a52163d907ff128570862cc441cb_5a19daf561.jpg', 3, 'product')
+;
+
+INSERT INTO categories (id, name, description, type)
+VALUES 
+    (1, 'Hoạt động công ty', 'Các hoạt động nổi bật của công ty', 'post'),
+    (2, 'Làm đẹp', 'Các sản phẩm của công ty', 'post')
+;
+
+INSERT INTO `posts` (
+        `id`, 
+        `title`, 
+        `thumbnail_id`, 
+        `thumbnail_description`,
+        `category_id`, 
+        `content_id`, 
+        `author_id`
+    ) 
+VALUES (
+    1, 
+    'Cocoon đã có mặt tại Pháp!', 
+    1, 
+    'Điều này đã mở ra cơ hội cho mỹ phẩm thuần chay từ Việt Nam bước vào một trong những trung tâm làm đẹp hàng đầu thế giới.', 
+    NULL, 
+    NULL,
+    1
+),
+(
+    2, 
+    'Chương trình "Thu hồi pin cũ - Bảo vệ trái đất xanh" năm 2026', 
+    2, 
+    'Tiếp nối những hành trình bền bỉ vì môi trường, Cocoon và Trường ĐH Sư phạm TP.HCM tiếp tục phát động chương trình “Thu Hồi Pin Cũ – Bảo Vệ Trái Đất Xanh” lần thứ 5', 
+    NULL,  
+    NULL,
+    1
+),
+(
+    3, 
+    'Cocoon x AAF: Ký kết hợp tác "Chung tay cứu trợ chó mèo lang thang" lần II', 
+    3, 
+    'Thông qua việc duy trì chương trình “Chung tay cứu trợ chó mèo lang thang” cùng AAF, Cocoon mong muốn được góp thêm một phần nhỏ bé trong việc cung cấp nguồn lực cho các trạm cứu hộ, giúp duy trì và nâng cao phúc lợi của chó mèo lang thang, đồng thời, lan tỏa sự khích lệ và sẻ chia từ cộng đồng đến với những cá nhân, tập thể đang điều hành trạm và thực hiện công tác cứu hộ chó mèo.', 
+    NULL,  
+    NULL,
+    1
+);

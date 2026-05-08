@@ -11,7 +11,7 @@ class AuditLoggerController {
     public function logs() {
         $search = isset($_GET['search']) ? $_GET['search'] : '';
         $limit = 10;
-        $page = isset($_GET['page']) ? (int)($_GET['page']) : 1;
+        $page = isset($_GET['page']) && is_int($_GET['page']) ? (int)($_GET['page']) : 1;
         $total = count($this->loggerModel->getLogs($search));
         $totalPage = ceil($total / $limit);
         $logs = $this->loggerModel->getLogs($search, $limit, $offset = ($page - 1) * $limit);

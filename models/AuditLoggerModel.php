@@ -1,17 +1,22 @@
 <?php
+require_once BASE_DIR . '/config/admin/idQuery.php';
 
 enum Action: string {
     case Login = 'LOGIN';
     case Logout = 'LOGOUT';
     case Register = 'REGISTER';
-    case Dashboard = 'DASHBOARD';
     case AddPost = 'ADD_POST';
-    case EditPost = 'EDIT_POST';
+    case UpdatePost = 'UPDATE_POST';
+    case HidePost = 'HIDE_POST';
     case DeletePost = 'DELETE_POST';
+    case AddCategory = 'ADD_CATEGORY';
+    case UpdateCategory = 'UPDATE_CATEGORY';
+    case DeleteCategory = 'DELETE_CATEGORY';
     case Comment = 'COMMENT';
+    case HideComment = 'HIDE_COMMENT';
     case DeleteComment = 'DELETE_COMMENT';
     case AddProduct = 'ADD_PRODUCT';
-    case EditProduct = 'EDIT_PRODUCT';
+    case UpdateProduct = 'UPDATE_PRODUCT';
     case DeleteProduct = 'DELETE_PRODUCT';
     case Purchase = 'PURCHASE';
     case AddtoCart = 'ADD_TO_CART';
@@ -26,8 +31,10 @@ class AuditLoggerModel {
 
     public function log(String $action, ?int $user_id = null, string $description = "", ?int $target_id = null) {
         $timestamp = date("Y-m-d H:i:s");
-        $stmt = $this->db->prepare("INSERT INTO logs (user_id, action, target_id, description, created_at) VALUES (:user_id, :action, :target_id, :description, :created_at)");
+        $id = IdQuery::getId('logs');
+        $stmt = $this->db->prepare("INSERT INTO logs (id, user_id, action, target_id, description, created_at) VALUES (:id, :user_id, :action, :target_id, :description, :created_at)");
         $stmt->execute([
+            ':id' => $id,
             ':user_id'   => $user_id,
             ':action'    => $action,
             ':target_id' => $target_id,

@@ -20,7 +20,7 @@ class AdminContactController {
         $contactModel->markSeen($id);
         // Get contact detail
         $contact = $contactModel->getById($id);
-        if (!$contact) {
+        if (!$contact && isset($_SESSION['admin_auth'])) {
             http_response_code(404);
             echo json_encode(['error' => 'Contact not found']);
             exit;
