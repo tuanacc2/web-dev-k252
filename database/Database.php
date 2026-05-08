@@ -4,7 +4,7 @@ class Database {
     private string $host = "localhost";
     private string $port = "3306";
     private string $user = "root";
-    private string $pass = "Daoham12**";
+    private string $pass = "";
     private string $db   = "mydbass";
     public PDO|null $conn;
 
