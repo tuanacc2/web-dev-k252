@@ -161,7 +161,7 @@
 						<div class="card">
 							<div class="card-body">
 								<h4 class="header-title">Content Controller</h4>
-								<form method="post" action="<?= SITE_URL ?>/admin/homepage">
+								<form id="contentVisibilityForm" method="post" action="<?= SITE_URL ?>/admin/homepage">
 									<div class="data-tables">
 										<table id="dataTableContent" class="text-center">
 											<thead class="bg-light text-capitalize">
@@ -211,6 +211,9 @@
 						<div class="card">
 							<div class="card-body">
 								<h4 class="header-title">Advertisements</h4>
+								<div class="mb-4">
+									<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAdModal">Create Advertisement</button>
+								</div>
 								<div class="data-tables">
 									<table id="dataTableAds" class="text-center">
 											<thead class="bg-light text-capitalize">
@@ -223,6 +226,7 @@
 												<th>Link</th>
 												<th>Text Color</th>
 												<th>Background Color</th>
+												<th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -232,8 +236,14 @@
 														<td><?= htmlspecialchars($ad['id'] ?? '') ?></td>
 														<td>
 															<?php if (!empty($ad['leftImage'])): ?>
+																<?php
+																	$leftImage = $ad['leftImage'] ?? '';
+																	if ($leftImage !== '' && $leftImage[0] !== '/') {
+																		$leftImage = '/' . $leftImage;
+																	}
+																?>
 																<img
-																	src="<?= htmlspecialchars((SITE_URL ?? '') . $ad['leftImage']) ?>"
+																	src="<?= htmlspecialchars((SITE_URL ?? '') . $leftImage) ?>"
 																	alt="left image"
 																	style="height: 40px;"
 																>
@@ -251,11 +261,27 @@
 														</td>
 														<td><?= htmlspecialchars($ad['textColor'] ?? '') ?></td>
 														<td><?= htmlspecialchars($ad['backgroundColor'] ?? '') ?></td>
+														<td>
+															<button
+																type="button"
+																class="btn btn-outline-primary btn-sm btn-edit-ad"
+																data-id="<?= (int) ($ad['id'] ?? 0) ?>"
+																data-thumbnail="<?= htmlspecialchars($ad['thumbnail'] ?? '', ENT_QUOTES) ?>"
+																data-title="<?= htmlspecialchars($ad['title'] ?? '', ENT_QUOTES) ?>"
+																data-content="<?= htmlspecialchars($ad['content'] ?? '', ENT_QUOTES) ?>"
+																data-link="<?= htmlspecialchars($ad['link'] ?? '', ENT_QUOTES) ?>"
+																data-text-color="<?= htmlspecialchars($ad['textColor'] ?? '', ENT_QUOTES) ?>"
+																data-background-color="<?= htmlspecialchars($ad['backgroundColor'] ?? '', ENT_QUOTES) ?>"
+																data-bs-toggle="modal"
+																data-bs-target="#editAdModal"
+															>Edit</button>
+															<button type="button" class="btn btn-danger btn-sm btn-delete-ad" data-id="<?= (int) ($ad['id'] ?? 0) ?>">Delete</button>
+														</td>
 													</tr>
 												<?php endforeach; ?>
 											<?php else: ?>
 												<tr>
-													<td colspan="8">No advertisements found.</td>
+													<td colspan="9">No advertisements found.</td>
 												</tr>
 											<?php endif; ?>
 										</tbody>
@@ -265,6 +291,66 @@
 						</div>
 					</div>
 					<!-- advertisements table end -->
+
+					<!-- main product table start -->
+					<div class="col-12 mt-5">
+						<div class="card">
+							<div class="card-body">
+								<h4 class="header-title">Main Product</h4>
+								<div class="data-tables">
+									<table id="dataTableMainProduct" class="text-center">
+										<thead class="bg-light text-capitalize">
+											<tr>
+												<th>Id</th>
+												<th>Image</th>
+												<th>Title</th>
+												<th>Description</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php if (!empty($mainProducts) && is_array($mainProducts)): ?>
+												<?php foreach ($mainProducts as $mainProduct): ?>
+													<tr>
+														<td><?= htmlspecialchars($mainProduct['id'] ?? '') ?></td>
+														<td>
+															<?php if (!empty($mainProduct['image'])): ?>
+																<?php
+																	$imagePath = $mainProduct['image'] ?? '';
+																	if ($imagePath !== '' && $imagePath[0] !== '/') {
+																		$imagePath = '/' . $imagePath;
+																	}
+																?>
+																<img src="<?= htmlspecialchars((SITE_URL ?? '') . $imagePath) ?>" alt="main product" style="height: 40px;">
+															<?php endif; ?>
+														</td>
+														<td><?= htmlspecialchars($mainProduct['title'] ?? '') ?></td>
+														<td><?= htmlspecialchars($mainProduct['description'] ?? '') ?></td>
+														<td>
+															<button
+																type="button"
+																class="btn btn-outline-primary btn-sm btn-edit-mainproduct"
+																data-id="<?= (int) ($mainProduct['id'] ?? 0) ?>"
+																data-title="<?= htmlspecialchars($mainProduct['title'] ?? '', ENT_QUOTES) ?>"
+																data-description="<?= htmlspecialchars($mainProduct['description'] ?? '', ENT_QUOTES) ?>"
+																data-bs-toggle="modal"
+																data-bs-target="#editMainProductModal"
+															>Edit</button>
+														</td>
+													</tr>
+												<?php endforeach; ?>
+											<?php else: ?>
+												<tr>
+													<td colspan="5">No main products found.</td>
+												</tr>
+											<?php endif; ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- main product table end -->
 
 					<!-- scroll text table start -->
 					<div class="col-12 mt-5">
@@ -277,6 +363,7 @@
 											<tr>
 												<th>Id</th>
 												<th>Content</th>
+												<th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -285,11 +372,21 @@
 													<tr>
 														<td><?= htmlspecialchars($scroll['id'] ?? '') ?></td>
 														<td><?= htmlspecialchars($scroll['content'] ?? '') ?></td>
+														<td>
+															<button
+																type="button"
+																class="btn btn-outline-primary btn-sm btn-edit-scroll"
+																data-id="<?= (int) ($scroll['id'] ?? 0) ?>"
+																data-content="<?= htmlspecialchars($scroll['content'] ?? '', ENT_QUOTES) ?>"
+																data-bs-toggle="modal"
+																data-bs-target="#editScrollModal"
+															>Edit</button>
+														</td>
 													</tr>
 												<?php endforeach; ?>
 											<?php else: ?>
 												<tr>
-													<td colspan="2">No scroll text found.</td>
+													<td colspan="3">No scroll text found.</td>
 												</tr>
 											<?php endif; ?>
 										</tbody>
@@ -314,6 +411,7 @@
 												<th>Title</th>
 												<th>Subtitle</th>
 												<th>Content</th>
+												<th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -323,8 +421,14 @@
 														<td><?= htmlspecialchars($cert['id'] ?? '') ?></td>
 														<td>
 															<?php if (!empty($cert['logo'])): ?>
+																<?php
+																	$logoPath = $cert['logo'] ?? '';
+																	if ($logoPath !== '' && $logoPath[0] !== '/') {
+																		$logoPath = '/' . $logoPath;
+																	}
+																?>
 																<img
-																	src="<?= htmlspecialchars((SITE_URL ?? '') . $cert['logo']) ?>"
+																	src="<?= htmlspecialchars((SITE_URL ?? '') . $logoPath) ?>"
 																	alt="logo"
 																	style="height: 40px;"
 																>
@@ -333,11 +437,23 @@
 														<td><?= htmlspecialchars($cert['title'] ?? '') ?></td>
 														<td><?= htmlspecialchars($cert['subtitle'] ?? '') ?></td>
 														<td><?= htmlspecialchars($cert['content'] ?? '') ?></td>
+														<td>
+															<button
+																type="button"
+																class="btn btn-outline-primary btn-sm btn-edit-cert"
+																data-id="<?= (int) ($cert['id'] ?? 0) ?>"
+																data-title="<?= htmlspecialchars($cert['title'] ?? '', ENT_QUOTES) ?>"
+																data-subtitle="<?= htmlspecialchars($cert['subtitle'] ?? '', ENT_QUOTES) ?>"
+																data-content="<?= htmlspecialchars($cert['content'] ?? '', ENT_QUOTES) ?>"
+																data-bs-toggle="modal"
+																data-bs-target="#editCertModal"
+															>Edit</button>
+														</td>
 													</tr>
 												<?php endforeach; ?>
 											<?php else: ?>
 												<tr>
-													<td colspan="5">No certifications found.</td>
+														<td colspan="6">No certifications found.</td>
 												</tr>
 											<?php endif; ?>
 										</tbody>
@@ -351,6 +467,198 @@
 			</div>
 		</div>
 		<!-- main content area end -->
+		<!-- modal area start -->
+		<div class="modal fade" id="createAdModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Create Advertisement</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form id="createAdForm" enctype="multipart/form-data">
+						<div class="modal-body">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label for="createAdLeftImage" class="form-label">Left Image</label>
+									<input type="file" class="form-control" id="createAdLeftImage" name="leftImage" accept="image/*" required>
+								</div>
+								<div class="col-md-6">
+									<label for="createAdThumbnail" class="form-label">Thumbnail</label>
+									<input type="text" class="form-control" id="createAdThumbnail" name="thumbnail" placeholder="VD: MO BAN" required>
+								</div>
+								<div class="col-md-6">
+									<label for="createAdTitle" class="form-label">Title</label>
+									<input type="text" class="form-control" id="createAdTitle" name="title" required>
+								</div>
+								<div class="col-md-6">
+									<label for="createAdLink" class="form-label">Link</label>
+									<input type="url" class="form-control" id="createAdLink" name="link" placeholder="https://">
+								</div>
+								<div class="col-12">
+									<label for="createAdContent" class="form-label">Content</label>
+									<textarea class="form-control" id="createAdContent" name="content" rows="3" required></textarea>
+								</div>
+								<div class="col-md-6">
+									<label for="createAdTextColor" class="form-label">Text Color</label>
+									<input type="text" class="form-control" id="createAdTextColor" name="textColor" placeholder="#1f1c17">
+								</div>
+								<div class="col-md-6">
+									<label for="createAdBackgroundColor" class="form-label">Background Color</label>
+									<input type="text" class="form-control" id="createAdBackgroundColor" name="backgroundColor" placeholder="#fff6cd">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Create</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editAdModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Advertisement</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form id="editAdForm" enctype="multipart/form-data">
+						<div class="modal-body">
+							<input type="hidden" id="editAdId" name="adId" value="">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label for="editAdLeftImage" class="form-label">Left Image</label>
+									<input type="file" class="form-control" id="editAdLeftImage" name="leftImage" accept="image/*">
+								</div>
+								<div class="col-md-6">
+									<label for="editAdThumbnail" class="form-label">Thumbnail</label>
+									<input type="text" class="form-control" id="editAdThumbnail" name="thumbnail" required>
+								</div>
+								<div class="col-md-6">
+									<label for="editAdTitle" class="form-label">Title</label>
+									<input type="text" class="form-control" id="editAdTitle" name="title" required>
+								</div>
+								<div class="col-md-6">
+									<label for="editAdLink" class="form-label">Link</label>
+									<input type="url" class="form-control" id="editAdLink" name="link" placeholder="https://">
+								</div>
+								<div class="col-12">
+									<label for="editAdContent" class="form-label">Content</label>
+									<textarea class="form-control" id="editAdContent" name="content" rows="3" required></textarea>
+								</div>
+								<div class="col-md-6">
+									<label for="editAdTextColor" class="form-label">Text Color</label>
+									<input type="text" class="form-control" id="editAdTextColor" name="textColor" placeholder="#1f1c17">
+								</div>
+								<div class="col-md-6">
+									<label for="editAdBackgroundColor" class="form-label">Background Color</label>
+									<input type="text" class="form-control" id="editAdBackgroundColor" name="backgroundColor" placeholder="#fff6cd">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editScrollModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Scroll Text</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form id="editScrollForm">
+						<div class="modal-body">
+							<input type="hidden" id="editScrollId" name="scrollId" value="">
+							<div class="mb-3">
+								<label for="editScrollContent" class="form-label">Content</label>
+								<input type="text" class="form-control" id="editScrollContent" name="content" required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editCertModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Certification</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form id="editCertForm" enctype="multipart/form-data">
+						<div class="modal-body">
+							<input type="hidden" id="editCertId" name="certId" value="">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label for="editCertLogo" class="form-label">Logo</label>
+									<input type="file" class="form-control" id="editCertLogo" name="logo" accept="image/*">
+								</div>
+								<div class="col-md-6">
+									<label for="editCertTitle" class="form-label">Title</label>
+									<input type="text" class="form-control" id="editCertTitle" name="title" required>
+								</div>
+								<div class="col-md-6">
+									<label for="editCertSubtitle" class="form-label">Subtitle</label>
+									<input type="text" class="form-control" id="editCertSubtitle" name="subtitle" required>
+								</div>
+								<div class="col-12">
+									<label for="editCertContent" class="form-label">Content</label>
+									<textarea class="form-control" id="editCertContent" name="content" rows="3" required></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editMainProductModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Main Product</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form id="editMainProductForm" enctype="multipart/form-data">
+						<div class="modal-body">
+							<input type="hidden" id="editMainProductId" name="mainProductId" value="">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label for="editMainProductImage" class="form-label">Image</label>
+									<input type="file" class="form-control" id="editMainProductImage" name="image" accept="image/*">
+								</div>
+								<div class="col-md-6">
+									<label for="editMainProductTitle" class="form-label">Title</label>
+									<input type="text" class="form-control" id="editMainProductTitle" name="title" required>
+								</div>
+								<div class="col-12">
+									<label for="editMainProductDescription" class="form-label">Description</label>
+									<textarea class="form-control" id="editMainProductDescription" name="description" rows="3" required></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- modal area end -->
 		<!-- footer area start-->
 		<footer>
 			<div class="footer-area">
@@ -425,13 +733,203 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			var contentTable = document.getElementById('dataTableContent');
 			var adsTable = document.getElementById('dataTableAds');
+			var mainProductTable = document.getElementById('dataTableMainProduct');
 			var scrollTable = document.getElementById('dataTableScroll');
 			var certTable = document.getElementById('dataTableCert');
 
 			if (contentTable) new simpleDatatables.DataTable(contentTable, { perPage: 10 });
 			if (adsTable) new simpleDatatables.DataTable(adsTable, { perPage: 10 });
+			if (mainProductTable) new simpleDatatables.DataTable(mainProductTable, { perPage: 10 });
 			if (scrollTable) new simpleDatatables.DataTable(scrollTable, { perPage: 10 });
 			if (certTable) new simpleDatatables.DataTable(certTable, { perPage: 10 });
+		});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const siteUrl = "<?= SITE_URL ?>";
+
+			const postForm = async function(url, form) {
+				const response = await fetch(url, {
+					method: 'POST',
+					body: new FormData(form)
+				});
+				let data = null;
+				try {
+					data = await response.json();
+				} catch (error) {
+					data = null;
+				}
+				if (!response.ok) {
+					throw new Error((data && data.error) ? data.error : 'Request failed');
+				}
+				return data;
+			};
+
+			const postEmpty = async function(url) {
+				const response = await fetch(url, { method: 'POST' });
+				let data = null;
+				try {
+					data = await response.json();
+				} catch (error) {
+					data = null;
+				}
+				if (!response.ok) {
+					throw new Error((data && data.error) ? data.error : 'Request failed');
+				}
+				return data;
+			};
+
+			const contentForm = document.getElementById('contentVisibilityForm');
+			if (contentForm) {
+				contentForm.addEventListener('submit', async function(event) {
+					event.preventDefault();
+					try {
+						await postForm(siteUrl + '/admin/homepage', contentForm);
+						alert('Visibility updated successfully.');
+					} catch (error) {
+						alert(error.message || 'Failed to update visibility.');
+					}
+				});
+			}
+
+			const createAdForm = document.getElementById('createAdForm');
+			if (createAdForm) {
+				createAdForm.addEventListener('submit', async function(event) {
+					event.preventDefault();
+					try {
+						await postForm(siteUrl + '/admin/advertisement', createAdForm);
+						location.reload();
+					} catch (error) {
+						alert(error.message || 'Failed to create advertisement.');
+					}
+				});
+			}
+
+			const editAdForm = document.getElementById('editAdForm');
+			let currentAdId = null;
+			document.querySelectorAll('.btn-edit-ad').forEach(function(button) {
+				button.addEventListener('click', function() {
+					currentAdId = button.dataset.id || null;
+					document.getElementById('editAdId').value = currentAdId || '';
+					document.getElementById('editAdThumbnail').value = button.dataset.thumbnail || '';
+					document.getElementById('editAdTitle').value = button.dataset.title || '';
+					document.getElementById('editAdContent').value = button.dataset.content || '';
+					document.getElementById('editAdLink').value = button.dataset.link || '';
+					document.getElementById('editAdTextColor').value = button.dataset.textColor || '';
+					document.getElementById('editAdBackgroundColor').value = button.dataset.backgroundColor || '';
+				});
+			});
+
+			if (editAdForm) {
+				editAdForm.addEventListener('submit', async function(event) {
+					event.preventDefault();
+					if (!currentAdId) {
+						alert('Missing advertisement id.');
+						return;
+					}
+					try {
+						await postForm(siteUrl + '/admin/advertisement-update/' + currentAdId, editAdForm);
+						location.reload();
+					} catch (error) {
+						alert(error.message || 'Failed to update advertisement.');
+					}
+				});
+			}
+
+			document.querySelectorAll('.btn-delete-ad').forEach(function(button) {
+				button.addEventListener('click', async function() {
+					const adId = button.dataset.id;
+					if (!adId) return;
+					if (!confirm('Delete this advertisement?')) return;
+					try {
+						await postEmpty(siteUrl + '/admin/advertisement-delete/' + adId);
+						location.reload();
+					} catch (error) {
+						alert(error.message || 'Failed to delete advertisement.');
+					}
+				});
+			});
+
+			const editScrollForm = document.getElementById('editScrollForm');
+			let currentScrollId = null;
+			document.querySelectorAll('.btn-edit-scroll').forEach(function(button) {
+				button.addEventListener('click', function() {
+					currentScrollId = button.dataset.id || null;
+					document.getElementById('editScrollId').value = currentScrollId || '';
+					document.getElementById('editScrollContent').value = button.dataset.content || '';
+				});
+			});
+			if (editScrollForm) {
+				editScrollForm.addEventListener('submit', async function(event) {
+					event.preventDefault();
+					if (!currentScrollId) {
+						alert('Missing scroll text id.');
+						return;
+					}
+					try {
+						await postForm(siteUrl + '/admin/scrolltext-update/' + currentScrollId, editScrollForm);
+						location.reload();
+					} catch (error) {
+						alert(error.message || 'Failed to update scroll text.');
+					}
+				});
+			}
+
+			const editCertForm = document.getElementById('editCertForm');
+			let currentCertId = null;
+			document.querySelectorAll('.btn-edit-cert').forEach(function(button) {
+				button.addEventListener('click', function() {
+					currentCertId = button.dataset.id || null;
+					document.getElementById('editCertId').value = currentCertId || '';
+					document.getElementById('editCertTitle').value = button.dataset.title || '';
+					document.getElementById('editCertSubtitle').value = button.dataset.subtitle || '';
+					document.getElementById('editCertContent').value = button.dataset.content || '';
+				});
+			});
+			if (editCertForm) {
+				editCertForm.addEventListener('submit', async function(event) {
+					event.preventDefault();
+					if (!currentCertId) {
+						alert('Missing certification id.');
+						return;
+					}
+					try {
+						await postForm(siteUrl + '/admin/certification-update/' + currentCertId, editCertForm);
+						location.reload();
+					} catch (error) {
+						alert(error.message || 'Failed to update certification.');
+					}
+				});
+			}
+
+
+			const editMainProductForm = document.getElementById('editMainProductForm');
+			let currentMainProductId = null;
+			document.querySelectorAll('.btn-edit-mainproduct').forEach(function(button) {
+				button.addEventListener('click', function() {
+					currentMainProductId = button.dataset.id || null;
+					document.getElementById('editMainProductId').value = currentMainProductId || '';
+					document.getElementById('editMainProductTitle').value = button.dataset.title || '';
+					document.getElementById('editMainProductDescription').value = button.dataset.description || '';
+				});
+			});
+
+			if (editMainProductForm) {
+				editMainProductForm.addEventListener('submit', async function(event) {
+					event.preventDefault();
+					if (!currentMainProductId) {
+						alert('Missing main product id.');
+						return;
+					}
+					try {
+						await postForm(siteUrl + '/admin/mainproduct-update/' + currentMainProductId, editMainProductForm);
+						location.reload();
+					} catch (error) {
+						alert(error.message || 'Failed to update main product.');
+					}
+				});
+			}
+
 		});
 	</script>
 

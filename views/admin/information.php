@@ -168,6 +168,7 @@
                                                 <th>Name</th>
                                                 <th>Type</th>
                                                 <th>Value</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -186,7 +187,7 @@
                                                                 <img
                                                                     src="<?= htmlspecialchars((SITE_URL ?? '') . $value) ?>"
                                                                     alt="<?= htmlspecialchars($item['name'] ?? 'image') ?>"
-                                                                    style="height: 40px;"
+                                                                    style="max-height: 40px; max-width: 120px; width: auto; height: auto; object-fit: contain;"
                                                                 >
                                                             <?php elseif ($type === 'link' && $value): ?>
                                                                 <a href="<?= htmlspecialchars($value) ?>" target="_blank" rel="noopener noreferrer">
@@ -196,11 +197,23 @@
                                                                 <?= htmlspecialchars($value) ?>
                                                             <?php endif; ?>
                                                         </td>
+                                                        <td>
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-primary btn-sm btn-edit-info"
+                                                                data-id="<?= (int) ($item['id'] ?? 0) ?>"
+                                                                data-name="<?= htmlspecialchars($item['name'] ?? '', ENT_QUOTES) ?>"
+                                                                data-type="<?= htmlspecialchars($type, ENT_QUOTES) ?>"
+                                                                data-value="<?= htmlspecialchars($value, ENT_QUOTES) ?>"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editInfoModal"
+                                                            >Edit</button>
+                                                        </td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             <?php else: ?>
                                                 <tr>
-                                                    <td colspan="4">No information found.</td>
+                                                    <td colspan="5">No information found.</td>
                                                 </tr>
                                             <?php endif; ?>
                                         </tbody>
@@ -214,6 +227,46 @@
             </div>
         </div>
         <!-- main content area end -->
+        <!-- modal area start -->
+        <div class="modal fade" id="editInfoModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editInfoForm" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <input type="hidden" id="editInfoId" name="infoId" value="">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="editInfoName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="editInfoName" name="name" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="editInfoType" class="form-label">Type</label>
+                                    <input type="text" class="form-control" id="editInfoType" name="type" readonly>
+                                </div>
+                                <div class="col-12" id="editInfoValueGroup">
+                                    <label for="editInfoValue" class="form-label">Value</label>
+                                    <input type="text" class="form-control" id="editInfoValue" name="value">
+                                </div>
+                                <div class="col-12 d-none" id="editInfoImageGroup">
+                                    <label for="editInfoImage" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="editInfoImage" name="image" accept="image/*">
+                                    <input type="hidden" id="editInfoImageValue" name="value" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- modal area end -->
         <!-- footer area start-->
         <footer>
             <div class="footer-area">
@@ -412,6 +465,82 @@
         document.addEventListener('DOMContentLoaded', function() {
             var el = document.getElementById('dataTable');
             if (el) new simpleDatatables.DataTable(el, { perPage: 10 });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const siteUrl = "<?= SITE_URL ?>";
+
+            const postForm = async function(url, form) {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+                let data = null;
+                try {
+                    data = await response.json();
+                } catch (error) {
+                    data = null;
+                }
+                if (!response.ok) {
+                    throw new Error((data && data.error) ? data.error : 'Request failed');
+                }
+                return data;
+            };
+
+            const valueGroup = document.getElementById('editInfoValueGroup');
+            const imageGroup = document.getElementById('editInfoImageGroup');
+            const valueInput = document.getElementById('editInfoValue');
+            const imageValueInput = document.getElementById('editInfoImageValue');
+            const typeInput = document.getElementById('editInfoType');
+            if (valueInput) valueInput.disabled = false;
+            if (imageValueInput) imageValueInput.disabled = true;
+
+            document.querySelectorAll('.btn-edit-info').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const id = button.dataset.id || '';
+                    const name = button.dataset.name || '';
+                    const type = button.dataset.type || '';
+                    const value = button.dataset.value || '';
+
+                    document.getElementById('editInfoId').value = id;
+                    document.getElementById('editInfoName').value = name;
+                    typeInput.value = type;
+
+                    if (type === 'image') {
+                        valueGroup.classList.add('d-none');
+                        imageGroup.classList.remove('d-none');
+                        valueInput.disabled = true;
+                        imageValueInput.disabled = false;
+                        imageValueInput.value = value;
+                    } else {
+                        imageGroup.classList.add('d-none');
+                        valueGroup.classList.remove('d-none');
+                        valueInput.disabled = false;
+                        imageValueInput.disabled = true;
+                        valueInput.type = type === 'link' ? 'url' : 'text';
+                        valueInput.value = value;
+                    }
+                });
+            });
+
+            const editInfoForm = document.getElementById('editInfoForm');
+            if (editInfoForm) {
+                editInfoForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    const infoId = document.getElementById('editInfoId').value;
+                    if (!infoId) {
+                        alert('Missing information id.');
+                        return;
+                    }
+                    try {
+                        await postForm(siteUrl + '/admin/information-update/' + infoId, editInfoForm);
+                        location.reload();
+                    } catch (error) {
+                        alert(error.message || 'Failed to update information.');
+                    }
+                });
+            }
         });
     </script>
 

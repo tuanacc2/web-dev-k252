@@ -54,7 +54,7 @@ $logo=$info['Logo'] ?? '';
         <!-- LOGO (center) -->
         <div class="absolute left-1/2 -translate-x-1/2">
             <a href="<?= SITE_URL ?? '' ?>/homepage">
-                <img src="<?= (SITE_URL ?? '') . $logo ?>" alt="Logo" class="h-8">            
+                <img src="<?= (SITE_URL ?? '') . $logo ?>" alt="Logo" class="h-8" style="max-height: 80px; max-width: 140px; width: auto; height: auto; object-fit: contain;">            
             </a>  
         </div>
         <!-- RIGHT (desktop menu) -->

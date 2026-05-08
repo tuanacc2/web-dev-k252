@@ -138,10 +138,16 @@
         <?php if (!empty($advertisements)): ?>
             <?php foreach ($advertisements as $advertisement): ?>
                 <div class="text-[#1f1c17]" style="color: <?= htmlspecialchars($advertisement['textColor'] ?? '#1f1c17') ?>; background-color: <?= htmlspecialchars($advertisement['backgroundColor'] ?? 'transparent') ?>;">
+                    <?php
+                        $leftImage = $advertisement['leftImage'] ?? '';
+                        if ($leftImage !== '' && $leftImage[0] !== '/') {
+                            $leftImage = '/' . $leftImage;
+                        }
+                    ?>
                     <div class="flex flex-col lg:flex-row h-full">
                         <!-- LEFT: IMAGE -->
                         <div class="w-full lg:w-1/2 h-full">
-                            <img src="<?= (SITE_URL  ?? '') . htmlspecialchars($advertisement['leftImage'] ?? '') ?>" class="w-full h-full object-cover" alt="Advertisement">
+                            <img src="<?= (SITE_URL  ?? '') . htmlspecialchars($leftImage) ?>" class="w-full h-full object-cover" alt="Advertisement">
                         </div>
 
                         <!-- RIGHT: TEXT (chỉ hiện lg) -->
