@@ -32,7 +32,7 @@ class AuthController {
                     $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar);
                     $_SESSION['admin_id'] = $user['id'];
                     $_SESSION['admin_auth'] = true;
-                    $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " (admin) logged in");
+                    $this->logModel->log(Action::Login, $user['id'], $user['username'] . " (admin) logged in");
                    
                     $redirect = SITE_URL . '/admin/dashboard';
 
@@ -43,7 +43,7 @@ class AuthController {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['login_status'] = true;
 
-                    $this->logModel->log(Action::Login->value, $user['id'], $user['username'] . " logged in");
+                    $this->logModel->log(Action::Login, $user['id'], $user['username'] . " logged in");
 
                     $redirect = SITE_URL . '/homepage';
 
@@ -131,17 +131,23 @@ class AuthController {
 
                 // Proceed with user registration
                 $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
-                $this->authModel->addNewUser($input_username, $input_lastname, $input_firstname, $hashed_password, $input_email, $input_phone, $input_address);
+                $user_id = $this->authModel->addNewUser(
+                    username: $input_username, 
+                    lastname: $input_lastname, 
+                    firstname: $input_firstname, 
+                    password: $hashed_password, 
+                    email: $input_email, 
+                    phone: $input_phone, 
+                    address: $input_address
+                );
 
-                $user = $this->authModel->getUserByUsername($input_username);
-
-                $_SESSION['user'] = $user['username'];
-                $_SESSION['name'] = $user['first_name'].' '.$user['last_name'];
-                $_SESSION['avatar'] = $this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar);
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user'] = $input_username;
+                $_SESSION['name'] = $input_firstname.' '.$input_lastname;
+                $_SESSION['avatar'] = $this->imageModel->getImageByTargetId($user_id, ImageType::Avatar);
+                $_SESSION['user_id'] = $user_id;
                 $_SESSION['login_status'] = true;
 
-                $this->logModel->log(Action::Register->value, $user['id'], $input_username . " registered an account");
+                $this->logModel->log(Action::Register, $user_id, $input_username . " registered an account");
 
                 $redirect = SITE_URL . '/homepage';
 

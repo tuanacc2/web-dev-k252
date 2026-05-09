@@ -30,7 +30,7 @@ class AuthModel {
         $id = IdQuery::getId('users');
         $stmt = $this->db->prepare("INSERT INTO users (id, username, last_name, first_name, password, email, phoneNumber, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$id, $username, $lastname, $firstname, $password, $email, $phone, $address]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $id;
     }
 
     public function getUserById(int $id) {

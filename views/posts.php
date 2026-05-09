@@ -71,23 +71,6 @@
         .slick-next {
             right: 10px !important;
         }
-
-        .slider {
-            height: 450px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slider .slick-slide {
-            height: 450px;
-            overflow: hidden;
-        }
-
-        .slider .slick-slide img {
-            height: 100%;
-            width: 100%;
-        }
-
         .font-nunito {
             font-family: 'Nunito', sans-serif;
         }
@@ -99,28 +82,18 @@
         .font-embed {
             font-family: 'Barlow Condensed', sans-serif;
         }
-
-        @media (min-width: 768px) {
-            .slider {
-                height: 600px;
-            }
-
-            .slider .slick-slide {
-                height: 600px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .slider {
-                height: 786px;
-            }
-
-            .slider .slick-slide {
-                height: 786px;
-            }
-        }
     </style>
 </head>
+<?php
+/** @var array $posts */
+/** @var string $search */
+/** @var string $category */
+/** @var array $category_list */
+/** @var int $limit */
+/** @var int $page */
+/** @var int $total */
+/** @var int $totalPage */
+?>
 <body>
 <div class="w-full min-h-screen bg-[#fefbf4]">
 
@@ -136,7 +109,7 @@
                 <p 
                     class="block text-xl md:text-5xl text-[#1f1c17] italic font-vollkorn" 
                     style="white-space: nowrap;">
-                    Bài viết 
+                    Bài viết
                 </p>
                 <form id="content-search-form" method='GET'
                     class="w-full flex items-center gap-4 ml-32"
@@ -158,27 +131,84 @@
                 </form>               
             </div>
             <!-- content -->
-            <div class="relative w-full flex flex-col lg:flex-row items-start lg:items-start justify-center gap-6 px-6 lg:px-20 my-5">
-                <?php foreach ($posts as $post): ?>
-                <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2">
-                    <a href="<?= SITE_URL .'/post/view/'. $post['id'] ?>" class="hover:shadow hover:scale-105 transition-transform duration-200">
-                        <div class="w-full overflow-hidden" style="height: 350px;">
-                            <img src="<?= (SITE_URL ?? '') . $post['thumbnail_url'] ?>" class="block w-full" style="height: 350px; object-fit: cover;" />
-                        </div>
-                        <div class="flex flex-col gap-3 w-full">
-                            <p class="text-sm font-semibold text-[#C5A25D] font-nunito">
-                                <span class="font-semibold text-black"><?= htmlspecialchars($companyName) ?></span>&nbsp;|
-                                <span class="font-embed"><?= htmlspecialchars($post['updated_at']) ?></span>
-                            </p>
-                            <p class="text-[#1f1c17] font-vollkorn"><?= $post['title'] ?? '' ?></p>
-                            <p class="overflow-hidden font-nunito" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
-                                <?= $post['thumbnail_description'] ?? '' ?>
-                            </p>
-                        </div>
-                    </a>
-                </div>
-                <?php endforeach; ?>
+            <?php foreach ($posts as $postsByCategory): ?>
+            <?php if (!empty($postsByCategory)): ?>
+            <div class="w-full flex items-center justify-between py-6">
+                <p 
+                    class="block text-xl md:text-5xl text-[#1f1c17] italic font-vollkorn" 
+                    style="white-space: nowrap;">
+                    <?= $postsByCategory[0]['category'] ? htmlspecialchars($postsByCategory[0]['category']) : 'Bài viết' ?>
+                </p>        
+                <a href="?category=<?= $postsByCategory[0]['category'] ? htmlspecialchars($postsByCategory[0]['category']) : '' ?><?= $search ? '&search='.htmlspecialchars($search) : '' ?>"
+                    class="text-xl md:text-2xl px-6 py-3 bg-transparent !text-black font-normal rounded-md
+                        flex flex-row items-center
+                        transition-all duration-300 font-embed <?= $category ? 'hidden' : '' ?>
+                        hover:bg-[#271f1d] hover:text-black hover:scale-105"
+                    style="white-space: nowrap; border: 1px solid #C5A25D";>        
+                    <p class="p-2">TẤT CẢ BÀI VIẾT</p>
+                    <i class="ti-arrow-right mr-2 ml-32 p-2" style="color: black"></i>
+                </a>             
             </div>
+        
+            <div class="slider-container">
+                <div class="
+                    slider
+                    relative w-full flex flex-col lg:flex-row items-start lg:items-start justify-center 
+                    gap-6 px-6 lg:px-20 my-5">
+                    <?php foreach ($postsByCategory as $post): ?>
+                    <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2 px-2">
+                        <a href="<?= SITE_URL .'/post/view/'. $post['id'] ?>" class="hover:shadow hover:scale-105 transition-transform duration-200">
+                            <div class="w-full overflow-hidden" style="height: 350px;">
+                                <img src="<?= (SITE_URL ?? '') . $post['thumbnail_url'] ?>" class="block w-full" style="height: 350px; object-fit: cover;" />
+                            </div>
+                            <div class="flex flex-col gap-3 w-full">
+                                <p class="text-sm font-semibold text-[#C5A25D] font-nunito">
+                                    <span class="font-semibold text-black"><?= htmlspecialchars($companyName) ?></span>&nbsp;|
+                                    <span class="font-embed"><?= htmlspecialchars($post['updated_at']) ?></span>
+                                </p>
+                                <p class="text-[#1f1c17] font-vollkorn"><?= $post['title'] ?? '' ?></p>
+                                <p class="overflow-hidden font-nunito" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
+                                    <?= $post['thumbnail_description'] ?? '' ?>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php endforeach; ?>
+            <div class='row w-full flex <?= $category ? '' : 'hidden ' ?></div>'>
+                <div class="ml-auto ">
+                    <?php for ($i = 1; $i <= $totalPage; $i++): ?>
+                    <?php 
+                    if ($i > 1 && $i < $totalPage && $totalPage > 14 &&
+                        (   ($page < 8 && $i > 8) || 
+                            ($page > $totalPage - 7 && $i < $totalPage - 7) || 
+                            ($page >= 8 && $page <= $totalPage - 7 && abs($i - $page) > 2)
+                        )
+                    ) { 
+                        if ($page < 8) {  
+                            if ($i == 9) {
+                                echo '<span class="btn btn-secondary mb-xl-3">...</span>';
+                            }
+                        } else if ($page > $totalPage - 7) {
+                            if ($i == $totalPage - 8) {
+                                echo '<span class="btn btn-secondary mb-xl-3">...</span>';
+                            }
+                        } else if (abs($i - $page) > 2) {
+                            if ($i == $page - 3 || $i == $page + 3) {
+                                echo '<span class="btn btn-secondary mb-xl-3">...</span>';
+                            }
+                        }
+                    } else { ?>
+                    <a href="?<?= $search ? 'search='.urlencode($search).'&' : '' ?>page=<?= $i ?>" 
+                        class="btn mb-xl-3 <?= ($i == $page) ? 'btn-primary' : 'btn-secondary' ?>"
+                    > <?= $i ?> </a>
+                    <?php } ?>
+                    <?php endfor; ?>
+                </div>
+            </div>            
         </div>
     </div>
 
@@ -187,14 +217,11 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
         $('.slider').slick({
-            slidesToShow: 1,
+            slidesToShow: 3,
             slidesToScroll: 1,
             infinite: true,
-            autoplay: true,
-            autoplaySpeed: 2000,
             arrows: true,
-            fade: true,
-            adaptiveHeight: false
+            adaptiveHeight: true
         });
     </script>
 </div>

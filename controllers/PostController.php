@@ -1,28 +1,75 @@
 <?php
 require_once BASE_DIR .'/models/PostModel.php';
+require_once BASE_DIR .'/models/CategoryModel.php';
 
 class PostController {
     private AuditLoggerModel $logModel;
     private PostModel $postModel;
+    private CategoryModel $categoryModel;
 
     public function __construct() {
         $this->logModel = new AuditLoggerModel();
         $this->postModel = new PostModel();
+        $this->categoryModel = new CategoryModel();
     }
 
     public function posts() {
         $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $category = isset($_GET['category']) ? $_GET['category'] : '';
+
+        $category_list = $this->categoryModel->getCategories(Category::Post);
+
+        $posts = [];
+
         $limit = 12;
         $page = isset($_GET['page']) && is_int($_GET['page']) ? (int)($_GET['page']) : 1;
-        $total = count($this->postModel->getPost($search));
-        $totalPage = ceil($total / $limit);
 
-        $posts = $this->postModel->getPost(search: $search, limit: $limit, offset: ($page - 1) * $limit);
+        // If user choose to see only one kind of category 
+        $total = 0;
+        $totalPage = 0;
 
-        foreach ($posts as &$post) {
-            $post['updated_at'] = $post['updated_at'] ? date_create($post['updated_at'])->format('d.m.y') : null;
+        if ($category) {
+        
+            $limit = 12;
+            $total = count($this->postModel->getPost($search));
+            $totalPage = ceil($total / $limit);
+
+            $category_id = 0;
+            foreach ($category_list as $cat) {
+                if ($cat['name'] === $category) {
+                    $category_id = $cat['id'];
+                }
+            }
+            
+            if ($category === 'uncategorized') {
+                $posts[0] = $this->postModel->getPost(
+                    search: $search, 
+                    limit: $limit, 
+                    offset: ($page - 1) * $limit, 
+                    category_id: null,
+                    categorized: PostModel::UNCATEGORIZED
+                );
+            } else {
+                $posts[0] = $this->postModel->getPost(
+                    search: $search, 
+                    limit: $limit, 
+                    offset: ($page - 1) * $limit, 
+                    category_id: $category_id
+                );
+            }
+
+            foreach ($posts[0] as &$post) {
+                $post['updated_at'] = $post['updated_at'] ? date_create($post['updated_at'])->format('d.m.y') : null;
+            }
+
+        } else {
+    
+            $limit = 3;
+
+            for ($i = 0; $i < count($category_list); $i++) {
+                $posts[$i] = $this->postModel->getPost($search, category_id: $category_list[$i]['id']);
+            }
         }
-        unset($post);
 
         require_once 'views/posts.php';
     }

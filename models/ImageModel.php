@@ -9,6 +9,19 @@ enum ImageType: string {
     case Certification = 'certification';
     case MainProduct = 'main_product';
     case Information = 'information';
+
+    public static function fromString(string $type): ?self {
+        return match (strtolower($type)) {
+            'avatar' => self::Avatar,
+            'product' => self::Product,
+            'post' => self::Post,
+            'advertisement' => self::Advertisement,
+            'certification' => self::Certification,
+            'main_product' => self::MainProduct,
+            'information' => self::Information,
+            default => null
+        };
+    }
 }
 
 
@@ -22,33 +35,46 @@ class ImageModel {
     }
 
     public function getImageById(int $imageId, ?ImageType $targetType = null): string {
-        $stmt = $this->db->prepare("SELECT file_name, target_type FROM images WHERE id = ?");
-        $stmt->bindValue(1, $imageId, PDO::PARAM_INT);
-        $stmt->execute();
-        $image = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$image) {
+        try {
+            $stmt = $this->db->prepare("SELECT file_name, target_type FROM images WHERE id = ?");
+            $stmt->bindValue(1, $imageId, PDO::PARAM_INT);
+            $stmt->execute();
+            $image = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$image) {
+                return $this->getDefaultImage($targetType->value);
+            }
+            if (!empty($image["file_name"])) {
+                return $image["file_name"];
+            } else {
+                return $this->getDefaultImage($image["target_type"]);
+            }
+
+        } catch (PDOException $e) {
+            echo 'Error fetching image: <br>';
+            // Log error or handle it as needed
             return $this->getDefaultImage($targetType->value);
-        }
-        if (!empty($image["file_name"])) {
-            return $image["file_name"];
-        } else {
-            return $this->getDefaultImage($image["target_type"]);
-        }
+        }       
     }
 
     public function getImageByTargetId(int $targetId, ?ImageType $targetType = null): string {
-        $stmt = $this->db->prepare("SELECT file_name, target_type FROM images WHERE target_id = ?");
-        $stmt->bindValue(1, $targetId, PDO::PARAM_INT);
-        $stmt->execute();
-        $image = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$image) {
+        try {
+            $stmt = $this->db->prepare("SELECT file_name, target_type FROM images WHERE target_id = ?");
+            $stmt->bindValue(1, $targetId, PDO::PARAM_INT);
+            $stmt->execute();
+            $image = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$image) {
+                return $this->getDefaultImage($targetType->value);
+            }
+            if (!empty($image["file_name"])) {
+                return $image["file_name"];
+            } else {
+                return $this->getDefaultImage($image["target_type"]);
+            }
+        } catch (PDOException $e) {
+            echo 'Error fetching image: <br>';
+            // Log error or handle it as needed
             return $this->getDefaultImage($targetType->value);
-        }
-        if (!empty($image["file_name"])) {
-            return $image["file_name"];
-        } else {
-            return $this->getDefaultImage($image["target_type"]);
-        }
+        }   
     }
 
     public function getDefaultImage(string $type): string {
@@ -62,63 +88,90 @@ class ImageModel {
         };
     }
     private function getUploadDir(ImageType $type): string {
-        return match ($type) {
-            ImageType::Avatar => "assets/upload/avatars/",
-            ImageType::Product => "assets/upload/products/",
-            ImageType::Post => "assets/upload/posts/",
-            ImageType::Advertisement => "assets/upload/advertisements/",
-            ImageType::Certification => "assets/upload/certifications/",
-            ImageType::MainProduct => "assets/upload/main_products/",
-            ImageType::Information => "assets/upload/informations/",
+        return BASE_DIR . match ($type) {
+            ImageType::Avatar => "/assets/upload/avatars/",
+            ImageType::Product => "/assets/upload/products/",
+            ImageType::Post => "/assets/upload/posts/",
+            ImageType::Advertisement => "/assets/upload/advertisements/",
+            ImageType::Certification => "/assets/upload/certifications/",
+            ImageType::MainProduct => "/assets/upload/main_products/",
+            ImageType::Information => "/assets/upload/informations/",
         };
     }
 
     public function addImage(array $file, int $targetId, ImageType $targetType): int|null {
-        $fileName = $this->uploadImage($file, $targetType);
-        if (!$fileName) {
+        try {   
+            $fileName = $this->uploadImage($file, $targetType);
+            if (!$fileName) {
+                return null;
+            }
+            $id = IdQuery::getId('images');
+            $timestamp = date("Y-m-d H:i:s");
+            $stmt = $this->db->prepare("INSERT INTO images (id, file_name, target_id, target_type, created_at) VALUES (:id, :file_name, :target_id, :target_type, :created_at)");
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':file_name', $fileName, PDO::PARAM_STR);
+            $stmt->bindValue(':target_id', $targetId, PDO::PARAM_INT);
+            $stmt->bindValue(':target_type', $targetType->value, PDO::PARAM_STR);
+            $stmt->bindValue(':created_at', $timestamp, PDO::PARAM_STR);
+            return $stmt->execute() ? $id : null;
+        } catch (PDOException $e) {
+            echo 'Error adding image: <br>';
             return null;
         }
-        $id = IdQuery::getId('images');
-        $timestamp = date("Y-m-d H:i:s");
-        $stmt = $this->db->prepare("INSERT INTO images (id, file_name, target_id, target_type, created_at) VALUES (:id, :file_name, :target_id, :target_type, :created_at)");
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->bindValue(':file_name', $fileName, PDO::PARAM_STR);
-        $stmt->bindValue(':target_id', $targetId, PDO::PARAM_INT);
-        $stmt->bindValue(':target_type', $targetType->value, PDO::PARAM_STR);
-        $stmt->bindValue(':created_at', $timestamp, PDO::PARAM_STR);
-        return $stmt->execute() ? $id : null;
     }
 
     public function deleteImage(int $imageId): bool {
-        $stmt = $this->db->prepare("DELETE FROM images WHERE id = ?");
-        return $stmt->execute([$imageId]);
+        try {
+            $stmt = $this->db->prepare("SELECT file_name FROM images WHERE id = ?");
+            $stmt->bindValue(1, $imageId, PDO::PARAM_INT);
+            $stmt->execute();
+            $image = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($image && !empty($image["file_name"])) {
+                $filePath = BASE_DIR . str_replace(SITE_URL, '', $image["file_name"]);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+        } catch (PDOException $e) {
+            echo 'Error deleting image: <br>';
+            // Log error or handle it as needed
+            return false;
+        }
+        return true;
     }
 
 
     public function uploadImage(array $file, ImageType $type): string {
-        $uploadDir = $this->getUploadDir($type);
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+        try {
+            $uploadDir = $this->getUploadDir($type);
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+                throw new RuntimeException("Upload error");
+            }
+            $tmpName = $file['tmp_name'] ?? '';
+            if ($tmpName === '') {
+                throw new RuntimeException("Missing temp file");
+            }
+            $mime = mime_content_type($tmpName);
+            if (!in_array($mime, $this->allowTypes, true)) {
+                throw new InvalidArgumentException("Invalid file type: $mime");
+            }
+            $originalName = $file['name'] ?? '';
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+            $fileName = bin2hex(random_bytes(16)) . '.' . $extension;
+            $destination = $uploadDir . $fileName;
+            if (!move_uploaded_file($tmpName, $destination)) {
+                throw new RuntimeException("Failed to move file");
+            }
+            $webPath = str_replace(BASE_DIR, '', $destination);
+            return '/' . ltrim($webPath, '/');
+        } catch (Exception $e) {
+            echo 'Error uploading image: <br>';
+            return '';
         }
-        if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
-            throw new RuntimeException("Upload error");
-        }
-        $tmpName = $file['tmp_name'] ?? '';
-        if ($tmpName === '') {
-            throw new RuntimeException("Missing temp file");
-        }
-        $mime = mime_content_type($tmpName);
-        if (!in_array($mime, $this->allowTypes, true)) {
-            throw new InvalidArgumentException("Invalid file type: $mime");
-        }
-        $originalName = $file['name'] ?? '';
-        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        $fileName = bin2hex(random_bytes(16)) . ($extension !== '' ? '.' . $extension : '');
-        $destination = $uploadDir . $fileName;
-        if (!move_uploaded_file($tmpName, $destination)) {
-            throw new RuntimeException("Failed to move file");
-        }
-        return '/' . ltrim($destination, '/');
+        
     }
 
         

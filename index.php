@@ -135,7 +135,7 @@ $parts = explode('/', $route);
 
 $controller = $parts[0];
 $action = $parts[1] ?? '';
-$subAction = $parts[2] ?? null;
+$id = $parts[2] ?? null;
 
 $page = Page::tryFrom($controller);
 $controller = $page?->value;
@@ -167,8 +167,8 @@ switch ($controller) {
         break; 
     case Page::Setting->value:
     case Page::Post->value:
-        if ($action === 'view' && $subAction && is_numeric($subAction)) {
-            (new PostController())->postDetail((int)$subAction); // New method for single post
+        if ($action === 'view' && $id && is_numeric($id)) {
+            (new PostController())->postDetail((int)$id); // New method for single post
         } else {
             (new PostController())->posts(); // Default list view
         }
@@ -200,7 +200,7 @@ switch ($controller) {
             (new AdminDashboardController())->dashboard();
             break;
         }
-        if ($subAction) {
+        if ($id) {
             switch ($action) {
                 case AdminPage::ContactDetail->value:
                     (new AdminContactController())->getDetail();
@@ -209,14 +209,14 @@ switch ($controller) {
                     (new AdminContactController())->markAnswered();
                     break;
                 case AdminPage::Category->value:
-                    match($subAction) {
+                    match($id) {
                         'add' => (new AdminCategoryController())->add(),
                         'update' => (new AdminCategoryController())->update(),
                         'delete' => (new AdminCategoryController())->delete(),
                         default => require_once "views/error404.php"
                     };
                 case AdminPage::Post->value:
-                    match($subAction) {
+                    match($id) {
                         'add' => (new AdminPostController())->add(),
                         'update' => (new AdminPostController())->update(),
                         'delete' => (new AdminPostController())->delete(),
@@ -231,7 +231,7 @@ switch ($controller) {
             match($action) {
                 AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
                 AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
-                AdminPage::CompanyInfoUpdate->value => (new AdminInformationController())->update($subAction),
+                AdminPage::CompanyInfoUpdate->value => (new AdminInformationController())->update($id),
             AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
             AdminPage::About->value         => (new AdminInformationController())->about(),
             AdminPage::Faq->value           => (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') ? (new AdminFaqController())->save() : (new AdminFaqController())->index(),
@@ -246,15 +246,15 @@ switch ($controller) {
                 AdminPage::Product->value       => require_once "views/error404.php",
                 AdminPage::AuditLog->value      => (new AuditLoggerController())->logs(),
                 AdminPage::Advertisement->value => (new AdminAdvertisementController())->store(),
-                AdminPage::AdvertisementDelete->value => (new AdminAdvertisementController())->delete($subAction),
-                AdminPage::AdvertisementUpdate->value => (new AdminAdvertisementController())->update($subAction),
-                AdminPage::ScrollTextUpdate->value => (new AdminScrollTextController())->update($subAction),
-                AdminPage::CertificationUpdate->value => (new AdminCertificationController())->update($subAction),
+                AdminPage::AdvertisementDelete->value => (new AdminAdvertisementController())->delete($id),
+                AdminPage::AdvertisementUpdate->value => (new AdminAdvertisementController())->update($id),
+                AdminPage::ScrollTextUpdate->value => (new AdminScrollTextController())->update($id),
+                AdminPage::CertificationUpdate->value => (new AdminCertificationController())->update($id),
                 AdminPage::Certification->value => (new AdminCertificationController())->store(),
-                AdminPage::CertificationDelete->value => (new AdminCertificationController())->delete($subAction),
+                AdminPage::CertificationDelete->value => (new AdminCertificationController())->delete($id),
                 AdminPage::MainProduct->value => (new AdminMainProductController())->store(),
-                AdminPage::MainProductUpdate->value => (new AdminMainProductController())->update($subAction),
-                AdminPage::MainProductDelete->value => (new AdminMainProductController())->delete($subAction),
+                AdminPage::MainProductUpdate->value => (new AdminMainProductController())->update($id),
+                AdminPage::MainProductDelete->value => (new AdminMainProductController())->delete($id),
                 default                         => require_once "views/error404.php"
             };
             break;

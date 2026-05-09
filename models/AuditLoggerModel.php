@@ -18,6 +18,8 @@ enum Action: string {
     case AddProduct = 'ADD_PRODUCT';
     case UpdateProduct = 'UPDATE_PRODUCT';
     case DeleteProduct = 'DELETE_PRODUCT';
+    case AddImage = 'ADD_IMAGE';
+    case DeleteImage = 'DELETE_IMAGE';
     case Purchase = 'PURCHASE';
     case AddtoCart = 'ADD_TO_CART';
 }
@@ -29,14 +31,14 @@ class AuditLoggerModel {
         $this->db = Database::getInstance()->conn;
     }
 
-    public function log(String $action, ?int $user_id = null, string $description = "", ?int $target_id = null) {
+    public function log(Action $action, ?int $user_id = null, string $description = "", ?int $target_id = null) {
         $timestamp = date("Y-m-d H:i:s");
         $id = IdQuery::getId('logs');
         $stmt = $this->db->prepare("INSERT INTO logs (id, user_id, action, target_id, description, created_at) VALUES (:id, :user_id, :action, :target_id, :description, :created_at)");
         $stmt->execute([
             ':id' => $id,
             ':user_id'   => $user_id,
-            ':action'    => $action,
+            ':action'    => $action->value,
             ':target_id' => $target_id,
             ':description' => $description,
             ':created_at'=> $timestamp

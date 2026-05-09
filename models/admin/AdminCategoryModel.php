@@ -1,5 +1,6 @@
 <?php
 require_once BASE_DIR . '/config/admin/idQuery.php';
+require_once BASE_DIR . '/models/CategoryModel.php';
 
 class AdminCategoryModel {
     private PDO $db;
@@ -14,23 +15,23 @@ class AdminCategoryModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getCategoryByName(string $name, string $type) {
+    public function getCategoryByName(string $name, Category $type) {
         $stmt = $this->db->prepare("SELECT * FROM categories WHERE name = ? AND type = ?");
-        $stmt->execute([$name, $type]);
+        $stmt->execute([$name, $type->value]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getCategories(string $search = "", string $type = "", int $limit = 0, int $offset = 0) {
+    public function getCategories(string $search = "", Category $type = Category::All, int $limit = 0, int $offset = 0) {
         $sql = "SELECT * FROM categories";
         $params = [];
 
-        if ($type) {
+        if (Category::isCategorized($type)) {
             $sql .= " WHERE type = :type";
-            $params[':type'] = $type;
+            $params[':type'] = $type->value;
         }
 
         if ($search) {
-            if ($type) {
+            if (Category::isCategorized($type)) {
                 $sql .= " AND";
             } else {
                 $sql .= " WHERE";
@@ -55,10 +56,10 @@ class AdminCategoryModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addCategory(string $name, string $description, string $type) {
+    public function addCategory(string $name, string $description, Category $type) {
         $id = IdQuery::getId('categories');
         $stmt = $this->db->prepare("INSERT INTO categories (id, name, description, type) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$id, $name, $description, $type]);
+        return $stmt->execute([$id, $name, $description, $type->value]);
     }
 
     public function updateCategory(int $id, string $name, string $description) {

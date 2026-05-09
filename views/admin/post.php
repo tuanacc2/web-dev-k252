@@ -22,7 +22,10 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
+<?php 
+/** @var array $posts */
+/** @var array $categories */
+?>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- preloader area start -->
@@ -317,7 +320,7 @@
                             <div class="card-body">
                                 <div class="header-title d-flex justify-content-between align-items-center mb-4">
                                     <h4 class="text-xl font-bold"><?= $categoryPosts[0]['category'] ? htmlspecialchars($categoryPosts[0]['category']) : 'Uncategorized' ?></h4>
-                                    <button onClick="openPostModal()" class="btn btn-primary btn-sm">+ Create New Post</button>
+                                    <button onClick="openPostModal(<?= htmlspecialchars(json_encode($categoryPosts[0]['category_id'] ?? null), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-primary btn-sm">+ Create New Post</button>
                                 </div>
 
                                 <div class="table-responsive">
@@ -578,8 +581,9 @@
                     <h5 class="modal-title font-bold">Add New Post</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="postForm" method="POST" enctype="multipart/form-data">
+                <form id="postForm" action="<?= SITE_URL ?>admin/post/add" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="post_id">
+                    <input type="hidden" name="thumbnail_id" id="post_thumbnail_id">
                     <div class="modal-body font-nunito">
                         <div class="row">
                             <div class="col-md-8">
@@ -599,8 +603,8 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
-                                    <select name="category" id="post_category" class="form-select">
-                                        <option value="">Select a category</option>
+                                    <select name="category_id" id="post_category" class="form-select">
+                                        <option value="0">Uncategorized</option>
                                         <?php foreach ($categories as $cat): ?>
                                             <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
                                         <?php endforeach; ?>
@@ -608,7 +612,22 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Thumbnail</label>
-                                    <input type="file" name="post_thumbnail" class="form-control">
+                                    <input id="post_thumbnail" type="file" name="thumbnail" class="form-control">
+                                </div>
+                                <div class="mb-3 <?= !empty($post['thumbnail_id']) ? '' : 'd-none'   ?>" id="thumbnail_preview_container">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label class="form-label mb-0">Current Thumbnail</label>
+                                        <a class="text-danger cursor-pointer fs-4 text-decoration-none me-5" 
+                                        style="cursor: pointer;"
+                                        onclick="removeThumbnail()">
+                                            ✕
+                                        </a>
+                                    </div>
+                                    <img id="thumbnail_preview" 
+                                        src="<?= !empty($post['thumbnail_id']) ? SITE_URL . $post['thumbnail_url'] : '' ?>" 
+                                        alt="Current Thumbnail" 
+                                        class="img-thumbnail" 
+                                        width="200">
                                 </div>
                             </div>
                         </div>
@@ -643,28 +662,76 @@
         gtag("js", new Date());
         gtag("config", "G-XXXXXXXXXX");
 
-        function openPostModal() {
-            $('#postForm')[0].reset();
-            $('#postForm').attr('action', '<?= SITE_URL ?>/admin/post/add');
+        const image = document.getElementById('post_thumbnail');
+        const preview = document.getElementById('thumbnail_preview');
 
+        let currentId = null;
+        let currentThumbnailId = null;
+        let currentThumbnailUrl = null;
+
+        image.onchange = evt => {
+            const [file] = image.files;
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.parentElement.classList.remove('d-none');
+            }
+        }
+
+        function openPostModal(categoryId = null) {
+            if (currentId) {
+                // Clear current post data when opening the modal for adding a new post
+                currentId = null;
+                $('#postForm')[0].reset();
+
+                $('#thumbnail_preview_container').addClass('d-none');
+                $('#thumbnail_preview').attr('src', '');  
+            }
+
+            
+            $('#postForm').attr('action', '<?= SITE_URL ?>/admin/post/add');
+                                                      
             $('#post_id').val('');
+            $('#post_category').val(categoryId ?? 0);
             $('#postModal .modal-title').text('Add New Post');
-            $('button[id="savePostBtn"]').text('Save Post').attr('name', 'id').val('');
+            $('button[id="savePostBtn"]').text('Save Post');
             $('#postModal').modal('show');
         }
 
-        function editPost(data) {
+        function editPost(data) {  
+            if (!currentId || currentId !== data.id) {
+                // Update current post data only if it's different from the existing one
+                currentId = data.id;
+                
+                $('#post_thumbnail').val('');  
+                $('#post_thumbnail_id').val(data.thumbnail_id);         
+                $('#post_id').val(data.id);
+                $('#post_title').val(data.title); 
+                $('#post_category').val(data.category_id ?? 0);
+                $('#post_description').val(data.thumbnail_description);
+                $('#post_content').val(data.content);
+
+                if (data.thumbnail_url) {
+                    $('#thumbnail_preview').attr('src', '<?= SITE_URL ?>' + data.thumbnail_url);
+                    $('#thumbnail_preview_container').removeClass('d-none');
+                } else {
+                    $('#thumbnail_preview_container').addClass('d-none');
+                    $('#thumbnail_preview').attr('src', '');
+                }
+            }
+            
+            currentId = currentId ? data.id : currentId;
+                          
             $('#postModal .modal-title').text('Edit Post');
             $('#postForm').attr('action', '<?= SITE_URL ?>/admin/post/update');
             
-            $('#post_id').val(data.id);
-            $('#post_title').val(data.title); 
-            $('#post_category').val(data.category_id);
-            $('#post_description').val(data.thumbnail_description);
-            $('#post_content').val(data.content);
-            $('button[id="savePostBtn"]').text('Update Post').attr('name', 'id').val(data.id);
-            
             $('#postModal').modal('show');
+        }
+
+        function removeThumbnail() {
+            $('#post_thumbnail').val('');  
+            $('#post_thumbnail_id').val(0);         
+            $('#thumbnail_preview_container').addClass('d-none');
+            $('#thumbnail_preview').attr('src', '');
         }
     </script>
 </body>
