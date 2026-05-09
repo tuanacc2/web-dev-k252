@@ -536,9 +536,10 @@
                     }
                     try {
                         await postForm(siteUrl + '/admin/information-update/' + infoId, editInfoForm);
+                        alert('Information updated successfully!');
                         location.reload();
                     } catch (error) {
-                        alert(error.message || 'Failed to update information.');
+                        alert('Failed to update information.');
                     }
                 });
             }

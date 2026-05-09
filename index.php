@@ -208,6 +208,25 @@ switch ($controller) {
                 case AdminPage::ContactAnswer->value:
                     (new AdminContactController())->markAnswered();
                     break;
+
+                case AdminPage::CompanyInfoUpdate->value:
+                    (new AdminInformationController())->update($id);
+                    break;
+                case AdminPage::AdvertisementDelete->value:
+                    (new AdminAdvertisementController())->delete($id);
+                    break;
+                case AdminPage::AdvertisementUpdate->value:
+                    (new AdminAdvertisementController())->update($id);
+                    break;
+                case AdminPage::ScrollTextUpdate->value:
+                    (new AdminScrollTextController())->update($id);
+                    break;
+                case AdminPage::CertificationUpdate->value:
+                    (new AdminCertificationController())->update($id);
+                    break;
+                case AdminPage::MainProductUpdate->value:
+                    (new AdminMainProductController())->update($id);
+                    break;
                 case AdminPage::Category->value:
                     match($id) {
                         'add' => (new AdminCategoryController())->add(),
@@ -215,6 +234,7 @@ switch ($controller) {
                         'delete' => (new AdminCategoryController())->delete(),
                         default => require_once "views/error404.php"
                     };
+                    break;
                 case AdminPage::Post->value:
                     match($id) {
                         'add' => (new AdminPostController())->add(),
@@ -223,6 +243,7 @@ switch ($controller) {
                         default => require_once "views/error404.php"
                     };
                     break;
+
                 default:
                     require_once "views/error404.php";
                     break;
@@ -232,16 +253,15 @@ switch ($controller) {
                 AdminPage::Dashboard->value     => (new AdminDashboardController())->dashboard(),
                 AdminPage::CompanyInfo->value   => (new AdminInformationController())->index(),
                 AdminPage::CompanyInfoUpdate->value => (new AdminInformationController())->update($id),
-            AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
-            AdminPage::About->value         => (new AdminInformationController())->about(),
-            AdminPage::Faq->value           => (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') ? (new AdminFaqController())->save() : (new AdminFaqController())->index(),
+                AdminPage::Homepage->value      => (new AdminHomepageController())->index(),
+                AdminPage::About->value         => (new AdminInformationController())->about(),
+                AdminPage::Faq->value           => (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') ? (new AdminFaqController())->save() : (new AdminFaqController())->index(),
 
-            AdminPage::Contact->value       => (new AdminContactController())->contact(),
+                AdminPage::Contact->value       => (new AdminContactController())->contact(),
                 AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
-                AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
                 AdminPage::Category->value      => (new AdminCategoryController())->category(),
                 
-            AdminPage::User->value          => (new AdminUserController())->users(),
+                AdminPage::User->value          => (new AdminUserController())->users(),
                 AdminPage::Post->value          => (new AdminPostController())->posts(),
                 AdminPage::Product->value       => require_once "views/error404.php",
                 AdminPage::AuditLog->value      => (new AuditLoggerController())->logs(),

@@ -11,57 +11,81 @@ class AdminContactController {
         $contacts = (new ContactModel())->getAll();
         require_once 'views/admin/contact.php';
     }
-
-    public function getDetail() {
+    private function respondJson(int $statusCode, array $payload): void {
         header('Content-Type: application/json');
-        $id = (int)($_GET['id'] ?? 0);
-        $contactModel = new ContactModel();
-        // Mark as seen
-        $contactModel->markSeen($id);
-        // Get contact detail
-        $contact = $contactModel->getById($id);
-        if (!$contact && isset($_SESSION['admin_auth'])) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Contact not found']);
-            exit;
-        }
-        $contact['hasAnswer'] = (int)($contact['hasReplied'] ?? 0);
-        echo json_encode($contact);
+        http_response_code($statusCode);
+        echo json_encode($payload);
         exit;
     }
 
-    public function markAnswered() {
-        header('Content-Type: application/json');
-        $id = (int)($_GET['id'] ?? 0);
+    public function getDetail(): void
+    {
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
+            $this->respondJson(405, ['error' => 'Method not allowed']);
+        }
+        try {
+            $id = (int) ($_GET['id'] ?? 0);
+            if ($id <= 0) {
+                $this->respondJson(400, ['error' => 'Invalid contact id']);
+            }
+            $contactModel = new ContactModel();
+            // Mark as seen
+            $contactModel->markSeen($id);
+            // Get contact detail
+            $contact = $contactModel->getById($id);
+            if (!$contact) {
+                $this->respondJson(404, ['error' => 'Contact not found']);
+            }
+            $contact['hasAnswer'] = (int) ($contact['hasReplied'] ?? 0);
+            $this->respondJson(200, $contact);
+        } catch (Throwable $e) {
+            $this->respondJson(500, [
+                'error' => 'Failed to get contact detail'
+            ]);
+        }
+    }
 
-        if ($id <= 0) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid contact id']);
-            exit;
+
+    public function markAnswered(): void
+    {
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+            $this->respondJson(405, ['error' => 'Method not allowed']);
         }
 
-        $contactModel = new ContactModel();
-        $updated = $contactModel->markAnswered($id);
+        try {
+            $id = (int) ($_POST['id'] ?? 0);
 
-        if (!$updated) {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to mark contact as answered']);
-            exit;
+            if ($id <= 0) {
+                $this->respondJson(400, ['error' => 'Invalid contact id']);
+            }
+
+            $contactModel = new ContactModel();
+
+            $updated = $contactModel->markAnswered($id);
+
+            if (!$updated) {
+                $this->respondJson(500, [
+                    'error' => 'Failed to mark contact as answered'
+                ]);
+            }
+
+            $contact = $contactModel->getById($id);
+
+            if (!$contact) {
+                $this->respondJson(404, ['error' => 'Contact not found']);
+            }
+
+            $contact['hasAnswer'] = (int) ($contact['hasReplied'] ?? 0);
+
+            $this->respondJson(200, [
+                'status' => 'success',
+                'message' => 'Contact marked as answered',
+                'contact' => $contact,
+            ]);
+        } catch (Throwable $e) {
+            $this->respondJson(500, [
+                'error' => 'Failed to mark contact as answered'
+            ]);
         }
-
-        $contact = $contactModel->getById($id);
-        if (!$contact) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Contact not found']);
-            exit;
-        }
-
-        $contact['hasAnswer'] = (int)($contact['hasReplied'] ?? 0);
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Contact marked as answered',
-            'contact' => $contact,
-        ]);
-        exit;
     }
 }

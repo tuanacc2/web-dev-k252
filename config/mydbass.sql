@@ -222,7 +222,6 @@ CREATE TABLE IF NOT EXISTS advertisements (
 );
 INSERT INTO advertisements (id, leftImage, thumbnail, title, content, link, textColor, backgroundColor)
 VALUES
-(NULL, '/assets/images/banner/Social_post_Mo_ban_Giftbox_Cocoon_da_co_mat_tai_Phap_01_d99eec03fc.jpg', 'MỞ BÁN', 'Giftbox "Cocoon đã có mặt tại Pháp"', 'Nếu được gọi tên hành trình vươn ra thế giới của Cocoon, chúng tôi sẽ gọi đó là hành trình “nảy mầm”. Từ những nguyên liệu tinh túy của đất Việt, chúng tôi gieo mầm ở những vùng đất mới, và những hạt giống ấy đang dần nảy nở, được đón nhận, mang theo một màu sắc rất riêng của Việt Nam đến với bạn bè quốc tế.', '#', '#1f1c17', '#fff6cd'),
 (NULL, '/assets/images/banner/hinh1pmc_837dbe7578.jpg', 'RA MẮT SẢN PHẨM MỚI', 'Nước tẩy trang sen Hậu Giang', 'Cocoon x Phương Mỹ Chi ra mắt nước tẩy trang thế hệ mới: Nước Tẩy Trang Sen Hậu Giang - làm sạch sâu lớp trang điểm và bụi siêu mịn PM1.0 nhờ công nghệ độc quyền NatraGem™ S150, hỗ trợ cân bằng hệ vi sinh trên da với phức hợp prebiotics, phù hợp cho mọi loại da, kể cả da rất nhạy cảm.', '#', '#fefbf4', '#54a14a');
 
 -- Scroll text ----

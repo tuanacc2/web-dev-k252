@@ -374,36 +374,58 @@
                                 
         });
 
-        document.getElementById("markAnsweredBtn")?.addEventListener("click", function() {
+        document.getElementById("markAnsweredBtn")?.addEventListener("click", async function () {
             if (!currentContactId) return;
 
-            fetch(`<?= SITE_URL ?>/admin/contact-answer?id=${currentContactId}`)
-                .then(response => {
-                    if (!response.ok) throw new Error("Network response was not ok");
-                    return response.json();
-                })
-                .then(data => {
-                    const markAnsweredBtn = document.getElementById("markAnsweredBtn");
-                    markAnsweredBtn.disabled = true;
-                    markAnsweredBtn.textContent = "Answered";
-
-                    const row = document.querySelector(`tr[data-id="${currentContactId}"]`);
-                    if (row) {
-                        // đổi màu chữ
-                        row.classList.remove("font-bold", "fw-bold");
-                        row.classList.add("text-muted");
-
-                        const statusCell = row.querySelector("td:last-child");
-                        if (statusCell) {
-                            statusCell.innerHTML = '<span class="badge bg-success">Yes</span>';
-                             statusCell.setAttribute("data-order", "1");
-                        }
+            try {
+                const response = await fetch(
+                    `<?= SITE_URL ?>/admin/contact-answer`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: new URLSearchParams({
+                            id: currentContactId,
+                        }),
                     }
-                })
-                .catch(error => {
-                    console.error("Error marking contact as answered:", error);
-                    alert("Failed to mark contact as answered.");
-                });
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+
+                alert(data.message || "Contact marked as answered successfully!");
+
+                const markAnsweredBtn =
+                    document.getElementById("markAnsweredBtn");
+
+                markAnsweredBtn.disabled = true;
+                markAnsweredBtn.textContent = "Answered";
+
+                const row = document.querySelector(
+                    `tr[data-id="${currentContactId}"]`
+                );
+
+                if (row) {
+                    row.classList.remove("font-bold", "fw-bold");
+                    row.classList.add("text-muted");
+
+                    const statusCell = row.querySelector("td:last-child");
+
+                    if (statusCell) {
+                        statusCell.innerHTML =
+                            '<span class="badge bg-success">Yes</span>';
+
+                        statusCell.setAttribute("data-order", "1");
+                    }
+                }
+            } catch (error) {
+                console.error("Error marking contact as answered:", error);
+                alert("Failed to mark contact as answered.");
+            }
         });
     </script>
 </body>

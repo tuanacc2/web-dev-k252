@@ -38,22 +38,18 @@ class AdminInformationController {
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
             $this->respondJson(405, ['error' => 'Method not allowed']);
         }
-
         try {
             $infoId = (int) ($id ?? 0);
             if ($infoId <= 0) {
                 $this->respondJson(400, ['error' => 'Invalid information id']);
             }
-
             $info = $this->model->getById($infoId);
             if (!$info) {
                 $this->respondJson(404, ['error' => 'Information not found']);
             }
-
             $name = trim($_POST['name'] ?? '') ?: ($info['name'] ?? '');
             $type = trim($_POST['type'] ?? '') ?: ($info['type'] ?? '');
             $value = trim($_POST['value'] ?? '') ?: ($info['value'] ?? '');
-
             if ($type === 'image') {
                 $imageFile = $_FILES['image'] ?? null;
                 if ($imageFile && isset($imageFile['error'])) {
@@ -71,7 +67,6 @@ class AdminInformationController {
                     }
                 }
             }
-
             $this->model->updateById($infoId, [
                 'name' => $name,
                 'type' => $type,

@@ -753,183 +753,415 @@
 					method: 'POST',
 					body: new FormData(form)
 				});
-				let data = null;
-				try {
-					data = await response.json();
-				} catch (error) {
-					data = null;
-				}
+
 				if (!response.ok) {
-					throw new Error((data && data.error) ? data.error : 'Request failed');
+					throw new Error('Request failed');
 				}
-				return data;
+
+				return await response.json();
 			};
 
 			const postEmpty = async function(url) {
-				const response = await fetch(url, { method: 'POST' });
-				let data = null;
-				try {
-					data = await response.json();
-				} catch (error) {
-					data = null;
-				}
+				const response = await fetch(url, {
+					method: 'POST'
+				});
+
 				if (!response.ok) {
-					throw new Error((data && data.error) ? data.error : 'Request failed');
+					throw new Error('Request failed');
 				}
-				return data;
+
+				return await response.json();
 			};
 
-			const contentForm = document.getElementById('contentVisibilityForm');
+			// =========================
+			// Content Visibility
+			// =========================
+
+			const contentForm =
+				document.getElementById('contentVisibilityForm');
+
 			if (contentForm) {
-				contentForm.addEventListener('submit', async function(event) {
-					event.preventDefault();
-					try {
-						await postForm(siteUrl + '/admin/homepage', contentForm);
-						alert('Visibility updated successfully.');
-					} catch (error) {
-						alert(error.message || 'Failed to update visibility.');
+				contentForm.addEventListener(
+					'submit',
+					async function(event) {
+
+						event.preventDefault();
+
+						try {
+
+							await postForm(
+								siteUrl + '/admin/homepage',
+								contentForm
+							);
+
+							alert('Visibility updated successfully.');
+
+						} catch (error) {
+
+							alert('Failed to update visibility.');
+						}
 					}
-				});
+				);
 			}
 
-			const createAdForm = document.getElementById('createAdForm');
+			// =========================
+			// Create Advertisement
+			// =========================
+
+			const createAdForm =
+				document.getElementById('createAdForm');
+
 			if (createAdForm) {
-				createAdForm.addEventListener('submit', async function(event) {
-					event.preventDefault();
-					try {
-						await postForm(siteUrl + '/admin/advertisement', createAdForm);
-						location.reload();
-					} catch (error) {
-						alert(error.message || 'Failed to create advertisement.');
+
+				createAdForm.addEventListener(
+					'submit',
+					async function(event) {
+
+						event.preventDefault();
+
+						try {
+
+							await postForm(
+								siteUrl + '/admin/advertisement',
+								createAdForm
+							);
+
+							alert(
+								'Advertisement created successfully!'
+							);
+
+							location.reload();
+
+						} catch (error) {
+
+							alert(
+								'Failed to create advertisement.'
+							);
+						}
 					}
-				});
+				);
 			}
 
-			const editAdForm = document.getElementById('editAdForm');
+			// =========================
+			// Edit Advertisement
+			// =========================
+
+			const editAdForm =
+				document.getElementById('editAdForm');
+
 			let currentAdId = null;
-			document.querySelectorAll('.btn-edit-ad').forEach(function(button) {
-				button.addEventListener('click', function() {
-					currentAdId = button.dataset.id || null;
-					document.getElementById('editAdId').value = currentAdId || '';
-					document.getElementById('editAdThumbnail').value = button.dataset.thumbnail || '';
-					document.getElementById('editAdTitle').value = button.dataset.title || '';
-					document.getElementById('editAdContent').value = button.dataset.content || '';
-					document.getElementById('editAdLink').value = button.dataset.link || '';
-					document.getElementById('editAdTextColor').value = button.dataset.textColor || '';
-					document.getElementById('editAdBackgroundColor').value = button.dataset.backgroundColor || '';
+
+			document.querySelectorAll('.btn-edit-ad')
+				.forEach(function(button) {
+
+					button.addEventListener('click', function() {
+
+						currentAdId =
+							button.dataset.id || null;
+
+						document.getElementById('editAdId').value =
+							currentAdId || '';
+
+						document.getElementById('editAdThumbnail').value =
+							button.dataset.thumbnail || '';
+
+						document.getElementById('editAdTitle').value =
+							button.dataset.title || '';
+
+						document.getElementById('editAdContent').value =
+							button.dataset.content || '';
+
+						document.getElementById('editAdLink').value =
+							button.dataset.link || '';
+
+						document.getElementById('editAdTextColor').value =
+							button.dataset.textColor || '';
+
+						document.getElementById('editAdBackgroundColor').value =
+							button.dataset.backgroundColor || '';
+					});
 				});
-			});
 
 			if (editAdForm) {
-				editAdForm.addEventListener('submit', async function(event) {
-					event.preventDefault();
-					if (!currentAdId) {
-						alert('Missing advertisement id.');
-						return;
+
+				editAdForm.addEventListener(
+					'submit',
+					async function(event) {
+
+						event.preventDefault();
+
+						if (!currentAdId) {
+							alert('Missing advertisement id.');
+							return;
+						}
+
+						try {
+
+							await postForm(
+								siteUrl +
+								'/admin/advertisement-update/' +
+								currentAdId,
+								editAdForm
+							);
+
+							alert(
+								'Advertisement updated successfully!'
+							);
+
+							location.reload();
+
+						} catch (error) {
+
+							alert(
+								'Failed to update advertisement.'
+							);
+						}
 					}
-					try {
-						await postForm(siteUrl + '/admin/advertisement-update/' + currentAdId, editAdForm);
-						location.reload();
-					} catch (error) {
-						alert(error.message || 'Failed to update advertisement.');
-					}
-				});
+				);
 			}
 
-			document.querySelectorAll('.btn-delete-ad').forEach(function(button) {
-				button.addEventListener('click', async function() {
-					const adId = button.dataset.id;
-					if (!adId) return;
-					if (!confirm('Delete this advertisement?')) return;
-					try {
-						await postEmpty(siteUrl + '/admin/advertisement-delete/' + adId);
-						location.reload();
-					} catch (error) {
-						alert(error.message || 'Failed to delete advertisement.');
-					}
-				});
-			});
+			// =========================
+			// Delete Advertisement
+			// =========================
 
-			const editScrollForm = document.getElementById('editScrollForm');
+			document.querySelectorAll('.btn-delete-ad')
+				.forEach(function(button) {
+
+					button.addEventListener(
+						'click',
+						async function() {
+
+							const adId = button.dataset.id;
+
+							if (!adId) return;
+
+							if (
+								!confirm(
+									'Delete this advertisement?'
+								)
+							) return;
+
+							try {
+
+								await postEmpty(
+									siteUrl +
+									'/admin/advertisement-delete/' +
+									adId
+								);
+
+								alert(
+									'Advertisement deleted successfully!'
+								);
+
+								location.reload();
+
+							} catch (error) {
+
+								alert(
+									'Failed to delete advertisement.'
+								);
+							}
+						}
+					);
+				});
+
+			// =========================
+			// Edit Scroll Text
+			// =========================
+
+			const editScrollForm =
+				document.getElementById('editScrollForm');
+
 			let currentScrollId = null;
-			document.querySelectorAll('.btn-edit-scroll').forEach(function(button) {
-				button.addEventListener('click', function() {
-					currentScrollId = button.dataset.id || null;
-					document.getElementById('editScrollId').value = currentScrollId || '';
-					document.getElementById('editScrollContent').value = button.dataset.content || '';
+
+			document.querySelectorAll('.btn-edit-scroll')
+				.forEach(function(button) {
+
+					button.addEventListener('click', function() {
+
+						currentScrollId =
+							button.dataset.id || null;
+
+						document.getElementById('editScrollId').value =
+							currentScrollId || '';
+
+						document.getElementById('editScrollContent').value =
+							button.dataset.content || '';
+					});
 				});
-			});
+
 			if (editScrollForm) {
-				editScrollForm.addEventListener('submit', async function(event) {
-					event.preventDefault();
-					if (!currentScrollId) {
-						alert('Missing scroll text id.');
-						return;
+
+				editScrollForm.addEventListener(
+					'submit',
+					async function(event) {
+
+						event.preventDefault();
+
+						if (!currentScrollId) {
+							alert('Missing scroll text id.');
+							return;
+						}
+
+						try {
+
+							await postForm(
+								siteUrl +
+								'/admin/scrolltext-update/' +
+								currentScrollId,
+								editScrollForm
+							);
+
+							alert(
+								'Scroll text updated successfully!'
+							);
+
+							location.reload();
+
+						} catch (error) {
+
+							alert(
+								'Failed to update scroll text.'
+							);
+						}
 					}
-					try {
-						await postForm(siteUrl + '/admin/scrolltext-update/' + currentScrollId, editScrollForm);
-						location.reload();
-					} catch (error) {
-						alert(error.message || 'Failed to update scroll text.');
-					}
-				});
+				);
 			}
 
-			const editCertForm = document.getElementById('editCertForm');
+			// =========================
+			// Edit Certification
+			// =========================
+
+			const editCertForm =
+				document.getElementById('editCertForm');
+
 			let currentCertId = null;
-			document.querySelectorAll('.btn-edit-cert').forEach(function(button) {
-				button.addEventListener('click', function() {
-					currentCertId = button.dataset.id || null;
-					document.getElementById('editCertId').value = currentCertId || '';
-					document.getElementById('editCertTitle').value = button.dataset.title || '';
-					document.getElementById('editCertSubtitle').value = button.dataset.subtitle || '';
-					document.getElementById('editCertContent').value = button.dataset.content || '';
+
+			document.querySelectorAll('.btn-edit-cert')
+				.forEach(function(button) {
+
+					button.addEventListener('click', function() {
+
+						currentCertId =
+							button.dataset.id || null;
+
+						document.getElementById('editCertId').value =
+							currentCertId || '';
+
+						document.getElementById('editCertTitle').value =
+							button.dataset.title || '';
+
+						document.getElementById('editCertSubtitle').value =
+							button.dataset.subtitle || '';
+
+						document.getElementById('editCertContent').value =
+							button.dataset.content || '';
+					});
 				});
-			});
+
 			if (editCertForm) {
-				editCertForm.addEventListener('submit', async function(event) {
-					event.preventDefault();
-					if (!currentCertId) {
-						alert('Missing certification id.');
-						return;
+
+				editCertForm.addEventListener(
+					'submit',
+					async function(event) {
+
+						event.preventDefault();
+
+						if (!currentCertId) {
+							alert('Missing certification id.');
+							return;
+						}
+
+						try {
+
+							await postForm(
+								siteUrl +
+								'/admin/certification-update/' +
+								currentCertId,
+								editCertForm
+							);
+
+							alert(
+								'Certification updated successfully!'
+							);
+
+							location.reload();
+
+						} catch (error) {
+
+							alert(
+								'Failed to update certification.'
+							);
+						}
 					}
-					try {
-						await postForm(siteUrl + '/admin/certification-update/' + currentCertId, editCertForm);
-						location.reload();
-					} catch (error) {
-						alert(error.message || 'Failed to update certification.');
-					}
-				});
+				);
 			}
 
+			// =========================
+			// Edit Main Product
+			// =========================
 
-			const editMainProductForm = document.getElementById('editMainProductForm');
+			const editMainProductForm =
+				document.getElementById('editMainProductForm');
+
 			let currentMainProductId = null;
-			document.querySelectorAll('.btn-edit-mainproduct').forEach(function(button) {
-				button.addEventListener('click', function() {
-					currentMainProductId = button.dataset.id || null;
-					document.getElementById('editMainProductId').value = currentMainProductId || '';
-					document.getElementById('editMainProductTitle').value = button.dataset.title || '';
-					document.getElementById('editMainProductDescription').value = button.dataset.description || '';
+
+			document.querySelectorAll('.btn-edit-mainproduct')
+				.forEach(function(button) {
+
+					button.addEventListener('click', function() {
+
+						currentMainProductId =
+							button.dataset.id || null;
+
+						document.getElementById('editMainProductId').value =
+							currentMainProductId || '';
+
+						document.getElementById('editMainProductTitle').value =
+							button.dataset.title || '';
+
+						document.getElementById('editMainProductDescription').value =
+							button.dataset.description || '';
+					});
 				});
-			});
 
 			if (editMainProductForm) {
-				editMainProductForm.addEventListener('submit', async function(event) {
-					event.preventDefault();
-					if (!currentMainProductId) {
-						alert('Missing main product id.');
-						return;
-					}
-					try {
-						await postForm(siteUrl + '/admin/mainproduct-update/' + currentMainProductId, editMainProductForm);
-						location.reload();
-					} catch (error) {
-						alert(error.message || 'Failed to update main product.');
-					}
-				});
-			}
 
+				editMainProductForm.addEventListener(
+					'submit',
+					async function(event) {
+
+						event.preventDefault();
+
+						if (!currentMainProductId) {
+							alert('Missing main product id.');
+							return;
+						}
+
+						try {
+
+							await postForm(
+								siteUrl +
+								'/admin/mainproduct-update/' +
+								currentMainProductId,
+								editMainProductForm
+							);
+
+							alert(
+								'Main product updated successfully!'
+							);
+
+							location.reload();
+
+						} catch (error) {
+
+							alert(
+								'Failed to update main product.'
+							);
+						}
+					}
+				);
+			}
 		});
 	</script>
 
