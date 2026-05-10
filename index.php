@@ -131,6 +131,13 @@ enum AdminPage: string {
 
 $route = $_GET['route'] ?? Page::Home->value;
 
+// Handle special routes for about_us and faq
+if ($route === 'about_us') {
+    $route = 'homepage/about_us';
+} elseif ($route === 'faq') {
+    $route = 'homepage/faq';
+}
+
 $parts = explode('/', $route);
 
 $controller = $parts[0];
