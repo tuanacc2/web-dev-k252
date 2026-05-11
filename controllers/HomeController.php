@@ -32,7 +32,7 @@ class HomeController {
         $certifications = $this->certificationModel->getAll();
         $mainProducts = $this->mainProductModel->getAll();
         $content = $this->contentControllerModel->getBySiteName('homepage');
-        $latestPosts = $this->postModel->getRecentPosts(3);
+        $latestPosts = $this->postModel->getRecentPostsNoCategory(3);
         require_once 'views/homepage.php';
     }
 
