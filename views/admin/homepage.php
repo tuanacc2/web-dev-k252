@@ -161,7 +161,7 @@
 						<div class="card">
 							<div class="card-body">
 								<h4 class="header-title">Content Controller</h4>
-								<form id="contentVisibilityForm" method="post" action="<?= SITE_URL ?>/admin/homepage">
+								<form id="contentVisibilityForm" method="post" action="<?= SITE_URL ?>/admin/contentController/toggle">
 									<div class="data-tables">
 										<table id="dataTableContent" class="text-center">
 											<thead class="bg-light text-capitalize">
@@ -747,29 +747,23 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const siteUrl = "<?= SITE_URL ?>";
-
 			const postForm = async function(url, form) {
 				const response = await fetch(url, {
 					method: 'POST',
 					body: new FormData(form)
 				});
-
 				if (!response.ok) {
 					throw new Error('Request failed');
 				}
-
 				return await response.json();
 			};
-
 			const postEmpty = async function(url) {
 				const response = await fetch(url, {
 					method: 'POST'
 				});
-
 				if (!response.ok) {
 					throw new Error('Request failed');
 				}
-
 				return await response.json();
 			};
 
@@ -784,20 +778,14 @@
 				contentForm.addEventListener(
 					'submit',
 					async function(event) {
-
 						event.preventDefault();
-
 						try {
-
 							await postForm(
-								siteUrl + '/admin/homepage',
+								contentForm.action,
 								contentForm
 							);
-
 							alert('Visibility updated successfully.');
-
 						} catch (error) {
-
 							alert('Failed to update visibility.');
 						}
 					}
@@ -971,14 +959,10 @@
 
 			const editScrollForm =
 				document.getElementById('editScrollForm');
-
 			let currentScrollId = null;
-
 			document.querySelectorAll('.btn-edit-scroll')
 				.forEach(function(button) {
-
 					button.addEventListener('click', function() {
-
 						currentScrollId =
 							button.dataset.id || null;
 

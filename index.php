@@ -40,6 +40,7 @@ require_once __DIR__ . '/controllers/admin/AdminScrollTextController.php';
 require_once __DIR__ . '/controllers/admin/AdminCertificationController.php';
 require_once __DIR__ . '/controllers/admin/AdminMainProductController.php';
 require_once __DIR__ . '/controllers/admin/AdminFaqController.php';
+require_once __DIR__ . '/controllers/admin/AdminContentControllerController.php';
 
 
 enum Page: string {
@@ -118,6 +119,7 @@ enum AdminPage: string {
     case MainProduct = 'mainproduct';
     case MainProductUpdate = 'mainproduct-update';
     case MainProductDelete = 'mainproduct-delete';
+    case ContentController = 'contentController';
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -209,6 +211,13 @@ switch ($controller) {
         }
         if ($id) {
             switch ($action) {
+                case AdminPage::ContentController->value:
+                    if ($id === 'toggle') {
+                        (new AdminContentControllerController())->toggle();
+                        break;
+                    }
+                    require_once "views/error404.php";
+                    break;
                 case AdminPage::ContactDetail->value:
                     (new AdminContactController())->getDetail();
                     break;

@@ -28,33 +28,6 @@ class AdminHomepageController {
     }
 
     public function index() {
-        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-            try {
-                $visibility = $_POST['visibility'] ?? [];
-                $contentControllers = $this->contentControllerModel->getBySiteName('homepage');
-                $updated = 0;
-                foreach ($contentControllers as $row) {
-                    $id = (int) ($row['id'] ?? 0);
-                    $newVisible = isset($visibility[$id]) ? 1 : 0;
-                    if ($id > 0 && (int) $row['isVisible'] !== $newVisible) {
-                        $this->contentControllerModel->updateVisibility($id, $newVisible);
-                        $updated++;
-                    }
-                }
-
-                $this->respondJson(200, [
-                    'status' => 'success',
-                    'message' => 'Visibility updated',
-                    'updated' => $updated,
-                ]);
-            } catch (Throwable $e) {
-                $this->respondJson(500, [
-                    'status' => 'error',
-                    'error' => 'Failed to update visibility',
-                ]);
-            }
-        }
-
         $advertisements = $this->advertisementsModel->getAll();
         $scrollTexts = $this->scrollTextModel->getAll();
         $certifications = $this->certificationModel->getAll();
