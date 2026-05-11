@@ -266,6 +266,7 @@ switch ($controller) {
 
                 AdminPage::Contact->value       => (new AdminContactController())->contact(),
                 AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
+                AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
                 AdminPage::Category->value      => (new AdminCategoryController())->category(),
                 
                 AdminPage::User->value          => (new AdminUserController())->users(),
