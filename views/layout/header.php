@@ -33,21 +33,20 @@ $logo=$info['Logo'] ?? '';
     <!-- Navigation -->
     <div style="border-bottom: 1px solid #C5A25D ;" class="relative bg-[#fefbf4] flex items-center justify-between px-4 py-3 text-[#1f1c17] pt-[20px] pb-[20px]" >
         <!-- LEFT (desktop menu) -->
-        <div class="hidden lg:flex items-center gap-6">
+        <div class="hidden xl:flex items-center gap-6">
         <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="Interface / Search_Magnifying_Glass">
             <path id="Vector" d="M15 15L21 21M10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17Z" stroke="#1f1c17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
         </svg>
         <a href="#" class="nav-hover">Sản phẩm</a>
-        <a href="<?= SITE_URL ?? '' ?>/homepage/about_us" class="nav-hover">Về chúng tôi</a>
-        <a href="#" class="nav-hover"><?= $companyName ?></a>
-        <a href="<?= SITE_URL ?? '' ?>/homepage/faq" class="nav-hover">Câu hỏi thường gặp</a>
+        <a href="<?= SITE_URL ?? '' ?>/about_us" class="nav-hover">Về chúng tôi</a>
+        <a href="<?= SITE_URL ?? '' ?>/faq" class="nav-hover">Câu hỏi thường gặp</a>
         <a href="<?= SITE_URL ?? '' ?>/post" class="nav-hover">Bài viết</a>
         </div>
 
         <!-- MOBILE MENU BUTTON -->
-        <button class="lg:hidden text-2xl" onclick="openMenu()">
+        <button class="xl:hidden text-2xl" onclick="openMenu()">
             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4 6H20M4 12H20M4 18H20" stroke="#1f1c17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -59,7 +58,7 @@ $logo=$info['Logo'] ?? '';
             </a>  
         </div>
         <!-- RIGHT (desktop menu) -->
-        <div class="hidden lg:flex items-center gap-6">
+        <div class="hidden xl:flex items-center gap-6">
         <?php if (isset($_SESSION['login_status']) ? $_SESSION['login_status'] : false) { ?>
         <form method="POST" action="<?= SITE_URL ?? '' ?>/auth/logout" id="logout-form"></form>
         <el-dropdown class="nav-hover">
@@ -118,10 +117,10 @@ $logo=$info['Logo'] ?? '';
             <a href="#" >
                 <p class="font-semibold">Sản phẩm</p>
             </a>
-            <a href="<?= SITE_URL ?? '' ?>/homepage/about_us">
+            <a href="<?= SITE_URL ?? '' ?>/about_us">
                 <p class="font-semibold">Về chúng tôi</p>
             </a>
-            <a href="<?= SITE_URL ?? '' ?>/homepage/faq">
+            <a href="<?= SITE_URL ?? '' ?>/faq">
                 <p class="font-semibold">Câu hỏi thường gặp</p>
             </a>
             <a href="<?= SITE_URL ?? '' ?>/post">

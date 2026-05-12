@@ -10,6 +10,7 @@ class HomeController {
     private InformationModel $informationModel;
     private AdvertisementsModel $advertisementsModel;
     private ScrollTextModel $scrollTextModel;
+    private PostModel $postModel;
     private CertificationModel $certificationModel;
     private MainProductModel $mainProductModel;
     private ContentControllerModel $contentControllerModel;
@@ -17,6 +18,7 @@ class HomeController {
         $this->informationModel = new InformationModel();
         $this->advertisementsModel = new AdvertisementsModel();
         $this->scrollTextModel = new ScrollTextModel();
+        $this->postModel = new PostModel();
         $this->certificationModel = new CertificationModel();
         $this->mainProductModel = new MainProductModel();
         $this->contentControllerModel = new ContentControllerModel();
@@ -30,6 +32,7 @@ class HomeController {
         $certifications = $this->certificationModel->getAll();
         $mainProducts = $this->mainProductModel->getAll();
         $content = $this->contentControllerModel->getBySiteName('homepage');
+        $latestPosts = $this->postModel->getRecentPostsNoCategory(3);
         require_once 'views/homepage.php';
     }
 

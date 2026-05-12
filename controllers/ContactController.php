@@ -51,7 +51,7 @@ class ContactController {
         exit;
         }
 
-        require_once 'views/contact.php';
+        require_once 'views/homepage.php';
     }
 }
 

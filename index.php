@@ -40,6 +40,7 @@ require_once __DIR__ . '/controllers/admin/AdminScrollTextController.php';
 require_once __DIR__ . '/controllers/admin/AdminCertificationController.php';
 require_once __DIR__ . '/controllers/admin/AdminMainProductController.php';
 require_once __DIR__ . '/controllers/admin/AdminFaqController.php';
+require_once __DIR__ . '/controllers/admin/AdminContentControllerController.php';
 
 
 enum Page: string {
@@ -118,6 +119,7 @@ enum AdminPage: string {
     case MainProduct = 'mainproduct';
     case MainProductUpdate = 'mainproduct-update';
     case MainProductDelete = 'mainproduct-delete';
+    case ContentController = 'contentController';
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -130,6 +132,13 @@ enum AdminPage: string {
 }
 
 $route = $_GET['route'] ?? Page::Home->value;
+
+// Handle special routes for about_us and faq
+if ($route === 'about_us') {
+    $route = 'homepage/about_us';
+} elseif ($route === 'faq') {
+    $route = 'homepage/faq';
+}
 
 $parts = explode('/', $route);
 
@@ -221,6 +230,13 @@ switch ($controller) {
         }
         if ($id) {
             switch ($action) {
+                case AdminPage::ContentController->value:
+                    if ($id === 'toggle') {
+                        (new AdminContentControllerController())->toggle();
+                        break;
+                    }
+                    require_once "views/error404.php";
+                    break;
                 case AdminPage::ContactDetail->value:
                     (new AdminContactController())->getDetail();
                     break;
@@ -287,6 +303,7 @@ switch ($controller) {
 
                 AdminPage::Contact->value       => (new AdminContactController())->contact(),
                 AdminPage::ContactDetail->value => (new AdminContactController())->getDetail(),
+                AdminPage::ContactAnswer->value => (new AdminContactController())->markAnswered(),
                 AdminPage::Category->value      => (new AdminCategoryController())->category(),
                 
                 AdminPage::User->value          => (new AdminUserController())->users(),

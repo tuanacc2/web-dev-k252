@@ -76,11 +76,24 @@ class PostModel {
 
     public function getRecentPosts(int $limit = 3) {
         $stmt = $this->db->prepare(
-            "SELECT posts.id, posts.title, posts.thumbnail_description, images.file_name as thumbnail_url, CONCAT(users.last_name, ' ', users.first_name) as author
+            "SELECT posts.id, posts.title, posts.updated_at,posts.thumbnail_description, images.file_name as thumbnail_url, CONCAT(users.last_name, ' ', users.first_name) as author
             FROM posts 
             LEFT JOIN images ON posts.thumbnail_id = images.id 
             LEFT JOIN users ON posts.author_id = users.id 
             WHERE posts.category_id IS NOT NULL
+            ORDER BY updated_at DESC 
+            LIMIT ?"
+        );
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getRecentPostsNoCategory(int $limit = 3) {
+        $stmt = $this->db->prepare(
+            "SELECT posts.id, posts.title, posts.updated_at,posts.thumbnail_description, images.file_name as thumbnail_url, CONCAT(users.last_name, ' ', users.first_name) as author
+            FROM posts 
+            LEFT JOIN images ON posts.thumbnail_id = images.id 
+            LEFT JOIN users ON posts.author_id = users.id 
             ORDER BY updated_at DESC 
             LIMIT ?"
         );

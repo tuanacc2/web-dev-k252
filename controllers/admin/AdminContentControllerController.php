@@ -11,55 +11,41 @@ class AdminContentControllerController {
         $this->auditModel = new AuditLoggerModel();
     }
 
-    /**
-     * Hiển thị danh sách tất cả content controllers
-     */
-    public function index() {
-        $contents = $this->contentModel->getAll();
-        require_once BASE_DIR . '/views/admin/contentController.php';
-    }
-
-    /**
-     * Hiển thị content controllers của một site
-     */
-    public function bySite(string $siteName) {
-        $contents = $this->contentModel->getBySiteName($siteName);
-        $site = $siteName;
-        require_once BASE_DIR . '/views/admin/contentController.php';
+    private function respondJson(int $statusCode, array $payload): void {
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+        echo json_encode($payload);
+        exit;
     }
 
     /**
      * Bật/tắt hiển thị của content controller
      */
-    public function toggle(int $id) {
-        $content = $this->contentModel->getById($id);
-
-        if (!$content) {
-            $_SESSION['error'] = 'Không tìm thấy content controller';
-            header('Location: /admin/contentController');
-            exit;
-        }
-
-        try {
-            $result = $this->contentModel->toggleVisibility($id);
-            
-            if ($result) {
-                $newStatus = $content['isVisible'] ? 'Ẩn' : 'Hiển thị';
-                $this->auditModel->log(
-                    $_SESSION['user_id'] ?? null,
-                    'TOGGLE_CONTENT',
-                    $id,
-                    "Bật/tắt {$content['elementName']} - Trạng thái: $newStatus"
-                );
-                $_SESSION['success'] = 'Cập nhật trạng thái thành công';
-            } else {
-                $_SESSION['error'] = 'Không thể cập nhật trạng thái';
+    public function toggle() {
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+            try {
+                $visibility = $_POST['visibility'] ?? [];
+                $contentControllers = $this->contentModel->getBySiteName('homepage');
+                $updated = 0;
+                foreach ($contentControllers as $row) {
+                    $id = (int) ($row['id'] ?? 0);
+                    $newVisible = isset($visibility[$id]) ? 1 : 0;
+                    if ($id > 0 && (int) $row['isVisible'] !== $newVisible) {
+                        $this->contentModel->updateVisibility($id, $newVisible);
+                        $updated++;
+                    }
+                }
+                $this->respondJson(200, [
+                    'status' => 'success',
+                    'message' => 'Visibility updated',
+                    'updated' => $updated,
+                ]);
+            } catch (Throwable $e) {
+                $this->respondJson(500, [
+                    'status' => 'error',
+                    'error' => 'Failed to update visibility',
+                ]);
             }
-        } catch (Exception $e) {
-            $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
-
-        header('Location: /admin/contentController');
-        exit;
     }
 }
