@@ -24,8 +24,14 @@ class UserController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
             $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+            $flag = true;
             if ($_SESSION['login_status'])
-                $this->userModel->deleteUserById($id);
+                $flag = $this->userModel->deleteUserById($id);
+
+            if (!$flag) {
+                echo "Error";
+                exit();
+            }
 
             $this->logModel->log(Action::DeleteUser, $id, $username.' self deleted');
 

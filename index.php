@@ -66,6 +66,9 @@ enum Page: string {
 
 enum UserPage: string {
     case Profile = 'profile';
+    case Update = 'update';
+    case Delete = 'delete';
+    case Restricted = 'restricted';
 
     public static function isValid(string $name): bool {
         foreach (self::cases() as $case) {
@@ -198,26 +201,14 @@ switch ($controller) {
             require_once "views/error404.php";
             exit();
         }
-
-        if ($id) {
-            switch ($action) {
-                case UserPage::Profile->value:
-                    match($id) {
-                        'restricted' => (new UserController())->restricted(),
-                        'update' => (new UserController())->update(),
-                        'delete' => (new UserController())->delete(),
-                        default => require_once "views/error404.php"
-                    };
-                    break;
-                default:
-                    require_once "views/error404.php";
-                    break;
-            }
-        } else  {
-           (new UserController())->profile(); 
-           break;
-        }
-        break;        
+        match($action) {
+            UserPage::Profile->value => (new UserController())->profile(),
+            UserPage::Update->value => (new UserController())->update(),
+            UserPage::Restricted->value => (new UserController())->restricted(),
+            UserPage::Delete->value => (new UserController())->delete(),
+            default => require_once "views/error404.php"
+        };
+        break;    
     case Page::Admin->value:
         // Check if there's admin access
         if (!isset($_SESSION['admin_auth']) || $_SESSION['admin_auth'] !== true) {

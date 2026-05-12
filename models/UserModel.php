@@ -101,7 +101,7 @@ class UserModel {
 
     public function deleteUserById(int $id) {
         $stmt = $this->db->prepare("DELETE FROM users WHERE id = ?");
-        $stmt->execute([$id]);
+        return $stmt->execute([$id]);
     }
   
 }

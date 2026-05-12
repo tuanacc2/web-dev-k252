@@ -1,4 +1,5 @@
 <?php 
+/** @var array $user */
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +63,7 @@
     <div class="max-w-4xl mx-auto my-10 p-6 bg-white shadow-xl rounded-2xl">
         <p class="text-3xl font-bold mb-6 text-gray-800 border-b pb-4 font-vollkorn">Hồ sơ cá nhân</p>
 
-        <form action="<?= SITE_URL ?>/user/profile/update" method="POST" enctype="multipart/form-data">
+        <form action="<?= SITE_URL ?>/user/update" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= $user['id'] ?>">
             <input type="hidden" name="avatar_id" id="avatar_id" value="<?= $user['avatar_id'] ?>">
             <input type="hidden" name="username" value="<?= $user['username'] ?>">

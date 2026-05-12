@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>SRTDash Admin - Dashboard</title>
+    <title>SRTDash Admin - Contact</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="ICO cryptocurrency dashboard with real-time market data, sales reports, and trading analytics.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
