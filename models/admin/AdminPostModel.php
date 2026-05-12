@@ -148,10 +148,11 @@ class AdminPostModel {
                 $category_id = null;
             }
 
-            // Get the old thumbnail ID before updating the post
-            $old_thumbnail_id = $this->getPostById($post_id)['thumbnail_id'] ?? null;
-
             $post = $this->getPostById($post_id);
+
+            // Get the old thumbnail ID before updating the post
+            $old_thumbnail_id = $post['thumbnail_id'] ?? null;
+    
             if (!$post) {
                 return false;
             }

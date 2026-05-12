@@ -26,7 +26,7 @@ class AuthController {
                 if (!$user) {
                     $error_message = "Username not existed.";
                     $errors['username'] = "Tên tài khoản không tồn tại";
-                } elseif ($input_password === $user['password'] && $user['role'] === 'admin') {
+                } elseif (($input_password === $user['password'] || password_verify($input_password, $user['password'])) && $user['role'] === 'admin') {
                     $_SESSION['admin'] = $user['username'];
                     $_SESSION['admin_name'] = $user['first_name'].' '.$user['last_name'];
                     $_SESSION['admin_avatar'] = (string)$this->imageModel->getImageByTargetId($user['id'], ImageType::Avatar);

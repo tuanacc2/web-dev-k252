@@ -21,8 +21,9 @@ class PostController {
 
         $posts = [];
 
-        $limit = 12;
-        $page = isset($_GET['page']) && is_int($_GET['page']) ? (int)($_GET['page']) : 1;
+        $limit = 6;
+
+        $page = (int)(isset($_GET['page']) ? ($_GET['page']) : 0) ? (int)$_GET['page'] : 1;
 
         // If user choose to see only one kind of category 
         $total = 0;
@@ -30,22 +31,34 @@ class PostController {
 
         if ($category) {
         
-            $limit = 12;
-            $total = count($this->postModel->getPost($search));
-            $totalPage = ceil($total / $limit);
-
-            $category_id = 0;
+            $limit = 6; $category_id = 0;
             foreach ($category_list as $cat) {
                 if ($cat['name'] === $category) {
                     $category_id = $cat['id'];
                 }
             }
-            
+
+            if ($category === 'uncategorized') {
+                $posts[0] = $this->postModel->getPost(
+                    search: $search, 
+                    category_id: null,
+                    categorized: PostModel::UNCATEGORIZED
+                );
+            } else {
+                $posts[0] = $this->postModel->getPost(
+                    search: $search, 
+                    category_id: $category_id
+                );
+            }
+
+            $total = count($posts[0]);
+            $totalPage = ceil($total / $limit);
+
             if ($category === 'uncategorized') {
                 $posts[0] = $this->postModel->getPost(
                     search: $search, 
                     limit: $limit, 
-                    offset: ($page - 1) * $limit, 
+                    offset: (($page - 1) <= 0 ? 0 : ($page - 1)) * $limit, 
                     category_id: null,
                     categorized: PostModel::UNCATEGORIZED
                 );
@@ -53,15 +66,11 @@ class PostController {
                 $posts[0] = $this->postModel->getPost(
                     search: $search, 
                     limit: $limit, 
-                    offset: ($page - 1) * $limit, 
+                    offset: (($page - 1) <= 0 ? 0 : ($page - 1)) * $limit, 
                     category_id: $category_id
                 );
             }
-
-            foreach ($posts[0] as &$post) {
-                $post['updated_at'] = $post['updated_at'] ? date_create($post['updated_at'])->format('d.m.y') : null;
-            }
-
+            
         } else {
     
             $limit = 3;

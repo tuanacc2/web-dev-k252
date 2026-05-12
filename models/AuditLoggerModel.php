@@ -5,6 +5,10 @@ enum Action: string {
     case Login = 'LOGIN';
     case Logout = 'LOGOUT';
     case Register = 'REGISTER';
+    case AddAdmin = 'ADD_ADMIN';
+    case DeleteUser = 'DELETE_USER';
+    case UpdateUser = 'UPDATE_USER';
+    case ToggleUser = 'TOGGLE_USER';
     case AddPost = 'ADD_POST';
     case UpdatePost = 'UPDATE_POST';
     case HidePost = 'HIDE_POST';

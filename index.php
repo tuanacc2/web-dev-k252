@@ -185,10 +185,29 @@ switch ($controller) {
         };
         break;
     case Page::User->value:
-        match($action) {
-            UserPage::Profile->value    => (new UserController())->profile(),          
-            default                     => require_once "views/error404.php"
-        };
+        if (!isset($_SESSION['login_status'])) {
+            require_once "views/error404.php";
+            exit();
+        }
+
+        if ($id) {
+            switch ($action) {
+                case UserPage::Profile->value:
+                    match($id) {
+                        'restricted' => (new UserController())->restricted(),
+                        'update' => (new UserController())->update(),
+                        'delete' => (new UserController())->delete(),
+                        default => require_once "views/error404.php"
+                    };
+                    break;
+                default:
+                    require_once "views/error404.php";
+                    break;
+            }
+        } else  {
+           (new UserController())->profile(); 
+           break;
+        }
         break;        
     case Page::Admin->value:
         // Check if there's admin access
@@ -240,6 +259,15 @@ switch ($controller) {
                         'add' => (new AdminPostController())->add(),
                         'update' => (new AdminPostController())->update(),
                         'delete' => (new AdminPostController())->delete(),
+                        default => require_once "views/error404.php"
+                    };
+                    break;
+                case AdminPage::User->value:
+                    match($id) {
+                        'add' => (new AdminUserController())->add(),
+                        'update' => (new AdminUserController())->update(),
+                        'delete' => (new AdminUserController())->delete(),
+                        'toggle' => (new AdminUserController())->toggle(),
                         default => require_once "views/error404.php"
                     };
                     break;

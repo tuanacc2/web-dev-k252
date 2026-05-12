@@ -7,6 +7,8 @@ class AdminDashboardController {
 
     public function dashboard() {
         $log = (new AuditLoggerModel())->getLogs();
+        $post = (new PostModel())->getPost();
+        $product = (new ProductModel())->getProducts();
 
         require_once 'views/admin/dashboard.php';
     }

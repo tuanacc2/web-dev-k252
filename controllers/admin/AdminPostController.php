@@ -93,6 +93,7 @@ class AdminPostController {
             $post_id = $_POST['id'] ?? null;
             $title = $_POST['title'] ?? '';
             $thumbnail_id = $_POST['thumbnail_id'] ?? '';
+            $pre_thumbnail_id = $_POST['pre_thumbnail_id'] ?? '';
             $thumbnail_description = $_POST['description'] ?? '';
             $category_id = $_POST['category_id'] ?? '';
             $content = $_POST['content'] ?? '';

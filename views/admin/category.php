@@ -61,6 +61,12 @@
                                 </ul>
                             </li>
                             <li>
+                                <a href="<?= SITE_URL ?>/admin/user">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>User Management</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?= SITE_URL ?>/admin/contact">
                                     <i class="fa-solid fa-phone"></i>
                                     <span>Contact Request</span>

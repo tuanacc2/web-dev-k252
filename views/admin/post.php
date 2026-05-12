@@ -58,10 +58,17 @@
                                     <span>Edit page</span>
                                 </a>
                                 <ul class="collapse">
-                                    <li ><a href="<?= SITE_URL ?>/admin/information">Infomation</a></li>
+                                    <li><a href="<?= SITE_URL ?>/admin/information">Infomation</a></li>
                                     <li><a href="<?= SITE_URL ?>/admin/homepage">Homepage</a></li>
                                     <li><a href="<?= SITE_URL ?>/admin/about">About us</a></li>
+                                    <li><a href="<?= SITE_URL ?>/admin/faq">FAQ</a></li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="<?= SITE_URL ?>/admin/user">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>User Management</span>
+                                </a>
                             </li>
                             <li>
                                 <a href="<?= SITE_URL ?>/admin/contact">
@@ -335,7 +342,7 @@
                                                 <th>Category</th>
                                                 <th>Action</th>
                                             </tr>
-                                        </thead>
+                                        1</thead>
                                         <tbody>
                                             <?php foreach ($categoryPosts as $post): ?>
                                                 <tr>
@@ -584,6 +591,7 @@
                 <form id="postForm" action="<?= SITE_URL ?>admin/post/add" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="post_id">
                     <input type="hidden" name="thumbnail_id" id="post_thumbnail_id">
+                    <input type="hidden" name="pre_thumbnail_id" id="pre_thumbnail_id">
                     <div class="modal-body font-nunito">
                         <div class="row">
                             <div class="col-md-8">
@@ -614,7 +622,7 @@
                                     <label class="form-label">Thumbnail</label>
                                     <input id="post_thumbnail" type="file" name="thumbnail" class="form-control">
                                 </div>
-                                <div class="mb-3 <?= !empty($post['thumbnail_id']) ? '' : 'd-none'   ?>" id="thumbnail_preview_container">
+                                <div class="mb-3 d-none" id="thumbnail_preview_container">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <label class="form-label mb-0">Current Thumbnail</label>
                                         <a class="text-danger cursor-pointer fs-4 text-decoration-none me-5" 
@@ -624,7 +632,7 @@
                                         </a>
                                     </div>
                                     <img id="thumbnail_preview" 
-                                        src="<?= !empty($post['thumbnail_id']) ? SITE_URL . $post['thumbnail_url'] : '' ?>" 
+                                        src="" 
                                         alt="Current Thumbnail" 
                                         class="img-thumbnail" 
                                         width="200">
@@ -683,6 +691,8 @@
                 currentId = null;
                 $('#postForm')[0].reset();
 
+                $('#post_thumbnail').val('');  
+                $('#post_thumbnail_id').val(data.thumbnail_id);   
                 $('#thumbnail_preview_container').addClass('d-none');
                 $('#thumbnail_preview').attr('src', '');  
             }
@@ -718,6 +728,8 @@
                     $('#thumbnail_preview').attr('src', '');
                 }
             }
+
+            $('#pre_thumbnail_id').val(data.thumbnail_id);  
             
             currentId = currentId ? data.id : currentId;
                           

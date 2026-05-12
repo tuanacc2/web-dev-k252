@@ -82,6 +82,20 @@
         .font-embed {
             font-family: 'Barlow Condensed', sans-serif;
         }
+
+        .pagebtn {
+            color: #C5A25D;
+            border: 1px #C5A25D solid;
+            border-radius: 8px;
+            background-color: transparent;   
+        }
+
+        .pagebtn {
+            color: white;
+            border: none;
+            border-radius: 8px;
+            background-color: #C5A25D;   
+        }
     </style>
 </head>
 <?php
@@ -114,6 +128,9 @@
                 <form id="content-search-form" method='GET'
                     class="w-full flex items-center gap-4 ml-32"
                     action="<?= (SITE_URL ?? '') .'/post?search='.htmlspecialchars($search) ?>">
+                    <?php if ($category): ?>
+                    <input form="content-search-form" type="text" name="category" value="<?= $category ?>" class="hidden">
+                    <?php endif; ?>
                     <input form="content-search-form" type="text" name="search" 
                         placeholder="Tìm kiếm bài viết..." 
                         class="inline-block w-full bg-transparent focus:outline-none font-nunito" 
@@ -151,12 +168,12 @@
             </div>
         
             <div class="slider-container">
-                <div class="
-                    slider
-                    relative w-full flex flex-col lg:flex-row items-start lg:items-start justify-center 
-                    gap-6 px-6 lg:px-20 my-5">
+                <div class="<?= $category ? 
+                    'relative w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 lg:px-20 my-5' : 
+                    'relative w-full flex flex-col lg:flex-row items-start lg:items-start justify-center 
+                    gap-6 px-6 lg:px-20 my-5 slider' ?>">
                     <?php foreach ($postsByCategory as $post): ?>
-                    <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-start gap-2 px-2">
+                    <div class="w-full flex flex-col items-stretch justify-start gap-2 px-2">
                         <a href="<?= SITE_URL .'/post/view/'. $post['id'] ?>" class="hover:shadow hover:scale-105 transition-transform duration-200">
                             <div class="w-full overflow-hidden" style="height: 350px;">
                                 <img src="<?= (SITE_URL ?? '') . $post['thumbnail_url'] ?>" class="block w-full" style="height: 350px; object-fit: cover;" />
@@ -164,7 +181,7 @@
                             <div class="flex flex-col gap-3 w-full">
                                 <p class="text-sm font-semibold text-[#C5A25D] font-nunito">
                                     <span class="font-semibold text-black"><?= htmlspecialchars($companyName) ?></span>&nbsp;|
-                                    <span class="font-embed"><?= htmlspecialchars($post['updated_at']) ?></span>
+                                    <span class="font-embed"><?= htmlspecialchars(date_create($post['updated_at'])->format('d.m.y')) ?></span>
                                 </p>
                                 <p class="text-[#1f1c17] font-vollkorn"><?= $post['title'] ?? '' ?></p>
                                 <p class="overflow-hidden font-nunito" style="max-height: 120px; display: -webkit-box; line-clamp: 5; -webkit-line-clamp: 5; -webkit-box-orient: vertical; text-overflow: ellipsis;">
@@ -190,20 +207,20 @@
                     ) { 
                         if ($page < 8) {  
                             if ($i == 9) {
-                                echo '<span class="btn btn-secondary mb-xl-3">...</span>';
+                                echo '<span class="btn pagebtn  mb-xl-3">...</span>';
                             }
                         } else if ($page > $totalPage - 7) {
                             if ($i == $totalPage - 8) {
-                                echo '<span class="btn btn-secondary mb-xl-3">...</span>';
+                                echo '<span class="btn pagebtn  mb-xl-3">...</span>';
                             }
                         } else if (abs($i - $page) > 2) {
                             if ($i == $page - 3 || $i == $page + 3) {
-                                echo '<span class="btn btn-secondary mb-xl-3">...</span>';
+                                echo '<span class="btn pagebtn  mb-xl-3">...</span>';
                             }
                         }
                     } else { ?>
-                    <a href="?<?= $search ? 'search='.urlencode($search).'&' : '' ?>page=<?= $i ?>" 
-                        class="btn mb-xl-3 <?= ($i == $page) ? 'btn-primary' : 'btn-secondary' ?>"
+                    <a href="?category=<?= $postsByCategory[0]['category'] ? htmlspecialchars($postsByCategory[0]['category']) : '' ?><?= $search ? '&search='.htmlspecialchars($search) : '' ?>&page=<?= $i ?>" 
+                        class="btn mb-xl-3 <?= ($i == $page) ? 'pagebtn-on' : 'pagebtn ' ?>"
                     > <?= $i ?> </a>
                     <?php } ?>
                     <?php endfor; ?>
@@ -217,12 +234,32 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
         $('.slider').slick({
-            slidesToShow: 3,
+            slidesToShow: <?= $limit ?>,
             slidesToScroll: 1,
             infinite: true,
             arrows: true,
-            adaptiveHeight: true
+            adaptiveHeight: true,
+
+            responsive: [
+                {
+                    // For screens smaller than 1024px (Tablets)
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1
+                    }
+                },
+                {
+                    // For screens smaller than 640px (Mobile)
+                    breakpoint: 640,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                }
+            ]
         });
+        
     </script>
 </div>
 <?php require_once 'views/layout/footer.php'; ?>

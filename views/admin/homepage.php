@@ -44,7 +44,7 @@
 					<nav>
 						<ul class="metismenu" id="menu">
 							<li>
-								<a href="javascript:void(0)">
+								<a href="<?= SITE_URL ?>/admin/dashboard">
 									<i class="ti-dashboard"></i>
 									<span>Dashboard</span>
 								</a>
@@ -58,8 +58,15 @@
 									<li><a href="<?= SITE_URL ?>/admin/information">Infomation</a></li>
 									<li class="active"><a href="<?= SITE_URL ?>/admin/homepage">Homepage</a></li>
 									<li><a href="<?= SITE_URL ?>/admin/about">About us</a></li>
+									<li><a href="<?= SITE_URL ?>/admin/faq">FAQ</a></li>
 								</ul>
 							</li>
+							<li>
+                                <a href="<?= SITE_URL ?>/admin/user">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>User Management</span>
+                                </a>
+                            </li>
 							<li>
 								<a href="<?= SITE_URL ?>/admin/contact">
 									<i class="fa-solid fa-phone"></i>
@@ -72,6 +79,12 @@
 									<span>Help Request</span>
 								</a>
 							</li>
+							<li>
+                                <a href="<?= SITE_URL ?>/admin/category">
+                                    <i class="fa-solid fa-tags"></i>
+                                    <span>Categories</span>
+                                </a>
+                            </li>
 							<li>
 								<a href="<?= SITE_URL ?>/admin/product">
 									<i class="fa-solid fa-boxes-stacked"></i>
